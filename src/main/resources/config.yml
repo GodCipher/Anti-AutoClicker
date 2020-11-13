@@ -8,6 +8,19 @@ AntiAC:
 
   React-At-Violations: 5
   # Will punish the player & inform the team, if the player have this much VL's
+  # Set to 0 for instant punish
+
+  Easy-Violation: 1
+  # Set the amount of violations added to the player, when he fires an easy-violation
+
+  Normal-Violation: 2
+  # Set the amount of violations added to the player, when he fires an normal-violation
+
+  Hard-Violation: 3
+  # Set the amount of violations added to the player, when he fires an hard-violation
+
+  Clear-Violations-After-Minutes-Of-Non-Adding: 5
+  # Clear the violation of a player, if he hasn't got any violation Clear-Violations-After-Minutes-Of-Non-Adding minutes long
 
   ClickAverageOfSeconds: 3
   # Summarizes the clicks from the last ClickAverageOfSeconds seconds

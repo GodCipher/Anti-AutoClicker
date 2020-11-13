@@ -10,14 +10,6 @@ import org.bukkit.entity.Player;
 
 public class Timer implements Runnable {
 
-    private final int maxAllowedClicks = Core.getInstance().getConfig().getInt("AntiAC.AllowedClicks");
-    private final int highestAllowedPing = Core.getInstance().getConfig().getInt("AntiAC.HighestAllowedPing");
-    private final int averageCheckHowOften = Core.getInstance().getConfig().getInt("AntiAC.AverageCheckHowOften");
-    private final int clickAverageOfSeconds = Core.getInstance().getConfig().getInt("AntiAC.ClickAverageOfSeconds");
-
-    private final boolean pingChecker = Core.getInstance().getConfig().getBoolean("AntiAC.PingChecker");
-    private final boolean bypass = Core.getInstance().getConfig().getBoolean("AntiAC.Bypass");
-
     public void run() {
 
         for(Player all : Bukkit.getOnlinePlayers()) {
@@ -36,8 +28,8 @@ public class Timer implements Runnable {
                 String message1 = "§4§l" + user.getChecked().getName();
                 String message2;
 
-                if(maxAllowedClicks - user.getChecked().getClicks() <= 8) {
-                    if(!(maxAllowedClicks - user.getChecked().getClicks() <= 0)) {
+                if(Variables.allowedClicks - user.getChecked().getClicks() <= 8) {
+                    if(!(Variables.allowedClicks - user.getChecked().getClicks() <= 0)) {
                         message2 = " §e§l-> §cClicks : §c§l" + user.getChecked().getClicks() + " §6Average : §6§l" + user.getChecked().getAverage();
                     } else {
                         message2 = " §e§l-> §cClicks : §4§l" + user.getChecked().getClicks()+ " §6Average : §6§l" + user.getChecked().getAverage();
@@ -46,19 +38,19 @@ public class Timer implements Runnable {
                     message2 = " §e§l-> §cClicks : §a§l" + user.getChecked().getClicks()+ " §6Average : §6§l" + user.getChecked().getAverage();
                 }
 
-                message2 = message2 + " §6VL: §e" + user.getViolations();
+                message2 = message2 + " §6VL: §e" + user.getChecked().getViolations();
 
                 if(Core.lowTPS) {
                     message2 = " §e§l-> §c§lCannot be checked -> §4§lLowTPS";
                 }
 
-                if(pingChecker) {
-                    if(user.getChecked().getPing() >= highestAllowedPing) {
+                if(Variables.pingChecker) {
+                    if(user.getChecked().getPing() >= Variables.highestAllowedPing) {
                         message2 = " §e§l-> §c§lCannot be checked -> §4§lPing §8(§4" + user.getChecked().getPing() + "§8)";
                     }
                 }
 
-                if(bypass) {
+                if(Variables.bypass) {
                     if(user.getChecked().isBypassed()) {
                         message2 = " §e§l-> §c§lCannot be checked -> §4§lBypassed";
                     }
@@ -71,7 +63,7 @@ public class Timer implements Runnable {
                 check.execute(user);
             }
 
-            if(user.clearViolations != 60*5) {
+            if(user.clearViolations != 60*Variables.clearVLMinutes) {
                 user.clearViolations++;
             } else {
                 user.clearViolations();
@@ -82,12 +74,12 @@ public class Timer implements Runnable {
                 user.setRestricted(false);
             }
 
-            if(user.getClicksAverageCheckList().size() >= averageCheckHowOften) {
+            if(user.getClicksAverageCheckList().size() >= Variables.clickAverageOfSeconds) {
 
                 user.getClicksAverageCheckList().remove(0);
 
             }
-            if(User.get(all.getUniqueId()).getClicksAverageList().size() >= clickAverageOfSeconds) {
+            if(User.get(all.getUniqueId()).getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
                 User.get(all.getUniqueId()).getClicksAverageList().remove(0);
             }
             User.get(all.getUniqueId()).setClicks(0);

@@ -31,6 +31,15 @@ public class Variables {
     public static ArrayList<String> SHOUTOUT_PUNISHMENT = new ArrayList<>();
     public static ArrayList<String> TEAM_NOTIFY = new ArrayList<>();
 
+    public static String executeBanCommand, executeKickCommand, perms;
+
+    public static boolean averageCheck, consoleNotify, log, playerBan, shoutOutPunishment, informTeam, playerKick, playerKill, playerFreeze, restrictPlayer, bypass, pingChecker
+            , autoNotify;
+
+    public static int allowedClicks, averageCheckAtEntries,
+            averageCheckAtNeededClicks, unbanAfterHours, clickAverageOfSeconds,
+            freezeTimeInSeconds, banAtClicks, kickAtClicks, killAtClicks, freezeAtClicks, highestAllowedPing, clearVLMinutes;
+
     public static void init() {
 
         if(!file.exists()) {
@@ -82,6 +91,37 @@ public class Variables {
         SHOUTOUT_PUNISHMENT.addAll(cfg.getStringList("ShoutOut-Punishment"));
 
         TEAM_NOTIFY.addAll(cfg.getStringList("Team-Notify"));
+
+        executeBanCommand = Core.getInstance().getConfig().getString("AntiAC.ExecuteBanCommand");
+        executeKickCommand = Core.getInstance().getConfig().getString("AntiAC.ExecuteKickCommand");
+        perms = Core.getInstance().getConfig().getString("AntiAC.NeededPermission");
+
+        informTeam = Core.getInstance().getConfig().getBoolean("AntiAC.InformTeam");
+        averageCheck = Core.getInstance().getConfig().getBoolean("AntiAC.AverageCheck");
+        consoleNotify = Core.getInstance().getConfig().getBoolean("AntiAC.ConsoleNotification");
+        log = Core.getInstance().getConfig().getBoolean("AntiAC.Log");
+        playerBan = Core.getInstance().getConfig().getBoolean("AntiAC.PlayerBan");
+        playerKick = Core.getInstance().getConfig().getBoolean("AntiAC.PlayerKick");
+        playerKill = Core.getInstance().getConfig().getBoolean("AntiAC.PlayerKill");
+        playerFreeze = Core.getInstance().getConfig().getBoolean("AntiAC.PlayerFreeze");
+        restrictPlayer = Core.getInstance().getConfig().getBoolean("AntiAC.RestrictPlayer");
+        shoutOutPunishment = Core.getInstance().getConfig().getBoolean("AntiAC.ShoutOutPunishment");
+        bypass = Core.getInstance().getConfig().getBoolean("AntiAC.Bypass");
+        pingChecker = Core.getInstance().getConfig().getBoolean("AntiAC.PingChecker");
+        autoNotify = Core.getInstance().getConfig().getBoolean("AntiAC.AutoNotification");
+
+        averageCheckAtNeededClicks = Core.getInstance().getConfig().getInt("AntiAC.AverageCheckNeededClicks");
+        averageCheckAtEntries = Core.getInstance().getConfig().getInt("AntiAC.AverageCheckAtEntries");
+        allowedClicks = Core.getInstance().getConfig().getInt("AntiAC.AllowedClicks");
+        unbanAfterHours = Core.getInstance().getConfig().getInt("AntiAC.UnbanAfterHours");
+        clickAverageOfSeconds = Core.getInstance().getConfig().getInt("AntiAC.ClickAverageOfSeconds");
+        freezeTimeInSeconds = Core.getInstance().getConfig().getInt("AntiAC.FreezeTimeInSeconds");
+        banAtClicks = Core.getInstance().getConfig().getInt("AntiAC.BanAtClicks");
+        kickAtClicks = Core.getInstance().getConfig().getInt("AntiAC.KickAtClicks");
+        killAtClicks = Core.getInstance().getConfig().getInt("AntiAC.KillAtClicks");
+        freezeAtClicks = Core.getInstance().getConfig().getInt("AntiAC.FreezeAtClicks");
+        highestAllowedPing = Core.getInstance().getConfig().getInt("AntiAC.HighestAllowedPing");
+        clearVLMinutes = Core.getInstance().getConfig().getInt("AntiAC.Clear-Violations-After-Minutes-Of-Non-Adding");
     }
 
 }

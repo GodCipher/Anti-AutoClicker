@@ -51,15 +51,15 @@ public class Listeners implements Listener {
         if (User.get(e.getPlayer().getUniqueId()).isRestricted()) {
             e.setCancelled(true);
         }
-        if (core.getConfig().getBoolean("AntiAC.Bypass")) {
-            if ((e.getPlayer().hasPermission(Objects.requireNonNull(core.getConfig().getString("AntiAC.NeededPermission"))) || e.getPlayer().isOp())
-                    || e.getPlayer().hasPermission(Objects.requireNonNull(core.getConfig().getString("AntiAC.NeededPermission"))) && e.getPlayer().isOp())
+        if (Variables.bypass) {
+            if ((e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) || e.getPlayer().isOp())
+                    || e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) && e.getPlayer().isOp())
                 return;
         }
 
         if (!Core.lowTPS) {
-            if (Core.getInstance().getConfig().getBoolean("AntiAC.PingChecker")) {
-                if (!(User.get(e.getPlayer().getUniqueId()).getPing() >= Core.getInstance().getConfig().getInt("AntiAC.HighestAllowedPing"))) {
+            if (Variables.pingChecker) {
+                if (!(User.get(e.getPlayer().getUniqueId()).getPing() >= Variables.highestAllowedPing)) {
 
                     if (User.get(e.getPlayer().getUniqueId()).getLastRightClick() == null) {
                         User.get(e.getPlayer().getUniqueId()).setLastRightClick(System.currentTimeMillis());
@@ -134,13 +134,13 @@ public class Listeners implements Listener {
 
                 }
 
-                if(core.getConfig().getBoolean("AntiAC.Bypass")) {
-                    if((player.hasPermission(Objects.requireNonNull(core.getConfig().getString("AntiAC.NeededPermission"))) || player.isOp())
-                            || player.hasPermission(Objects.requireNonNull(core.getConfig().getString("AntiAC.NeededPermission"))) && player.isOp() ) return;
+                if(Variables.bypass) {
+                    if((player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp())
+                            || player.hasPermission(Objects.requireNonNull(Variables.perms)) && player.isOp() ) return;
                 }
                 if(!Core.lowTPS) {
-                    if(Core.getInstance().getConfig().getBoolean("AntiAC.PingChecker")) {
-                        if(!(User.get(player.getUniqueId()).getPing() >= Core.getInstance().getConfig().getInt("AntiAC.HighestAllowedPing"))) {
+                    if(Variables.pingChecker) {
+                        if(!(User.get(player.getUniqueId()).getPing() >= Variables.highestAllowedPing)) {
                             User.get(player.getUniqueId()).addClicks(1);
                         }
                     } else {
@@ -148,6 +148,7 @@ public class Listeners implements Listener {
                     }
 
                 }
+
             }
         }
     }
@@ -157,10 +158,10 @@ public class Listeners implements Listener {
         Player p = e.getPlayer();
         User user = User.get(p.getUniqueId());
 
-        if(Core.getInstance().getConfig().getBoolean("AntiAC.AutoNotification")) {
+        if(Variables.autoNotify) {
             Bukkit.getScheduler().runTaskLater(core, () -> {
-                if((p.hasPermission(Objects.requireNonNull(core.getConfig().getString("AntiAC.NeededPermission"))) || p.isOp())
-                        || p.hasPermission(Objects.requireNonNull(core.getConfig().getString("AntiAC.NeededPermission"))) && p.isOp() ) {
+                if((p.hasPermission(Objects.requireNonNull(Variables.perms)) || p.isOp())
+                        || p.hasPermission(Objects.requireNonNull(Variables.perms)) && p.isOp() ) {
 
                     user.setNotified(true);
 
@@ -202,16 +203,16 @@ public class Listeners implements Listener {
         if(User.get(e.getPlayer().getUniqueId()).isRestricted()) {
             e.setCancelled(true);
         }
-        if(core.getConfig().getBoolean("AntiAC.Bypass")) {
-            if((e.getPlayer().hasPermission(Objects.requireNonNull(core.getConfig().getString("AntiAC.NeededPermission"))) || e.getPlayer().isOp())
-                    || e.getPlayer().hasPermission(Objects.requireNonNull(core.getConfig().getString("AntiAC.NeededPermission"))) && e.getPlayer().isOp() )  return;
+        if(Variables.bypass) {
+            if((e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) || e.getPlayer().isOp())
+                    || e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) && e.getPlayer().isOp() )  return;
         }
         if(e.getAction() == Action.LEFT_CLICK_AIR ||
                 e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
             if(!Core.lowTPS) {
-                if(Core.getInstance().getConfig().getBoolean("AntiAC.PingChecker")) {
-                    if(!(User.get(e.getPlayer().getUniqueId()).getPing() >= Core.getInstance().getConfig().getInt("AntiAC.HighestAllowedPing"))) {
+                if(Variables.pingChecker) {
+                    if(!(User.get(e.getPlayer().getUniqueId()).getPing() >= Variables.highestAllowedPing)) {
                         User.get(e.getPlayer().getUniqueId()).addClicks(1);
                     }
                 } else {

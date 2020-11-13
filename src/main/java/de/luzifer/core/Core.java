@@ -46,14 +46,19 @@ public class Core extends JavaPlugin {
     private static String nmsver;
     private static boolean useOldMethods;
 
+    private static int days = 0;
+
     public void onEnable() {
         core = this;
+        days = Core.getInstance().getConfig().getInt("AntiAC.DeleteLogsAfterDays");
+        lowestAllowedTPS = getConfig().getInt("AntiAC.LowestAllowedTPS");
         Bukkit.getLogger().info("[AntiAC]");
         initialize();
         loadConfig();
         loadChecks();
         loadMessages();
         loadListener();
+        loadPacketListener();
         loadCommands();
         loadActionBar();
         Bukkit.getLogger().info("[AntiAC]");
@@ -103,6 +108,8 @@ public class Core extends JavaPlugin {
         return core;
     }
 
+    public int lowestAllowedTPS;
+
     public void tpsChecker() {
         Bukkit.getLogger().info("[AntiAC] Booting up TPSChecker");
         Bukkit.getScheduler().runTaskTimer(this, () -> {
@@ -112,7 +119,7 @@ public class Core extends JavaPlugin {
                 Tick = 0;
                 if (LastFinish + 1000 < System.currentTimeMillis()) TPS /= (System.currentTimeMillis() - LastFinish) / 1000;
                 LastFinish = System.currentTimeMillis();
-                if(TPS < getConfig().getInt("AntiAC.LowestAllowedTPS")) {
+                if(TPS < lowestAllowedTPS) {
                     if(!lowTPS) {
                         lowTPS = true;
                     }
@@ -140,6 +147,9 @@ public class Core extends JavaPlugin {
         }
     }
 
+    public void loadPacketListener() {
+    }
+
     public void loadMessages() {
 
         Variables.init();
@@ -151,6 +161,7 @@ public class Core extends JavaPlugin {
     }
 
     public void loadConfig() {
+
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
@@ -181,7 +192,7 @@ public class Core extends JavaPlugin {
     }
 
     public static void deleteLogs() {
-        Date xDaysAgo = Date.from(Instant.now().minus(Duration.ofDays(Core.getInstance().getConfig().getInt("AntiAC.DeleteLogsAfterDays"))));
+        Date xDaysAgo = Date.from(Instant.now().minus(Duration.ofDays(days)));
         SimpleDateFormat formatFile = new SimpleDateFormat("dd MMMM yyyy");
 
         if(new Date().after(xDaysAgo)) {
@@ -228,7 +239,7 @@ public class Core extends JavaPlugin {
 
                         try {
                             Check checkInstance = clazz.getConstructor().newInstance();
-                            checkInstance.onEnable();
+                            checkInstance.onEnable(this);
 
                             CheckManager.registerCheck(checkInstance);
                         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
