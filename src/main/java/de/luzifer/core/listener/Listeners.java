@@ -2,6 +2,7 @@ package de.luzifer.core.listener;
 
 import de.luzifer.core.Core;
 import de.luzifer.core.api.player.User;
+import de.luzifer.core.api.profile.inventory.ProfileGUI;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -14,6 +15,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 
 import java.util.Objects;
@@ -43,6 +45,14 @@ public class Listeners implements Listener {
     public void onConsume(PlayerItemConsumeEvent e) {
         if(User.get(e.getPlayer().getUniqueId()).isRestricted()) {
             e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInvClick(InventoryClickEvent e) {
+        if(e.getView().getTopInventory().getHolder() instanceof ProfileGUI) {
+            ProfileGUI profileGUI = (ProfileGUI) e.getView().getTopInventory().getHolder();
+            profileGUI.handleEvent(e);
         }
     }
 

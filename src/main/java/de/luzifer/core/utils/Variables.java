@@ -34,11 +34,11 @@ public class Variables {
     public static String executeBanCommand, executeKickCommand, perms;
 
     public static boolean averageCheck, consoleNotify, log, playerBan, shoutOutPunishment, informTeam, playerKick, playerKill, playerFreeze, restrictPlayer, bypass, pingChecker
-            , autoNotify;
+            , autoNotify, doNotStoreNothing;
 
     public static int allowedClicks, averageCheckAtEntries,
             averageCheckAtNeededClicks, unbanAfterHours, clickAverageOfSeconds,
-            freezeTimeInSeconds, banAtClicks, kickAtClicks, killAtClicks, freezeAtClicks, highestAllowedPing, clearVLMinutes;
+            freezeTimeInSeconds, banAtClicks, kickAtClicks, killAtClicks, freezeAtClicks, highestAllowedPing, clearVLMinutes, storeAsManyData, removeAfterExist;
 
     public static void init() {
 
@@ -109,6 +109,7 @@ public class Variables {
         bypass = Core.getInstance().getConfig().getBoolean("AntiAC.Bypass");
         pingChecker = Core.getInstance().getConfig().getBoolean("AntiAC.PingChecker");
         autoNotify = Core.getInstance().getConfig().getBoolean("AntiAC.AutoNotification");
+        doNotStoreNothing = Core.getInstance().getConfig().getBoolean("AntiAC.Profile-Do-Not-Store-Nothing");
 
         averageCheckAtNeededClicks = Core.getInstance().getConfig().getInt("AntiAC.AverageCheckNeededClicks");
         averageCheckAtEntries = Core.getInstance().getConfig().getInt("AntiAC.AverageCheckAtEntries");
@@ -122,6 +123,8 @@ public class Variables {
         freezeAtClicks = Core.getInstance().getConfig().getInt("AntiAC.FreezeAtClicks");
         highestAllowedPing = Core.getInstance().getConfig().getInt("AntiAC.HighestAllowedPing");
         clearVLMinutes = Core.getInstance().getConfig().getInt("AntiAC.Clear-Violations-After-Minutes-Of-Non-Adding");
+        storeAsManyData = Core.getInstance().getConfig().getInt("AntiAC.Profile-Store-As-Much-Data-In-One-DataContainer");
+        removeAfterExist = Core.getInstance().getConfig().getInt("AntiAC.Remove-First-DataContainer-After-X-Exist");
     }
 
 }

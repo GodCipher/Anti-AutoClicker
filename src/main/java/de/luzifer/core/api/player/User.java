@@ -2,6 +2,7 @@ package de.luzifer.core.api.player;
 
 import de.luzifer.core.Core;
 import de.luzifer.core.api.enums.ViolationType;
+import de.luzifer.core.api.profile.Profile;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
@@ -19,6 +20,8 @@ public class User {
     private int clicks = 0;
 
     private Long lastRightClick;
+
+    private Profile profile;
 
     private final List<Integer> clicksAverage = new ArrayList<>();
     private final List<Double> clicksAverageCheck = new ArrayList<>();
@@ -51,12 +54,16 @@ public class User {
             }
 
             User user = new User(uuid);
+            Profile profile = new Profile(user);
+            user.setProfile(profile);
             allUser.add(user);
             return user;
 
         } else {
 
             User user = new User(uuid);
+            Profile profile = new Profile(user);
+            user.setProfile(profile);
             allUser.add(user);
             return user;
 
@@ -80,6 +87,14 @@ public class User {
 
         return uuid;
 
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public void pluginBan() {

@@ -10,6 +10,21 @@ AntiAC:
   # Will punish the player & inform the team, if the player have this much VL's
   # Set to 0 for instant punish
 
+  Profile-Store-As-Much-Data-In-One-DataContainer: 20
+  # Set how much data a DataContainer saves (what will be displayed in the profile)
+  # If it reached this amount, the DataContainer will be closed, posted to the profile and a new will be created
+  # Storing per second
+  # NOTE: Too much data in one DataContainer could glitch out of the minecraft window at a too little screen
+
+  Remove-First-DataContainer-After-X-Exist: 10
+  # Removes the first set DataContainer after Remove-First-DataContainer-After-X-Exist DataContainer exist
+  # To keep track of the DataContainer and don't get too many
+
+  Profile-Do-Not-Store-Nothing: true
+  # If on true: Doesn't store ClickCounts & their Averages when the clicks are 0
+  # NOTE: Will not send the DataContainer into the Profile 'till Profile-Store-As-Much-Data-In-One-DataContainer is reached
+    # Could take a long time, when the player doesn't click
+
   Easy-Violation: 1
   # Set the amount of violations added to the player, when he fires an easy-violation
 

@@ -2,6 +2,7 @@ package de.luzifer.core.commands;
 
 import de.luzifer.core.Core;
 import de.luzifer.core.api.player.User;
+import de.luzifer.core.api.profile.inventory.ProfileGUI;
 import de.luzifer.core.utils.UpdateChecker;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.Bukkit;
@@ -38,6 +39,7 @@ public class AntiACCommand implements CommandExecutor {
                 p.sendMessage(" ");
                 p.sendMessage(prefix + "§6/antiac version");
                 p.sendMessage(prefix + "§6/antiac checkupdate");
+                p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
                 p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
                 p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
                 p.sendMessage(" ");
@@ -73,6 +75,7 @@ public class AntiACCommand implements CommandExecutor {
                     p.sendMessage(" ");
                     p.sendMessage(prefix + "§6/antiac version");
                     p.sendMessage(prefix + "§6/antiac checkupdate");
+                    p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
                     p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
                     p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
                     p.sendMessage(" ");
@@ -81,6 +84,26 @@ public class AntiACCommand implements CommandExecutor {
                 }
 
             } else if(args.length == 2) {
+                if (args[0].equalsIgnoreCase("profile")) {
+
+                    Player target = Bukkit.getPlayer(args[1]);
+
+                    if(target == null) {
+                        p.sendMessage(" ");
+                        Variables.PLAYER_OFFLINE.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
+                        p.sendMessage(" ");
+                        return true;
+                    }
+
+                    User targetUser = User.get(target.getUniqueId());
+
+                    ProfileGUI profileGUI = new ProfileGUI();
+                    profileGUI.setOwner(targetUser);
+                    profileGUI.buildGUI();
+
+                    p.openInventory(profileGUI.getInventory());
+
+                } else
                 if(args[0].equalsIgnoreCase("notify")) {
                     if(args[1].equalsIgnoreCase("on")) {
                         if(!User.get(p.getUniqueId()).isNotified()) {
@@ -138,6 +161,7 @@ public class AntiACCommand implements CommandExecutor {
                     p.sendMessage(" ");
                     p.sendMessage(prefix + "§6/antiac version");
                     p.sendMessage(prefix + "§6/antiac checkupdate");
+                    p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
                     p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
                     p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
                     p.sendMessage(" ");

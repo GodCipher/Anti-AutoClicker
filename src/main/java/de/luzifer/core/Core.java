@@ -4,6 +4,9 @@ import de.luzifer.core.api.check.Check;
 import de.luzifer.core.api.events.ActionBarMessageEvent;
 import de.luzifer.core.api.manager.CheckManager;
 import de.luzifer.core.api.player.User;
+import de.luzifer.core.api.profile.inventory.ProfileGUI;
+import de.luzifer.core.checks.AverageCheck;
+import de.luzifer.core.checks.ClickCheck;
 import de.luzifer.core.commands.AntiACCommand;
 import de.luzifer.core.extern.Metrics;
 import de.luzifer.core.listener.Listeners;
@@ -31,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Core extends JavaPlugin {
 
@@ -58,7 +62,6 @@ public class Core extends JavaPlugin {
         loadChecks();
         loadMessages();
         loadListener();
-        loadPacketListener();
         loadCommands();
         loadActionBar();
         Bukkit.getLogger().info("[AntiAC]");
@@ -66,7 +69,7 @@ public class Core extends JavaPlugin {
 
     static class AntiACCommandTabCompleter implements TabCompleter {
 
-        final String[] ARGS = {"check", "version", "notify", "checkupdate"};
+        final String[] ARGS = {"check", "version", "notify", "checkupdate", "profile"};
         final String[] ARGS2 = {"on", "off"};
 
         @Override
@@ -84,8 +87,28 @@ public class Core extends JavaPlugin {
 
                 if(args[0].equalsIgnoreCase("check")) {
 
-                    return null;
+                    List<String> playerNames = new ArrayList<>();
 
+                    for(Player all : Bukkit.getOnlinePlayers()) {
+                        playerNames.add(all.getName());
+                    }
+
+                    Collections.sort(playerNames);
+
+                    return playerNames;
+
+                }
+
+                if(args[0].equalsIgnoreCase("profile")) {
+                    List<String> playerNames = new ArrayList<>();
+
+                    for(Player all : Bukkit.getOnlinePlayers()) {
+                        playerNames.add(all.getName());
+                    }
+
+                    Collections.sort(playerNames);
+
+                    return playerNames;
                 }
 
                 if(args[0].equalsIgnoreCase("notify")) {
@@ -134,6 +157,13 @@ public class Core extends JavaPlugin {
 
     public void onDisable() {
         saveDefaultConfig();
+
+        for(Player all : Bukkit.getOnlinePlayers()) {
+            if(all.getOpenInventory().getTopInventory().getHolder() instanceof ProfileGUI) {
+                all.closeInventory();
+            }
+        }
+
     }
 
     public void initialize() {
@@ -145,9 +175,6 @@ public class Core extends JavaPlugin {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void loadPacketListener() {
     }
 
     public void loadMessages() {
@@ -262,8 +289,8 @@ public class Core extends JavaPlugin {
         if(!file.exists())
             file.mkdirs();
 
-        addFromDir(new File("plugins"));
         addFromDir(file);
+        addFromDir(new File("plugins"));
 
         Bukkit.getLogger().info("[AntiAC] Registered " + CheckManager.getChecks().size() + " Checks");
 
