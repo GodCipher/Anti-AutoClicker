@@ -3,7 +3,6 @@ package de.luzifer.core.api.profile.storage;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.Profile;
 import de.luzifer.core.api.profile.inventory.ProfileGUI;
-import de.luzifer.core.utils.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -31,7 +30,7 @@ public class DataContainer {
 
     public void collectData() {
 
-        if(getClicksList().size() <= Variables.storeAsManyData) {
+        if(storeAsManyData > clicksList.size()) {
             clicksList.add(user.getClicks());
             averagesList.add(user.getAverage());
         } else {

@@ -290,7 +290,9 @@ public class Core extends JavaPlugin {
             file.mkdirs();
 
         addFromDir(file);
-        addFromDir(new File("plugins"));
+
+        CheckManager.registerCheck(new AverageCheck());
+        CheckManager.registerCheck(new ClickCheck());
 
         Bukkit.getLogger().info("[AntiAC] Registered " + CheckManager.getChecks().size() + " Checks");
 

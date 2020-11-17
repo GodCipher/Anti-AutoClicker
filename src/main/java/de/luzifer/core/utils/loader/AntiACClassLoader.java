@@ -1,6 +1,5 @@
 package de.luzifer.core.utils.loader;
 
-import com.google.common.collect.ImmutableList;
 import lombok.NonNull;
 
 import java.io.File;
@@ -94,7 +93,7 @@ public class AntiACClassLoader {
             e.printStackTrace();
         }
 
-        return ImmutableList.copyOf(classes);
+        return classes;
     }
 
     private List<Class<?>> findClassesInSourceRoot(

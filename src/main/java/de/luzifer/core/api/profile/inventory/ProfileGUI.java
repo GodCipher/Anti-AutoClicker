@@ -81,7 +81,7 @@ public class ProfileGUI extends PaginatedMenu {
 
             if(dataContainers.get(index) != null) {
 
-                ItemStack item = new ItemStack(Objects.requireNonNull(XMaterial.OAK_SIGN.parseMaterial()));
+                ItemStack item = new ItemStack(Objects.requireNonNull(XMaterial.CHEST.parseMaterial()));
                 ItemMeta meta = item.getItemMeta();
                 assert meta != null;
                 meta.setDisplayName("§cDataContainer §8" + UUID.randomUUID().toString().split("(?<=\\G.{5})")[0]);
@@ -97,8 +97,8 @@ public class ProfileGUI extends PaginatedMenu {
                         break;
                     } else {
 
-                        if(Variables.allowedClicks - user.getClicks() <= 8) {
-                            if(!(Variables.allowedClicks - user.getClicks() <= 0)) {
+                        if(Variables.allowedClicks - dataContainers.get(index).getClicksList().get(i1) <= 8) {
+                            if(!(Variables.allowedClicks - dataContainers.get(index).getClicksList().get(i1) <= 0)) {
 
                                 if (dataContainers.get(index).getClicksList().get(i1) >= 100 && dataContainers.get(index).getClicksList().get(i1) <= 999) {
                                     lore.add("§c" + dataContainers.get(index).getClicksList().get(i1)
