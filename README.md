@@ -77,7 +77,8 @@ public class TestCheck {
 
 This class we will now extend with Check:
 *This will add some methods to the class and make the class visible for the ClassLoader*
-
+*If you r making a plugin and not an addon, you will have to register the Check in your main onEnable
+ with:* `CheckManager.registerCheck(new YourCheck());`
 ```java
 public class TestCheck extends Check {
 
