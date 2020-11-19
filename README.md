@@ -2,10 +2,7 @@
 
 The following explains how and for what the API can be used.
 
-With the API you can create standalone Addons, which you can put into plugins/AntiAC/Checks.
-*The Spigot-API still have to be implemented*
-
-You can also implement the API into your plugin.
+With the API you can hook into the plugin.
 
 The API is mainly intended to create new Checks.
 The data of the User can also be modified by using the API.
@@ -76,9 +73,7 @@ public class TestCheck {
 ```
 
 This class we will now extend with Check:
-*This will add some methods to the class and make the class visible for the ClassLoader*
-*If you r making a plugin and not an addon, you will have to register the Check in your main onEnable
- with:* `CheckManager.registerCheck(new YourCheck());`
+
 ```java
 public class TestCheck extends Check {
 
@@ -95,6 +90,21 @@ public class TestCheck extends Check {
 }
 ```
 
-Now you just have to fill in the methods and there you go.
+Now fill in the methods, go to your main class and register the Check in your onEnable()
+
+```java
+
+@Override
+public void onEnable() {
+
+// other stuff
+
+  CheckManager.registerCheck(new TestCheck());
+
+// another other stuff
+
+}
+
+```
 
 
