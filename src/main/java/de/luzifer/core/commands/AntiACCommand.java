@@ -2,6 +2,7 @@ package de.luzifer.core.commands;
 
 import de.luzifer.core.Core;
 import de.luzifer.core.api.player.User;
+import de.luzifer.core.api.profile.inventory.LogGUI;
 import de.luzifer.core.api.profile.inventory.ProfileGUI;
 import de.luzifer.core.utils.UpdateChecker;
 import de.luzifer.core.utils.Variables;
@@ -39,6 +40,8 @@ public class AntiACCommand implements CommandExecutor {
                 p.sendMessage(" ");
                 p.sendMessage(prefix + "§6/antiac version");
                 p.sendMessage(prefix + "§6/antiac checkupdate");
+                p.sendMessage(prefix + "§6/antiac logs");
+                p.sendMessage(prefix + "§6/antiac reload");
                 p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
                 p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
                 p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
@@ -46,6 +49,24 @@ public class AntiACCommand implements CommandExecutor {
                 return true;
             }
             else if(args.length == 1) {
+
+                if(args[0].equalsIgnoreCase("reload")) {
+                    Core.getInstance().reloadConfig();
+                    Variables.init();
+
+                    p.sendMessage(" ");
+                    p.sendMessage(prefix + "§7Config reloaded!");
+                    p.sendMessage(" ");
+                    return true;
+                } else
+
+                if(args[0].equalsIgnoreCase("logs")) {
+
+                    LogGUI logGUI = new LogGUI();
+                    logGUI.buildGUI();
+                    p.openInventory(logGUI.getInventory());
+                    return true;
+                } else
 
                 if(args[0].equalsIgnoreCase("version")) {
                     p.sendMessage(" ");
@@ -75,6 +96,7 @@ public class AntiACCommand implements CommandExecutor {
                     p.sendMessage(" ");
                     p.sendMessage(prefix + "§6/antiac version");
                     p.sendMessage(prefix + "§6/antiac checkupdate");
+                    p.sendMessage(prefix + "§6/antiac logs");
                     p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
                     p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
                     p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
@@ -161,6 +183,7 @@ public class AntiACCommand implements CommandExecutor {
                     p.sendMessage(" ");
                     p.sendMessage(prefix + "§6/antiac version");
                     p.sendMessage(prefix + "§6/antiac checkupdate");
+                    p.sendMessage(prefix + "§6/antiac logs");
                     p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
                     p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
                     p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");

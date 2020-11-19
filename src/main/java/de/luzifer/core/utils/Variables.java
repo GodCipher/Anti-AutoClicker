@@ -42,6 +42,21 @@ public class Variables {
 
     public static void init() {
 
+        PLAYER_OFFLINE = new ArrayList<>();
+        NOTIFY_ACTIVATED = new ArrayList<>();
+        NOTIFY_DEACTIVATED = new ArrayList<>();
+        NOTIFY_ALREADY_ACTIVATED = new ArrayList<>();
+        NOTIFY_ALREADY_DEACTIVATED = new ArrayList<>();
+        ON_CLICK_CHECK = new ArrayList<>();
+        ON_CLICK_CHECK_OFF = new ArrayList<>();
+        NOT_CHECKING_ANYONE = new ArrayList<>();
+        BAN_REASON = new ArrayList<>();
+        KICK_REASON = new ArrayList<>();
+        PLAYER_NOW_OFFLINE = new ArrayList<>();
+        PUNISHED = new ArrayList<>();
+        SHOUTOUT_PUNISHMENT = new ArrayList<>();
+        TEAM_NOTIFY = new ArrayList<>();
+
         if(!file.exists()) {
 
             try {

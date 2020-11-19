@@ -65,9 +65,7 @@ public class AverageCheck extends Check {
                     }
 
                     if(Variables.log) {
-                        if(!Log.isLogged(user.getPlayer())) {
-                            Log.log(user.getPlayer(), user.getClicks(), user.getAverage(), Variables.allowedClicks, "too equal average");
-                        }
+                        Log.log(user.getPlayer(), user.getClicks(), user.getAverage(), Variables.allowedClicks, "too equal average");
                     }
 
                     if(Variables.playerBan) {
@@ -121,13 +119,8 @@ public class AverageCheck extends Check {
                                 }
                             }
                         }
-                        if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                            user.getClicksAverageList().remove(0);
-                        }
-                        user.setClicks(0);
-                        return;
                     }
-
+                    else
                     if(Variables.playerKick) {
 
                         if(Variables.executeKickCommand.equals("") ||
@@ -170,13 +163,8 @@ public class AverageCheck extends Check {
                                 }
                             }
                         }
-                        if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                            user.getClicksAverageList().remove(0);
-                        }
-                        user.setClicks(0);
-                        return;
                     }
-
+                    else
                     if(Variables.playerKill) {
 
                         user.getPlayer().setHealth(0);
@@ -206,13 +194,8 @@ public class AverageCheck extends Check {
                                 }
                             }
                         }
-                        if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                            user.getClicksAverageList().remove(0);
-                        }
-                        user.setClicks(0);
-                        return;
                     }
-
+                    else
                     if(Variables.playerFreeze) {
                         if(!user.isFrozen()) {
                             user.setFrozen(true);
@@ -246,13 +229,8 @@ public class AverageCheck extends Check {
                                 }
                             }
                         }
-                        if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                            user.getClicksAverageList().remove(0);
-                        }
-                        user.setClicks(0);
-                        return;
                     }
-
+                    else
                     if(Variables.restrictPlayer) {
                         if(!user.isRestricted()) {
                             user.setRestricted(true);
@@ -285,27 +263,21 @@ public class AverageCheck extends Check {
                                 }
                             }
                         }
-                        if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                            user.getClicksAverageList().remove(0);
-                        }
-                        user.setClicks(0);
-                        return;
-                    }
-
-                    if(Variables.informTeam) {
-                        for(Player team : Bukkit.getOnlinePlayers()) {
-                            if(team.hasPermission(Objects.requireNonNull(Variables.perms))) {
-                                if(User.get(team.getUniqueId()).isNotified()) {
-                                    team.sendMessage(" ");
-                                    Variables.TEAM_NOTIFY.forEach(var -> team.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", user.getPlayer().getName())
-                                            .replaceAll("%clicks%", String.valueOf(user.getClicks()))
-                                            .replaceAll("%average%", String.valueOf(user.getAverage())).replaceAll("%VL%", String.valueOf(user.getViolations()))));
-                                    team.sendMessage(" ");
+                    } else {
+                        if(Variables.informTeam) {
+                            for(Player team : Bukkit.getOnlinePlayers()) {
+                                if(team.hasPermission(Objects.requireNonNull(Variables.perms))) {
+                                    if(User.get(team.getUniqueId()).isNotified()) {
+                                        team.sendMessage(" ");
+                                        Variables.TEAM_NOTIFY.forEach(var -> team.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", user.getPlayer().getName())
+                                                .replaceAll("%clicks%", String.valueOf(user.getClicks()))
+                                                .replaceAll("%average%", String.valueOf(user.getAverage())).replaceAll("%VL%", String.valueOf(user.getViolations()))));
+                                        team.sendMessage(" ");
+                                    }
                                 }
                             }
                         }
                     }
-
                 }
             }
 

@@ -4,6 +4,8 @@ import de.luzifer.core.api.check.Check;
 import de.luzifer.core.api.events.ActionBarMessageEvent;
 import de.luzifer.core.api.manager.CheckManager;
 import de.luzifer.core.api.player.User;
+import de.luzifer.core.api.profile.inventory.InsideLogGUI;
+import de.luzifer.core.api.profile.inventory.LogGUI;
 import de.luzifer.core.api.profile.inventory.ProfileGUI;
 import de.luzifer.core.checks.AverageCheck;
 import de.luzifer.core.checks.ClickCheck;
@@ -13,7 +15,6 @@ import de.luzifer.core.listener.Listeners;
 import de.luzifer.core.timer.Timer;
 import de.luzifer.core.timer.UpdateTimer;
 import de.luzifer.core.utils.Variables;
-import de.luzifer.core.utils.loader.AntiACClassLoader;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -162,6 +163,12 @@ public class Core extends JavaPlugin {
             if(all.getOpenInventory().getTopInventory().getHolder() instanceof ProfileGUI) {
                 all.closeInventory();
             }
+            if(all.getOpenInventory().getTopInventory().getHolder() instanceof LogGUI) {
+                all.closeInventory();
+            }
+            if(all.getOpenInventory().getTopInventory().getHolder() instanceof InsideLogGUI) {
+                all.closeInventory();
+            }
         }
 
     }
@@ -176,6 +183,8 @@ public class Core extends JavaPlugin {
             e.printStackTrace();
         }
     }
+
+
 
     public void loadMessages() {
 
@@ -255,46 +264,14 @@ public class Core extends JavaPlugin {
         } catch (InterruptedException ignored) {}
     }
 
-    private void addFromDir(File dir) {
-
-        AntiACClassLoader loader = new AntiACClassLoader();
-
-        Arrays.stream(Objects.requireNonNull(dir.listFiles())).forEach(jar -> {
-            if(jar.getName().endsWith(".jar")) {
-                if(!loader.findClasses(getInstance().getClassLoader(), jar, Check.class).isEmpty()) {
-                    for(Class<? extends Check> clazz : loader.findClasses(getInstance().getClassLoader(), jar, Check.class)) {
-
-                        try {
-                            Check checkInstance = clazz.getConstructor().newInstance();
-                            checkInstance.onEnable(this);
-
-                            CheckManager.registerCheck(checkInstance);
-                        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                            if(!(e instanceof InstantiationException)) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }
-                }
-            }
-        });
-
-    }
-
     public void loadChecks() {
-
-        File file = new File("plugins/AntiAC/Checks");
-
-        if(!file.exists())
-            file.mkdirs();
-
-        addFromDir(file);
 
         CheckManager.registerCheck(new AverageCheck());
         CheckManager.registerCheck(new ClickCheck());
 
-        Bukkit.getLogger().info("[AntiAC] Registered " + CheckManager.getChecks().size() + " Checks");
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            Bukkit.getLogger().info("[AntiAC] Registered " + CheckManager.getChecks().size() + " Checks");
+        }, 1);
 
     }
 

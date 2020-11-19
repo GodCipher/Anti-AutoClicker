@@ -41,9 +41,7 @@ public class ClickCheck extends Check {
             }
 
             if(Variables.log) {
-                if(!Log.isLogged(user.getPlayer())) {
-                    Log.log(user.getPlayer(), user.getClicks(), user.getAverage(), Variables.allowedClicks, "too many clicks");
-                }
+                Log.log(user.getPlayer(), user.getClicks(), user.getAverage(), Variables.allowedClicks, "too many clicks");
             }
 
             if(user.getClicks() >= Variables.banAtClicks) {
@@ -96,13 +94,9 @@ public class ClickCheck extends Check {
                             }
                         }
                     }
-                    if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                        user.getClicksAverageList().remove(0);
-                    }
-                    user.setClicks(0);
-                    return;
                 }
             }
+            else
             if(user.getClicks() >= Variables.kickAtClicks) {
                 if(Variables.playerKick) {
 
@@ -147,13 +141,9 @@ public class ClickCheck extends Check {
                             }
                         }
                     }
-                    if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                        user.getClicksAverageList().remove(0);
-                    }
-                    user.setClicks(0);
-                    return;
                 }
             }
+            else
             if(user.getClicks() >= Variables.killAtClicks) {
                 if(Variables.playerKill) {
 
@@ -185,13 +175,9 @@ public class ClickCheck extends Check {
                             }
                         }
                     }
-                    if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                        user.getClicksAverageList().remove(0);
-                    }
-                    user.setClicks(0);
-                    return;
                 }
             }
+            else
             if(user.getClicks() >= Variables.freezeAtClicks) {
                 if(Variables.playerFreeze) {
                     if(!user.isFrozen()) {
@@ -227,14 +213,9 @@ public class ClickCheck extends Check {
                             }
                         }
                     }
-                    if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                        user.getClicksAverageList().remove(0);
-                    }
-                    user.setClicks(0);
-                    return;
                 }
             }
-
+            else
             if(Variables.restrictPlayer) {
                 if(!user.isRestricted()) {
                     user.setRestricted(true);
@@ -267,26 +248,23 @@ public class ClickCheck extends Check {
                         }
                     }
                 }
-                if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                    user.getClicksAverageList().remove(0);
-                }
-                user.setClicks(0);
-                return;
-            }
-
-            if(Variables.informTeam) {
-                for(Player team : Bukkit.getOnlinePlayers()) {
-                    if(team.hasPermission(Objects.requireNonNull(Variables.perms))) {
-                        if(User.get(team.getUniqueId()).isNotified()) {
-                            team.sendMessage(" ");
-                            Variables.TEAM_NOTIFY.forEach(var -> team.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", user.getPlayer().getName())
-                                    .replaceAll("%clicks%", String.valueOf(user.getClicks()))
-                                    .replaceAll("%average%", String.valueOf(user.getAverage())).replaceAll("%VL%", String.valueOf(user.getViolations()))));
-                            team.sendMessage(" ");
+            } else {
+                if(Variables.informTeam) {
+                    for(Player team : Bukkit.getOnlinePlayers()) {
+                        if(team.hasPermission(Objects.requireNonNull(Variables.perms))) {
+                            if(User.get(team.getUniqueId()).isNotified()) {
+                                team.sendMessage(" ");
+                                Variables.TEAM_NOTIFY.forEach(var -> team.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", user.getPlayer().getName())
+                                        .replaceAll("%clicks%", String.valueOf(user.getClicks()))
+                                        .replaceAll("%average%", String.valueOf(user.getAverage())).replaceAll("%VL%", String.valueOf(user.getViolations()))));
+                                team.sendMessage(" ");
+                            }
                         }
                     }
                 }
             }
+
+
         }
 
     }

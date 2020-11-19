@@ -2,6 +2,8 @@ package de.luzifer.core.listener;
 
 import de.luzifer.core.Core;
 import de.luzifer.core.api.player.User;
+import de.luzifer.core.api.profile.inventory.InsideLogGUI;
+import de.luzifer.core.api.profile.inventory.LogGUI;
 import de.luzifer.core.api.profile.inventory.ProfileGUI;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.Bukkit;
@@ -53,6 +55,14 @@ public class Listeners implements Listener {
         if(e.getView().getTopInventory().getHolder() instanceof ProfileGUI) {
             ProfileGUI profileGUI = (ProfileGUI) e.getView().getTopInventory().getHolder();
             profileGUI.handleEvent(e);
+        }
+        if(e.getView().getTopInventory().getHolder() instanceof LogGUI) {
+            LogGUI logGUI = (LogGUI) e.getView().getTopInventory().getHolder();
+            logGUI.handleEvent(e);
+        }
+        if(e.getView().getTopInventory().getHolder() instanceof InsideLogGUI) {
+            InsideLogGUI insideLogGUI = (InsideLogGUI) e.getView().getTopInventory().getHolder();
+            insideLogGUI.handleEvent(e);
         }
     }
 

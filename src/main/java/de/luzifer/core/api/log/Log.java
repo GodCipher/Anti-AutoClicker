@@ -35,6 +35,20 @@ public class Log {
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-YYYY HH;mm;ss");
 
+        if(isLogged(player)) {
+            if(cfg.getInt("LogDetailed." + player.getName() + ".clicks") >= clicks) {
+                return;
+            }
+
+            for(String s : cfg.getStringList("LogList")) {
+                if(s.startsWith(player.getName())) {
+                    logList.remove(s);
+                    cfg.set("LogList", logList);
+                    break;
+                }
+            }
+
+        }
 
         String c = "" + player.getName() + " ||| [" + clicks + "] Clicks - [" + average + "] ||| " + format.format(date);
         logList.add(c);
