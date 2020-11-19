@@ -78,11 +78,6 @@ This class we will now extend with Check:
 public class TestCheck extends Check {
 
     @Override
-    public void onEnable() {
-        // everything in here will be executed, when the Check gets loaded
-    }
-
-    @Override
     public void execute(User user) {
         // everything in here will be executed
     }
