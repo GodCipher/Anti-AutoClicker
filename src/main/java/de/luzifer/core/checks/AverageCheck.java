@@ -18,11 +18,6 @@ import java.util.*;
 public class AverageCheck extends Check {
 
     @Override
-    public void onEnable(Plugin plugin) {
-
-    }
-
-    @Override
     public void execute(User user) {
 
         if(Variables.averageCheck) {
