@@ -21,7 +21,7 @@ public class ProfileGUI extends PaginatedMenu {
 
     @Override
     public String getTitle() {
-        return "§8[" + "§6" + (page+1) + "§8] §9DataProfile by §b" + user.getPlayer().getName();
+        return "§8[" + "§6" + (page+1) + "§8] §b" + user.getPlayer().getName();
     }
 
     @Override

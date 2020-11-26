@@ -6,7 +6,7 @@
 
     <groupId>de.luzifer</groupId>
     <artifactId>AntiAC</artifactId>
-    <version>2.6.5</version>
+    <version>2.6.5-FIX</version>
     <packaging>jar</packaging>
 
     <name>AntiAC</name>

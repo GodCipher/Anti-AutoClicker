@@ -17,10 +17,9 @@ import java.util.Objects;
 
 public class LogGUI extends PaginatedMenu {
 
-//todo
     @Override
     public String getTitle() {
-        return "§8[" + "§6" + (page+1) + "§8] §9Choose a File to inspect";
+        return "§8[" + "§6" + (page+1) + "§8] §9Choose a File";
     }
 
     @Override

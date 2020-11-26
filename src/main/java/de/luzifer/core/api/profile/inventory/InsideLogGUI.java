@@ -27,7 +27,7 @@ public class InsideLogGUI extends PaginatedMenu {
 
     @Override
     public String getTitle() {
-        return "§8[" + "§6" + (page+1) + "§8] §9Log-File: §b" + file.getName().replaceAll(".yml", "");
+        return "§8[" + "§6" + (page+1) + "§8] §b" + file.getName().replaceAll(".yml", "");
     }
 
     @Override
