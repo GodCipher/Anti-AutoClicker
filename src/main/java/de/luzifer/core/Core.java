@@ -1,6 +1,5 @@
 package de.luzifer.core;
 
-import de.luzifer.core.api.check.Check;
 import de.luzifer.core.api.events.ActionBarMessageEvent;
 import de.luzifer.core.api.manager.CheckManager;
 import de.luzifer.core.api.player.User;
@@ -9,6 +8,7 @@ import de.luzifer.core.api.profile.inventory.LogGUI;
 import de.luzifer.core.api.profile.inventory.ProfileGUI;
 import de.luzifer.core.checks.AverageCheck;
 import de.luzifer.core.checks.ClickCheck;
+import de.luzifer.core.checks.DoubleClickCheck;
 import de.luzifer.core.commands.AntiACCommand;
 import de.luzifer.core.extern.Metrics;
 import de.luzifer.core.listener.Listeners;
@@ -29,13 +29,11 @@ import org.bukkit.util.StringUtil;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Core extends JavaPlugin {
 
@@ -268,6 +266,7 @@ public class Core extends JavaPlugin {
 
         CheckManager.registerCheck(new AverageCheck());
         CheckManager.registerCheck(new ClickCheck());
+        CheckManager.registerCheck(new DoubleClickCheck());
 
         Bukkit.getScheduler().runTaskLater(this, () -> {
             Bukkit.getLogger().info("[AntiAC] Registered " + CheckManager.getChecks().size() + " Checks");

@@ -80,72 +80,88 @@ public class ProfileGUI extends PaginatedMenu {
             if(index >= dataContainers.size()) break;
 
             if(dataContainers.get(index) != null) {
-
-                ItemStack item = new ItemStack(Objects.requireNonNull(XMaterial.CHEST.parseMaterial()));
-                ItemMeta meta = item.getItemMeta();
-                assert meta != null;
-                meta.setDisplayName("§cDataContainer §8" + UUID.randomUUID().toString().split("(?<=\\G.{5})")[0]);
-                ArrayList<String> lore = new ArrayList<>();
-                PrettyTime pr = new PrettyTime();
-                lore.add("§6Data from: §e" + pr.format(dataContainers.get(index).getFinishedAt()));
-                lore.add("§6Data collected: §e" + Variables.storeAsManyData);
-                lore.add("");
-                lore.add("§6Clicks                  §6Averages");
-                for(int i1 = 0; i1 < dataContainers.get(index).getClicksList().size(); i1++) {
-                    if(i1 >= 20) {
-                        lore.add("§8+" + (dataContainers.get(index).getClicksList().size()-i1) + " more...");
-                        break;
-                    } else {
-
-                        if(Variables.allowedClicks - dataContainers.get(index).getClicksList().get(i1) <= 8) {
-                            if(!(Variables.allowedClicks - dataContainers.get(index).getClicksList().get(i1) <= 0)) {
-
-                                if (dataContainers.get(index).getClicksList().get(i1) >= 100 && dataContainers.get(index).getClicksList().get(i1) <= 999) {
-                                    lore.add("§c" + dataContainers.get(index).getClicksList().get(i1)
-                                            + "                         §6" + dataContainers.get(index).getAveragesList().get(i1));
-                                } else if(dataContainers.get(index).getClicksList().get(i1) >= 10 && dataContainers.get(index).getClicksList().get(i1) <= 99) {
-                                    lore.add("§c" + dataContainers.get(index).getClicksList().get(i1)
-                                            + "                           §6" + dataContainers.get(index).getAveragesList().get(i1));
-                                } else {
-                                    lore.add("§c" + dataContainers.get(index).getClicksList().get(i1)
-                                            + "                            §6" + dataContainers.get(index).getAveragesList().get(i1));
-                                }
-                            } else {
-
-                                if (dataContainers.get(index).getClicksList().get(i1) >= 100 && dataContainers.get(index).getClicksList().get(i1) <= 999) {
-                                    lore.add("§4" + dataContainers.get(index).getClicksList().get(i1)
-                                            + "                         §6" + dataContainers.get(index).getAveragesList().get(i1));
-                                } else if(dataContainers.get(index).getClicksList().get(i1) >= 10 && dataContainers.get(index).getClicksList().get(i1) <= 99) {
-                                    lore.add("§4" + dataContainers.get(index).getClicksList().get(i1)
-                                            + "                           §6" + dataContainers.get(index).getAveragesList().get(i1));
-                                } else {
-                                    lore.add("§4" + dataContainers.get(index).getClicksList().get(i1)
-                                            + "                            §6" + dataContainers.get(index).getAveragesList().get(i1));
-                                }
-                            }
-                        } else {
-
-                            if (dataContainers.get(index).getClicksList().get(i1) >= 100 && dataContainers.get(index).getClicksList().get(i1) <= 999) {
-                                lore.add("§a" + dataContainers.get(index).getClicksList().get(i1)
-                                        + "                         §6" + dataContainers.get(index).getAveragesList().get(i1));
-                            } else if(dataContainers.get(index).getClicksList().get(i1) >= 10 && dataContainers.get(index).getClicksList().get(i1) <= 99) {
-                                lore.add("§a" + dataContainers.get(index).getClicksList().get(i1)
-                                        + "                           §6" + dataContainers.get(index).getAveragesList().get(i1));
-                            } else {
-                                lore.add("§a" + dataContainers.get(index).getClicksList().get(i1)
-                                        + "                            §6" + dataContainers.get(index).getAveragesList().get(i1));
-                            }
-                        }
-                    }
-                }
-                meta.setLore(lore);
-                item.setItemMeta(meta);
-
-                inv.addItem(item);
+                addDataContainer(dataContainers);
             }
 
         }
 
+        changeButtons(dataContainers);
+
+    }
+
+    private void addDataContainer(List<DataContainer> dataContainers) {
+
+        ItemStack item = new ItemStack(Objects.requireNonNull(XMaterial.CHEST.parseMaterial()));
+        ItemMeta meta = item.getItemMeta();
+        assert meta != null;
+        meta.setDisplayName("§cDataContainer §8" + UUID.randomUUID().toString().split("(?<=\\G.{5})")[0]);
+        ArrayList<String> lore = new ArrayList<>();
+        PrettyTime pr = new PrettyTime();
+        lore.add("§6Data from: §e" + pr.format(dataContainers.get(index).getFinishedAt()));
+        lore.add("§6Data collected: §e" + Variables.storeAsManyData);
+        lore.add("");
+        lore.add("§6Clicks                  §6Averages");
+        setupDataContainerLore(lore, dataContainers);
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        inv.addItem(item);
+    }
+
+    private void setupDataContainerLore(List<String> lore, List<DataContainer> dataContainers) {
+        for(int i1 = 0; i1 < dataContainers.get(index).getClicksList().size(); i1++) {
+            if(i1 >= 20) {
+                lore.add("§8+" + (dataContainers.get(index).getClicksList().size()-i1) + " more...");
+                break;
+            } else {
+                setupDataContainerLoreColor(lore, dataContainers, i1);
+            }
+        }
+    }
+
+    private void setupDataContainerLoreColor(List<String> lore, List<DataContainer> dataContainers, int i1) {
+        if(Variables.allowedClicks - dataContainers.get(index).getClicksList().get(i1) <= 8) {
+            if(!(Variables.allowedClicks - dataContainers.get(index).getClicksList().get(i1) <= 0)) {
+
+                if (dataContainers.get(index).getClicksList().get(i1) >= 100 && dataContainers.get(index).getClicksList().get(i1) <= 999) {
+                    lore.add("§c" + dataContainers.get(index).getClicksList().get(i1)
+                            + "                         §6" + dataContainers.get(index).getAveragesList().get(i1));
+                } else if(dataContainers.get(index).getClicksList().get(i1) >= 10 && dataContainers.get(index).getClicksList().get(i1) <= 99) {
+                    lore.add("§c" + dataContainers.get(index).getClicksList().get(i1)
+                            + "                           §6" + dataContainers.get(index).getAveragesList().get(i1));
+                } else {
+                    lore.add("§c" + dataContainers.get(index).getClicksList().get(i1)
+                            + "                            §6" + dataContainers.get(index).getAveragesList().get(i1));
+                }
+            } else {
+
+                if (dataContainers.get(index).getClicksList().get(i1) >= 100 && dataContainers.get(index).getClicksList().get(i1) <= 999) {
+                    lore.add("§4" + dataContainers.get(index).getClicksList().get(i1)
+                            + "                         §6" + dataContainers.get(index).getAveragesList().get(i1));
+                } else if(dataContainers.get(index).getClicksList().get(i1) >= 10 && dataContainers.get(index).getClicksList().get(i1) <= 99) {
+                    lore.add("§4" + dataContainers.get(index).getClicksList().get(i1)
+                            + "                           §6" + dataContainers.get(index).getAveragesList().get(i1));
+                } else {
+                    lore.add("§4" + dataContainers.get(index).getClicksList().get(i1)
+                            + "                            §6" + dataContainers.get(index).getAveragesList().get(i1));
+                }
+            }
+        } else {
+
+            if (dataContainers.get(index).getClicksList().get(i1) >= 100 && dataContainers.get(index).getClicksList().get(i1) <= 999) {
+                lore.add("§a" + dataContainers.get(index).getClicksList().get(i1)
+                        + "                         §6" + dataContainers.get(index).getAveragesList().get(i1));
+            } else if(dataContainers.get(index).getClicksList().get(i1) >= 10 && dataContainers.get(index).getClicksList().get(i1) <= 99) {
+                lore.add("§a" + dataContainers.get(index).getClicksList().get(i1)
+                        + "                           §6" + dataContainers.get(index).getAveragesList().get(i1));
+            } else {
+                lore.add("§a" + dataContainers.get(index).getClicksList().get(i1)
+                        + "                            §6" + dataContainers.get(index).getAveragesList().get(i1));
+            }
+        }
+    }
+
+    private void changeButtons(List<DataContainer> dataContainers) {
         if(page == 0) {
             ItemStack backward = new ItemStack(Objects.requireNonNull(XMaterial.STONE_BUTTON.parseMaterial()));
             ItemMeta backwardMeta = backward.getItemMeta();
@@ -168,27 +184,10 @@ public class ProfileGUI extends PaginatedMenu {
 
             inv.setItem(53, forward);
         }
-
     }
 
     public User getOwner() {
         return user;
-    }
-
-    public void setStartPage(int page) {
-        this.page = page;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public boolean isNextPage(int i) {
-        return !((index + 1) >= i);
-    }
-
-    public boolean isPreviousPage() {
-        return !(page == 0);
     }
 
 }

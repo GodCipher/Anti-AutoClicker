@@ -38,7 +38,9 @@ public class Variables {
 
     public static int allowedClicks, averageCheckAtEntries,
             averageCheckAtNeededClicks, unbanAfterHours, clickAverageOfSeconds,
-            freezeTimeInSeconds, banAtClicks, kickAtClicks, killAtClicks, freezeAtClicks, highestAllowedPing, clearVLMinutes, storeAsManyData, removeAfterExist;
+            freezeTimeInSeconds, banAtClicks,
+            kickAtClicks, killAtClicks, freezeAtClicks, highestAllowedPing, clearVLMinutes,
+            storeAsManyData, removeAfterExist, sanctionateAtViolations, DCcheckAtClicks;
 
     public static void init() {
 
@@ -79,38 +81,35 @@ public class Variables {
             e.printStackTrace();
         }
 
+        configStrings(cfg);
+
+        configBooleans();
+
+        configInts();
+    }
+
+    private static void configStrings(FileConfiguration cfg) {
         PLAYER_OFFLINE.addAll(cfg.getStringList("Player-Not-Online"));
-
         NOTIFY_ACTIVATED.addAll( cfg.getStringList("Activate-Notify"));
-
         NOTIFY_DEACTIVATED.addAll(cfg.getStringList("Deactivate-Notify"));
-
         NOTIFY_ALREADY_ACTIVATED.addAll(cfg.getStringList("Notify-Already-Activated")) ;
-
         NOTIFY_ALREADY_DEACTIVATED.addAll(cfg.getStringList("Notify-Already-Deactivated"));
-
         ON_CLICK_CHECK.addAll(cfg.getStringList("On-Click-Check"));
-
         ON_CLICK_CHECK_OFF.addAll(cfg.getStringList("On-Click-Check-Off"));
-
         NOT_CHECKING_ANYONE.addAll(cfg.getStringList("Not-Checking-Anyone"));
-
         BAN_REASON.addAll(cfg.getStringList("Ban-Reason"));
-
         KICK_REASON.addAll(cfg.getStringList("Kick-Reason"));
-
         PLAYER_NOW_OFFLINE.addAll(cfg.getStringList("Player-Now-Offline"));
-
         PUNISHED.addAll(cfg.getStringList("Punished"));
-
         SHOUTOUT_PUNISHMENT.addAll(cfg.getStringList("ShoutOut-Punishment"));
-
         TEAM_NOTIFY.addAll(cfg.getStringList("Team-Notify"));
 
         executeBanCommand = Core.getInstance().getConfig().getString("AntiAC.ExecuteBanCommand");
         executeKickCommand = Core.getInstance().getConfig().getString("AntiAC.ExecuteKickCommand");
         perms = Core.getInstance().getConfig().getString("AntiAC.NeededPermission");
+    }
 
+    private static void configBooleans() {
         informTeam = Core.getInstance().getConfig().getBoolean("AntiAC.InformTeam");
         averageCheck = Core.getInstance().getConfig().getBoolean("AntiAC.AverageCheck");
         consoleNotify = Core.getInstance().getConfig().getBoolean("AntiAC.ConsoleNotification");
@@ -125,7 +124,9 @@ public class Variables {
         pingChecker = Core.getInstance().getConfig().getBoolean("AntiAC.PingChecker");
         autoNotify = Core.getInstance().getConfig().getBoolean("AntiAC.AutoNotification");
         doNotStoreNothing = Core.getInstance().getConfig().getBoolean("AntiAC.Profile-Do-Not-Store-Nothing");
+    }
 
+    private static void configInts() {
         averageCheckAtNeededClicks = Core.getInstance().getConfig().getInt("AntiAC.AverageCheckNeededClicks");
         averageCheckAtEntries = Core.getInstance().getConfig().getInt("AntiAC.AverageCheckAtEntries");
         allowedClicks = Core.getInstance().getConfig().getInt("AntiAC.AllowedClicks");
@@ -140,6 +141,8 @@ public class Variables {
         clearVLMinutes = Core.getInstance().getConfig().getInt("AntiAC.Clear-Violations-After-Minutes-Of-Non-Adding");
         storeAsManyData = Core.getInstance().getConfig().getInt("AntiAC.Profile-Store-As-Much-Data-In-One-DataContainer");
         removeAfterExist = Core.getInstance().getConfig().getInt("AntiAC.Remove-First-DataContainer-After-X-Exist");
+        sanctionateAtViolations = Core.getInstance().getConfig().getInt("AntiAC.Just-Sanction-If-At-Violations");
+        DCcheckAtClicks = Core.getInstance().getConfig().getInt("AntiAC.Check-At-Clicks");
     }
 
 }

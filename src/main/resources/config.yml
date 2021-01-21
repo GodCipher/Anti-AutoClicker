@@ -1,76 +1,95 @@
 # The plugin does not perceive clicks on the ground or in the air so well. But clicks against players or entities are generally 100% accurate
 AntiAC:
 
-# Normal configurations
+# Permission Settings
+  NeededPermission: 'antiac.clicks'
+  # Permissions which are needed to execute the commands
+  # OP also works
+
+
+
+# Clicks Settings
   AllowedClicks: 40
   # The number of clicks that are allowed
-  # Could come to false positives if it is under 15-25
+  # Could come to false positives if it is under 30
 
-  React-At-Violations: 5
-  # Will punish the player & inform the team, if the player have this much VL's
-  # Set to 0 for instant punish
 
+
+# Profile Settings
   Profile-Store-As-Much-Data-In-One-DataContainer: 20
   # Set how much data a DataContainer saves (what will be displayed in the profile)
   # If it reached this amount, the DataContainer will be closed, posted to the profile and a new will be created
   # Storing per second
-  # NOTE: Too much data in one DataContainer could glitch out of the minecraft window at a too little screen
+  # NOTE: Too much data in one DataContainer could glitch out of the minecraft window at a too little screen or cause other bugs
 
   Remove-First-DataContainer-After-X-Exist: 10
-  # Removes the first set DataContainer after Remove-First-DataContainer-After-X-Exist DataContainer exist
+  # Removes the first set DataContainer after X DataContainer exist
   # To keep track of the DataContainer and don't get too many
 
   Profile-Do-Not-Store-Nothing: true
   # If on true: Doesn't store ClickCounts & their Averages when the clicks are 0
-  # NOTE: Will not send the DataContainer into the Profile 'till Profile-Store-As-Much-Data-In-One-DataContainer is reached
+  # NOTE: Will not send the DataContainer into the Profile 'till X is reached
     # Could take a long time, when the player doesn't click
+
+
+
+# Violation Settings
+  Just-Sanction-If-At-Violations: 20
+  # (!!) SET TO -1 IF YOU WANT TO HAVE THAT DISABLED (!!)
+  # Just punishes the detected player if he has X violations or more
 
   Easy-Violation: 1
   # Set the amount of violations added to the player, when he fires an easy-violation
 
-  Normal-Violation: 2
+  Normal-Violation: 3
   # Set the amount of violations added to the player, when he fires an normal-violation
 
-  Hard-Violation: 3
+  Hard-Violation: 5
   # Set the amount of violations added to the player, when he fires an hard-violation
 
   Clear-Violations-After-Minutes-Of-Non-Adding: 5
-  # Clear the violation of a player, if he hasn't got any violation Clear-Violations-After-Minutes-Of-Non-Adding minutes long
+  # Clear the violation of a player, if he hasn't got any violation X minutes long
 
+
+
+# DoubleClick Settings
+  Check-At-Clicks: 12
+  # Starts to check if the user clicks are over X
+  # NOTE: It is NOT recommended to put this value under or at 10 (causes to 100% false positives)
+
+
+
+# Average Settings
   ClickAverageOfSeconds: 3
-  # Summarizes the clicks from the last ClickAverageOfSeconds seconds
+  # Summarizes the clicks from the last X seconds
 
   AverageCheck: true
   # The average clicks are checked if they are constant if the player is above the allowed clicks
 
   AverageCheckAtEntries: 3
-  # AverageCheck will fire if the AverageChecker contains AverageCheckAtEntries entries
+  # AverageCheck will fire if the AverageChecker contains X entries
 
   AverageCheckNeededClicks: 15
-  # AverageCheck will fire if the player have more clicks than AverageCheckNeededClicks
+  # AverageCheck will fire if the player have more clicks than X
   # Could come to false positives if it is under 15
 
-  AverageCheckHowOften: 5
-  # Summarizes the averages from the last ClickAverageOfSeconds seconds
 
-  NeededPermission: 'antiac.clicks'
-  # Permissions which are needed to execute the commands
-  # OP also works
 
+# Normal Notification Settings
   AutoNotification: true
   # Enables notifications for players with permissions after a reload or when they log in
 
-  ConsoleNotification: true
-  # Sends a notification to the server console when a player comes over the allowed CPS
 
+
+# Anti-Lag-False-Positives Settings
   TPSChecker: true
   # Checks the tps to prevent false detections because of lags
   # Stops the counting of the clicks while the low tps
-  # EVERY LAG PIECE COUNTS
+  # NOTE: EVERY LAG PIECE COUNTS
 
   LowestAllowedTPS: 15
   # Set the lowest allowed TPS.
-  # If the TPS is lower than LowestAllowedTPS the TPSProtection will be activated
+  # If the TPS is lower than X the TPSProtection will be activated
 
   PingChecker: true
   # Checks the ping of every player to prevent false detections because of ping
@@ -78,29 +97,42 @@ AntiAC:
 
   HighestAllowedPing: 200
   # Set the highest allowed Ping
-  # If the Ping is higher than HighestAllowedPing the PingProtection will be activated
+  # If the Ping is higher than X the PingProtection will be activated
 
+
+
+# Update Settings
   UpdateChecker: true
   # Check the plugin for updates and shout out a message if there is any
 
+
+
+# Bypass Settings
   Bypass: true
   # If 'true' the clicks of the players with the perms BypassPermission will not be count
 
   BypassPermission: 'antiac.bypass'
   # Permission for being bypassed
-  # OP also works
+  # NOTE: OP also works
 
+
+
+# Log Settings
   Log: false
-  # Store players who come over the allowed clicks with their highest click count in a file.
+  # Store players who got detected in a file.
   # ATTENTION only recommended if sufficient memory space is available.
 
   DeleteLogsAfterDays: 14
-  # Deletes the logs after DeleteLogsAfter days
+  # Deletes the logs after X days
+
 
 
 # Punishments configurations
   InformTeam: true
-  # Sends a message to someone with the permissions If a player got discovered for AutoClicker
+  # Sends a message to someone with the permissions If a player got detected
+
+  ConsoleNotification: true
+  # Sends a notification to the server console when a player got detected
 
   RestrictPlayer: true
   # If a player got discovered for AutoClicker he can't build & place blocks and can't hit entities

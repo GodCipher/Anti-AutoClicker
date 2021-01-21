@@ -16,6 +16,12 @@ public abstract class PaginatedMenu extends Menu {
 
         super.build();
 
+        setButtons();
+
+        fill();
+    }
+
+    private void setButtons() {
         ItemStack back = new ItemStack(Objects.requireNonNull(XMaterial.OAK_BUTTON.parseMaterial()));
         ItemMeta backMeta = back.getItemMeta();
         assert backMeta != null;
@@ -29,8 +35,6 @@ public abstract class PaginatedMenu extends Menu {
         forwardMeta.setDisplayName("§bNext page");
         forward.setItemMeta(forwardMeta);
         inv.setItem(53, forward);
-
-        fill();
     }
 
     public int getMaxItemsPerPage() {

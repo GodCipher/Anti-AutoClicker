@@ -37,15 +37,7 @@ public class AntiACCommand implements CommandExecutor {
             }
 
             if(args.length == 0) {
-                p.sendMessage(" ");
-                p.sendMessage(prefix + "§6/antiac version");
-                p.sendMessage(prefix + "§6/antiac checkupdate");
-                p.sendMessage(prefix + "§6/antiac logs");
-                p.sendMessage(prefix + "§6/antiac reload");
-                p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
-                p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
-                p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
-                p.sendMessage(" ");
+                sendCommands(p);
                 return true;
             }
             else if(args.length == 1) {
@@ -66,6 +58,7 @@ public class AntiACCommand implements CommandExecutor {
                     logGUI.buildGUI();
                     p.openInventory(logGUI.getInventory());
                     return true;
+
                 } else
 
                 if(args[0].equalsIgnoreCase("version")) {
@@ -93,14 +86,7 @@ public class AntiACCommand implements CommandExecutor {
                     return true;
                 } else {
 
-                    p.sendMessage(" ");
-                    p.sendMessage(prefix + "§6/antiac version");
-                    p.sendMessage(prefix + "§6/antiac checkupdate");
-                    p.sendMessage(prefix + "§6/antiac logs");
-                    p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
-                    p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
-                    p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
-                    p.sendMessage(" ");
+                    sendCommands(p);
                     return true;
 
                 }
@@ -180,14 +166,7 @@ public class AntiACCommand implements CommandExecutor {
                     p.sendMessage(" ");
                 } else {
 
-                    p.sendMessage(" ");
-                    p.sendMessage(prefix + "§6/antiac version");
-                    p.sendMessage(prefix + "§6/antiac checkupdate");
-                    p.sendMessage(prefix + "§6/antiac logs");
-                    p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
-                    p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
-                    p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
-                    p.sendMessage(" ");
+                    sendCommands(p);
                     return true;
 
                 }
@@ -195,5 +174,17 @@ public class AntiACCommand implements CommandExecutor {
         }
 
         return false;
+    }
+
+    private void sendCommands(Player p) {
+        p.sendMessage(" ");
+        p.sendMessage(prefix + "§6/antiac version");
+        p.sendMessage(prefix + "§6/antiac checkupdate");
+        p.sendMessage(prefix + "§6/antiac logs");
+        p.sendMessage(prefix + "§6/antiac reload");
+        p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
+        p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
+        p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
+        p.sendMessage(" ");
     }
 }

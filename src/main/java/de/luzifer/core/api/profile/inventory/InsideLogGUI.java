@@ -98,35 +98,45 @@ public class InsideLogGUI extends PaginatedMenu {
             if(index >= playerNames.size()) break;
 
             if(playerNames.get(index) != null) {
-                String name = cfg.getString("LogDetailed." + playerNames.get(index) + ".name");
-                String uuid = cfg.getString("LogDetailed." + playerNames.get(index) + ".uuid");
-                String date = cfg.getString("LogDetailed." + playerNames.get(index) + ".date");
-                Integer clicks = cfg.getInt("LogDetailed." + playerNames.get(index) + ".clicks");
-                Double average = cfg.getDouble("LogDetailed." + playerNames.get(index) + ".average");
-                Integer clicksToMuch = cfg.getInt("LogDetailed." + playerNames.get(index) + ".clicksToMuch");
-                String logMessage = cfg.getString("LogDetailed." + playerNames.get(index) + ".logMessage");
 
-                ItemStack itemStack = new ItemStack(XMaterial.PAPER.parseMaterial());
-                ItemMeta itemMeta = itemStack.getItemMeta();
-
-                itemMeta.setDisplayName("§cIndex: " + (index+1));
-                ArrayList<String> lore = new ArrayList<>();
-                lore.add("§6Name: §e" + name);
-                lore.add("§6UUID: §e" + uuid);
-                lore.add("§6Date: §e" + date);
-                lore.add("§6Clicks: §e" + clicks);
-                lore.add("§6average: §e" + average);
-                lore.add("§6Clicks to much: §e" + clicksToMuch);
-                lore.add("§6Log message: §e" + logMessage);
-                itemMeta.setLore(lore);
-                itemStack.setItemMeta(itemMeta);
-
-                inv.addItem(itemStack);
+                addLogEntry(cfg, playerNames);
 
             }
 
         }
 
+        changeButtons(playerNames);
+
+    }
+
+    private void addLogEntry(FileConfiguration cfg, List<String> playerNames) {
+        String name = cfg.getString("LogDetailed." + playerNames.get(index) + ".name");
+        String uuid = cfg.getString("LogDetailed." + playerNames.get(index) + ".uuid");
+        String date = cfg.getString("LogDetailed." + playerNames.get(index) + ".date");
+        Integer clicks = cfg.getInt("LogDetailed." + playerNames.get(index) + ".clicks");
+        Double average = cfg.getDouble("LogDetailed." + playerNames.get(index) + ".average");
+        Integer clicksToMuch = cfg.getInt("LogDetailed." + playerNames.get(index) + ".clicksToMuch");
+        String logMessage = cfg.getString("LogDetailed." + playerNames.get(index) + ".logMessage");
+
+        ItemStack itemStack = new ItemStack(XMaterial.PAPER.parseMaterial());
+        ItemMeta itemMeta = itemStack.getItemMeta();
+
+        itemMeta.setDisplayName("§cIndex: " + (index+1));
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§6Name: §e" + name);
+        lore.add("§6UUID: §e" + uuid);
+        lore.add("§6Date: §e" + date);
+        lore.add("§6Clicks: §e" + clicks);
+        lore.add("§6average: §e" + average);
+        lore.add("§6Clicks to much: §e" + clicksToMuch);
+        lore.add("§6Log message: §e" + logMessage);
+        itemMeta.setLore(lore);
+        itemStack.setItemMeta(itemMeta);
+
+        inv.addItem(itemStack);
+    }
+
+    private void changeButtons(List<String> playerNames) {
         if(page == 0) {
             ItemStack backward = new ItemStack(Objects.requireNonNull(XMaterial.STONE_BUTTON.parseMaterial()));
             ItemMeta backwardMeta = backward.getItemMeta();
@@ -149,7 +159,6 @@ public class InsideLogGUI extends PaginatedMenu {
 
             inv.setItem(53, forward);
         }
-
     }
 
 }

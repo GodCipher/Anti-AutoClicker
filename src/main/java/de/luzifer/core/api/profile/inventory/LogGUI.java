@@ -96,22 +96,31 @@ public class LogGUI extends PaginatedMenu {
             if(index >= files.size()) break;
 
             if(files.get(index) != null) {
-                String name = files.get(index).getName().replaceAll(".yml", "");
-
-                ItemStack item = new ItemStack(XMaterial.BOOK.parseMaterial());
-                ItemMeta meta = item.getItemMeta();
-
-                meta.setDisplayName("§c" + name);
-                ArrayList<String> lore = new ArrayList<>();
-                lore.add("§7Contains the Logs of the day");
-                meta.setLore(lore);
-                item.setItemMeta(meta);
-
-                inv.addItem(item);
+                addLog(files);
             }
 
         }
 
+        changeButtons(files);
+
+    }
+
+    private void addLog(List<File> files) {
+        String name = files.get(index).getName().replaceAll(".yml", "");
+
+        ItemStack item = new ItemStack(XMaterial.BOOK.parseMaterial());
+        ItemMeta meta = item.getItemMeta();
+
+        meta.setDisplayName("§c" + name);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("§7Contains the Logs of the day");
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        inv.addItem(item);
+    }
+
+    private void changeButtons(List<File> files) {
         if(page == 0) {
             ItemStack backward = new ItemStack(Objects.requireNonNull(XMaterial.STONE_BUTTON.parseMaterial()));
             ItemMeta backwardMeta = backward.getItemMeta();
@@ -134,6 +143,5 @@ public class LogGUI extends PaginatedMenu {
 
             inv.setItem(53, forward);
         }
-
     }
 }

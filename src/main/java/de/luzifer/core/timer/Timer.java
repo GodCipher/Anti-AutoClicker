@@ -26,93 +26,113 @@ public class Timer implements Runnable {
                 Variables.PUNISHED.forEach(var -> all.sendMessage(Core.prefix + var.replace("&", "§")));
             }
 
-            User.get(all.getUniqueId()).getClicksAverageList().add(User.get(all.getUniqueId()).getClicks());
-            User.get(all.getUniqueId()).getClicksAverageCheckList().add(User.get(all.getUniqueId()).getAverage());
+            user.getClicksAverageList().add(user.getClicks());
+            user.getClicksAverageCheckList().add(user.getAverage());
 
-            if(user.getChecked() != null) {
+            sendActionBar(user);
 
-                String message1 = "§4§l" + user.getChecked().getName();
-                String message2;
-
-                if(Variables.allowedClicks - user.getChecked().getClicks() <= 8) {
-                    if(!(Variables.allowedClicks - user.getChecked().getClicks() <= 0)) {
-                        message2 = " §e§l-> §cClicks : §c§l" + user.getChecked().getClicks() + " §6Average : §6§l" + user.getChecked().getAverage();
-                    } else {
-                        message2 = " §e§l-> §cClicks : §4§l" + user.getChecked().getClicks()+ " §6Average : §6§l" + user.getChecked().getAverage();
-                    }
-                } else {
-                    message2 = " §e§l-> §cClicks : §a§l" + user.getChecked().getClicks()+ " §6Average : §6§l" + user.getChecked().getAverage();
-                }
-
-                message2 = message2 + " §6VL: §e" + user.getChecked().getViolations();
-
-                if(Core.lowTPS) {
-                    message2 = " §e§l-> §c§lCannot be checked -> §4§lLowTPS";
-                }
-
-                if(Variables.pingChecker) {
-                    if(user.getChecked().getPing() >= Variables.highestAllowedPing) {
-                        message2 = " §e§l-> §c§lCannot be checked -> §4§lPing §8(§4" + user.getChecked().getPing() + "§8)";
-                    }
-                }
-
-                if(Variables.bypass) {
-                    if(user.getChecked().isBypassed()) {
-                        message2 = " §e§l-> §c§lCannot be checked -> §4§lBypassed";
-                    }
-                }
-
-                Core.sendActionBar(all, message1 + message2);
-            }
-
-            if(!containerHashMap.containsKey(user.getPlayer().getUniqueId())) {
-                containerHashMap.put(user.getPlayer().getUniqueId(), new DataContainer(user, Variables.storeAsManyData));
-            }
-
-            if(!containerHashMap.get(user.getPlayer().getUniqueId()).isFinish()) {
-                DataContainer dataContainer = containerHashMap.get(user.getPlayer().getUniqueId());
-                if(Variables.doNotStoreNothing) {
-                    if(user.getClicks() != 0) {
-                        dataContainer.collectData();
-                    }
-                } else {
-                    dataContainer.collectData();
-                }
-                containerHashMap.put(user.getPlayer().getUniqueId(), dataContainer);
-            } else {
-                containerHashMap.remove(user.getPlayer().getUniqueId());
-            }
-
-            if(!user.getProfile().getDataContainers().isEmpty()) {
-                user.getProfile().checkForContainer();
-            }
+            dataContainer(user);
 
             for(Check check : CheckManager.getChecks()) {
                 check.execute(user);
             }
 
-            if(user.clearViolations != 60*Variables.clearVLMinutes) {
-                user.clearViolations++;
-            } else {
-                user.clearViolations();
-                user.clearViolations = 0;
-            }
+            cleanUp(user);
 
-            if(user.isRestricted()) {
-                user.setRestricted(false);
-            }
-
-            if(user.getClicksAverageCheckList().size() >= Variables.clickAverageOfSeconds) {
-
-                user.getClicksAverageCheckList().remove(0);
-
-            }
-            if(User.get(all.getUniqueId()).getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-                User.get(all.getUniqueId()).getClicksAverageList().remove(0);
-            }
-            User.get(all.getUniqueId()).setClicks(0);
         }
         Core.deleteLogs();
 
+    }
+
+    private void sendActionBar(User user) {
+        if(user.getChecked() != null) {
+
+            String message1 = "§4§l" + user.getChecked().getName();
+            String message2;
+
+            if(Variables.allowedClicks - user.getChecked().getClicks() <= 8) {
+                if(!(Variables.allowedClicks - user.getChecked().getClicks() <= 0)) {
+                    message2 = " §e§l-> §cClicks : §c§l" + user.getChecked().getClicks() + " §6Average : §6§l" + user.getChecked().getAverage();
+                } else {
+                    message2 = " §e§l-> §cClicks : §4§l" + user.getChecked().getClicks()+ " §6Average : §6§l" + user.getChecked().getAverage();
+                }
+            } else {
+                message2 = " §e§l-> §cClicks : §a§l" + user.getChecked().getClicks()+ " §6Average : §6§l" + user.getChecked().getAverage();
+            }
+
+            message2 = message2 + " §6VL: §e" + user.getChecked().getViolations();
+
+            if(Core.lowTPS) {
+                message2 = " §e§l-> §c§lCannot be checked -> §4§lLowTPS";
+            }
+
+            if(Variables.pingChecker) {
+                if(user.getChecked().getPing() >= Variables.highestAllowedPing) {
+                    message2 = " §e§l-> §c§lCannot be checked -> §4§lPing §8(§4" + user.getChecked().getPing() + "§8)";
+                }
+            }
+
+            if(Variables.bypass) {
+                if(user.getChecked().isBypassed()) {
+                    message2 = " §e§l-> §c§lCannot be checked -> §4§lBypassed";
+                }
+            }
+
+            Core.sendActionBar(user.getPlayer(), message1 + message2);
+        }
+    }
+
+    private void cleanUp(User user) {
+
+        if(Variables.sanctionateAtViolations > 0) {
+            if(user.getViolations() >= Variables.sanctionateAtViolations) {
+                user.sanction(false);
+                user.clearViolations();
+            }
+        }
+
+        if(user.clearViolations != 60*Variables.clearVLMinutes) {
+            user.clearViolations++;
+        } else {
+            user.clearViolations();
+            user.clearViolations = 0;
+        }
+
+        if(user.isRestricted()) {
+            user.setRestricted(false);
+        }
+
+        if(user.getClicksAverageCheckList().size() >= Variables.clickAverageOfSeconds) {
+            user.getClicksAverageCheckList().remove(0);
+        }
+
+        if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
+            user.getClicksAverageList().remove(0);
+        }
+        user.setClicks(0);
+    }
+
+    private void dataContainer(User user) {
+        if(!containerHashMap.containsKey(user.getPlayer().getUniqueId())) {
+            containerHashMap.put(user.getPlayer().getUniqueId(), new DataContainer(user, Variables.storeAsManyData));
+        }
+
+        if(!containerHashMap.get(user.getPlayer().getUniqueId()).isFinish()) {
+            DataContainer dataContainer = containerHashMap.get(user.getPlayer().getUniqueId());
+            if(Variables.doNotStoreNothing) {
+                if(user.getClicks() != 0) {
+                    dataContainer.collectData();
+                }
+            } else {
+                dataContainer.collectData();
+            }
+            containerHashMap.put(user.getPlayer().getUniqueId(), dataContainer);
+        } else {
+            containerHashMap.remove(user.getPlayer().getUniqueId());
+        }
+
+        if(!user.getProfile().getDataContainers().isEmpty()) {
+            user.getProfile().checkForContainer();
+        }
     }
 }
