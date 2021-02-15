@@ -66,8 +66,9 @@ public class Listeners implements Listener {
         }
     }
 
+    // need to be tested!
     @EventHandler
-    public void onEntityClick(PlayerInteractEntityEvent e) {
+    public void onEntityClick(PlayerInteractAtEntityEvent e) {
         if (User.get(e.getPlayer().getUniqueId()).isRestricted()) {
             e.setCancelled(true);
         }

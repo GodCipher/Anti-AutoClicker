@@ -460,7 +460,9 @@ public class User {
     /**
      * Sanctions the user according to the set settings
      *
-     * If true: Involves the clicks of the player in the decision
+     * If true: Involves the cl
+     *
+     * icks of the player in the decision
      * If false: Just pays attention to the set settings in the config.yml
      *
      * @param b Specifies whether the user's click count is specifically considered when sanctioning

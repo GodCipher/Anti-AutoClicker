@@ -37,38 +37,43 @@ public class LogGUI extends PaginatedMenu {
 
         File folder = new File("plugins/AntiAC/Logs");
 
-        List<File> files = Arrays.asList(folder.listFiles());
+        if(!folder.exists())
+            folder.mkdirs();
 
-        if(e.getSlot() != 45 && e.getSlot() != 53) {
-            if(e.getCurrentItem() != null) {
-                ItemStack item = e.getCurrentItem();
+        if(folder.listFiles() != null && Objects.requireNonNull(folder.listFiles()).length > 0) {
+            List<File> files = Arrays.asList(folder.listFiles());
 
-                if(!item.hasItemMeta() || !item.getItemMeta().hasDisplayName() || item.getType() != XMaterial.BOOK.parseMaterial()) return;
+            if(e.getSlot() != 45 && e.getSlot() != 53) {
+                if(e.getCurrentItem() != null) {
+                    ItemStack item = e.getCurrentItem();
 
-                InsideLogGUI insideLogGUI =
-                        new InsideLogGUI(new File(folder, e.getCurrentItem().getItemMeta().getDisplayName().replaceAll("§c", "") + ".yml"));
+                    if(!item.hasItemMeta() || !item.getItemMeta().hasDisplayName() || item.getType() != XMaterial.BOOK.parseMaterial()) return;
 
-                insideLogGUI.buildGUI();
-                player.openInventory(insideLogGUI.getInventory());
+                    InsideLogGUI insideLogGUI =
+                            new InsideLogGUI(new File(folder, e.getCurrentItem().getItemMeta().getDisplayName().replaceAll("§c", "") + ".yml"));
 
-            }
-        } else {
-            switch (e.getSlot()) {
+                    insideLogGUI.buildGUI();
+                    player.openInventory(insideLogGUI.getInventory());
 
-                case 45:
-                    if(page != 0){
-                        page = page-1;
-                        buildGUI();
-                        player.openInventory(inv);
-                    }
-                    break;
-                case 53:
-                    if(!((index + 1) >= files.size())) {
-                        page = page+1;
-                        buildGUI();
-                        player.openInventory(inv);
-                    }
-                    break;
+                }
+            } else {
+                switch (e.getSlot()) {
+
+                    case 45:
+                        if(page != 0){
+                            page = page-1;
+                            buildGUI();
+                            player.openInventory(inv);
+                        }
+                        break;
+                    case 53:
+                        if(!((index + 1) >= files.size())) {
+                            page = page+1;
+                            buildGUI();
+                            player.openInventory(inv);
+                        }
+                        break;
+                }
             }
         }
 
@@ -85,23 +90,25 @@ public class LogGUI extends PaginatedMenu {
 
         File folder = new File("plugins/AntiAC/Logs");
 
-        List<File> files = Arrays.asList(folder.listFiles());
-
         if(!folder.exists())
             folder.mkdirs();
 
-        for(int i = 0; i < getMaxItemsPerPage(); i++) {
-            index = getMaxItemsPerPage()*page+i;
+        if(folder.listFiles() != null && Objects.requireNonNull(folder.listFiles()).length > 0) {
+            List<File> files = Arrays.asList(Objects.requireNonNull(folder.listFiles()));
 
-            if(index >= files.size()) break;
+            for(int i = 0; i < getMaxItemsPerPage(); i++) {
+                index = getMaxItemsPerPage()*page+i;
 
-            if(files.get(index) != null) {
-                addLog(files);
+                if(index >= files.size()) break;
+
+                if(files.get(index) != null) {
+                    addLog(files);
+                }
+
             }
 
+            changeButtons(files);
         }
-
-        changeButtons(files);
 
     }
 

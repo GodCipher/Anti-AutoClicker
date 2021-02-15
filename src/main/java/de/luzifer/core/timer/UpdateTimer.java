@@ -2,7 +2,9 @@ package de.luzifer.core.timer;
 
 import de.luzifer.core.Core;
 import de.luzifer.core.utils.UpdateChecker;
+import de.luzifer.core.utils.Variables;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 public class UpdateTimer implements Runnable{
 
@@ -15,14 +17,16 @@ public class UpdateTimer implements Runnable{
     public void run() {
         new UpdateChecker(core, 74933).getVersion(version -> {
             if (!core.getDescription().getVersion().equals(version)) {
-                    Bukkit.broadcastMessage(" ");
-                    Bukkit.broadcastMessage(
-                            Core.prefix + "§6An update is available -> "
-                    );
-                    Bukkit.broadcastMessage("§ehttps://www.spigotmc.org/resources/anti-autoclicker-1-8-x-1-16-2.74933");
-                    Bukkit.broadcastMessage("§6§lYour current version : §e" + core.getDescription().getVersion());
-                    Bukkit.broadcastMessage("§6§lNewest version : §e" + version);
-                    Bukkit.broadcastMessage(" ");
+                for(Player player : Bukkit.getOnlinePlayers()) {
+                    if(!player.hasPermission(Variables.perms) && !player.isOp()) {
+
+                    } else {
+                        player.sendMessage(" ");
+                        player.sendMessage(Core.prefix + "§aAn update is available!");
+                        player.sendMessage(Core.prefix + "§c" + Core.getInstance().getDescription().getVersion() + " §e-> §a" + version);
+                        player.sendMessage(" ");
+                    }
+                }
             }
         });
     }
