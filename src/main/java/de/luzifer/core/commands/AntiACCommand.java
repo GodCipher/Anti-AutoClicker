@@ -73,16 +73,16 @@ public class AntiACCommand implements CommandExecutor {
                         UpdateChecker updateChecker = new UpdateChecker(Core.getInstance());
                         if(!updateChecker.check()) {
                             Bukkit.getScheduler().runTask(Core.getInstance(), () -> {
-                                for(Player player : Bukkit.getOnlinePlayers()) {
-                                    if(!player.hasPermission(Variables.perms) && !player.isOp()) {
-
-                                    } else {
-                                        player.sendMessage(" ");
-                                        player.sendMessage(Core.prefix + "§aAn update is available!");
-                                        player.sendMessage(Core.prefix + "§c" + Core.getInstance().getDescription().getVersion() + " §e-> §a" + updateChecker.getLast());
-                                        player.sendMessage(" ");
-                                    }
-                                }
+                                p.sendMessage(" ");
+                                p.sendMessage(Core.prefix + "§aAn update is available!");
+                                p.sendMessage(Core.prefix + "§c" + Core.getInstance().getDescription().getVersion() + " §e-> §a" + updateChecker.getLast());
+                                p.sendMessage(" ");
+                            });
+                        } else {
+                            Bukkit.getScheduler().runTask(Core.getInstance(), () -> {
+                                p.sendMessage(" ");
+                                p.sendMessage(Core.prefix + "§aYou have the latest version!");
+                                p.sendMessage(" ");
                             });
                         }
                     });

@@ -205,7 +205,7 @@ public class Core extends JavaPlugin {
         }
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Timer(), 0, 20);
         if(getConfig().getBoolean("AntiAC.UpdateChecker")) {
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new UpdateTimer(this), 0, 20*(1800*3));
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new UpdateTimer(this), 0, 20*60*15);
         }
         try {
             Bukkit.getLogger().info("[AntiAC] Loading config.yml complete");
