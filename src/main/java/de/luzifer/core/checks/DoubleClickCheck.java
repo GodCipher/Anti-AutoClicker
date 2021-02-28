@@ -44,8 +44,9 @@ public class DoubleClickCheck extends Check {
                 boolean same = true;
                 if(second-first == 0 || second-first == 1) {
                     for(int i = 1; i != everySecond.size(); i++) {
-                        if(everySecond.get(i)-everyFirst.get(i) != 0 && everySecond.get(i)-everyFirst.get(i) != 1) {
+                        if (everySecond.get(i) - everyFirst.get(i) != 0 && everySecond.get(i) - everyFirst.get(i) != 1) {
                             same = false;
+                            break;
                         }
                     }
                 } else {
@@ -54,6 +55,7 @@ public class DoubleClickCheck extends Check {
                             if(i+1 < everyFirst.size()) {
                                 if(everyFirst.get(i+1)-everySecond.get(i) != 0 && everyFirst.get(i+1)-everySecond.get(i) != 1) {
                                     same = false;
+                                    break;
                                 }
                             }
                         }

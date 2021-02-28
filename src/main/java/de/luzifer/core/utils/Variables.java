@@ -33,14 +33,14 @@ public class Variables {
 
     public static String executeBanCommand, executeKickCommand, perms;
 
-    public static boolean averageCheck, consoleNotify, log, playerBan, shoutOutPunishment, informTeam, playerKick, playerKill, playerFreeze, restrictPlayer, bypass, pingChecker
+    public static boolean consoleNotify, log, playerBan, shoutOutPunishment, informTeam, playerKick, playerKill, playerFreeze, restrictPlayer, bypass, pingChecker
             , autoNotify, doNotStoreNothing;
 
     public static int allowedClicks, averageCheckAtEntries,
             averageCheckAtNeededClicks, unbanAfterHours, clickAverageOfSeconds,
             freezeTimeInSeconds, banAtClicks,
             kickAtClicks, killAtClicks, freezeAtClicks, highestAllowedPing, clearVLMinutes,
-            storeAsManyData, removeAfterExist, sanctionateAtViolations, DCcheckAtClicks;
+            storeAsManyData, removeAfterExist, sanctionateAtViolations, DCcheckAtClicks, levelCheckMax;
 
     public static void init() {
 
@@ -82,9 +82,7 @@ public class Variables {
         }
 
         configStrings(cfg);
-
         configBooleans();
-
         configInts();
     }
 
@@ -111,7 +109,6 @@ public class Variables {
 
     private static void configBooleans() {
         informTeam = Core.getInstance().getConfig().getBoolean("AntiAC.InformTeam");
-        averageCheck = Core.getInstance().getConfig().getBoolean("AntiAC.AverageCheck");
         consoleNotify = Core.getInstance().getConfig().getBoolean("AntiAC.ConsoleNotification");
         log = Core.getInstance().getConfig().getBoolean("AntiAC.Log");
         playerBan = Core.getInstance().getConfig().getBoolean("AntiAC.PlayerBan");
@@ -142,7 +139,8 @@ public class Variables {
         storeAsManyData = Core.getInstance().getConfig().getInt("AntiAC.Profile-Store-As-Much-Data-In-One-DataContainer");
         removeAfterExist = Core.getInstance().getConfig().getInt("AntiAC.Remove-First-DataContainer-After-X-Exist");
         sanctionateAtViolations = Core.getInstance().getConfig().getInt("AntiAC.Just-Sanction-If-At-Violations");
-        DCcheckAtClicks = Core.getInstance().getConfig().getInt("AntiAC.Check-At-Clicks");
+        DCcheckAtClicks = Core.getInstance().getConfig().getInt("AntiAC.DoubleClick-Check-At-Clicks");
+        levelCheckMax = Core.getInstance().getConfig().getInt("AntiAC.LevelCheck-Level-Max");
     }
 
 }

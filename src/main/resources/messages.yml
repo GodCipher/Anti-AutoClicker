@@ -18,7 +18,7 @@ Notify-Already-Deactivated:
   - '&cNotifications are already deactivated!'
 #
 Team-Notify:
-  - '§cAutoClicker was discovered at &4%player% &8[&b%clicks%&8] &8[&6%average%&8] &8[&6VL: &e%VL%&8]'
+  - '&cAutoClicker was discovered at &4%player% &8[&b%clicks%&8] &8[&6%average%&8] &8[&6VL: &e%VL%&8]'
   - '&cUse &6/antiac check %player% &cto check the player'
 #
 On-Click-Check:

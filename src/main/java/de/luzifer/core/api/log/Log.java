@@ -64,21 +64,16 @@ public class Log {
 
         try {
             cfg.save(file);
-        } catch (Exception e) {
-        }
+        } catch (Exception ignored) {}
 
     }
 
     public static boolean isLogged(Player player) {
         try {
             cfg.load(file);
-        } catch (Exception e) {
-        }
+        } catch (Exception ignored) {}
 
-        if(cfg.getString("LogDetailed." + player.getName()) == null) {
-            return false;
-        }
-        return true;
+        return cfg.getString("LogDetailed." + player.getName()) != null;
     }
 
 }

@@ -51,9 +51,14 @@ AntiAC:
   # Clear the violation of a player, if he hasn't got any violation X minutes long
 
 
+# LevelCheck Settings
+  LevelCheck-Level-Max: 40
+  # Set the allowed difference between the players last clicks and the players current clicks
+  # Shouldn't be set too low
+
 
 # DoubleClick Settings
-  Check-At-Clicks: 12
+  DoubleClick-Check-At-Clicks: 12
   # Starts to check if the user clicks are over X
   # NOTE: It is NOT recommended to put this value under or at 10 (causes to 100% false positives)
 
@@ -62,9 +67,6 @@ AntiAC:
 # Average Settings
   ClickAverageOfSeconds: 3
   # Summarizes the clicks from the last X seconds
-
-  AverageCheck: true
-  # The average clicks are checked if they are constant if the player is above the allowed clicks
 
   AverageCheckAtEntries: 3
   # AverageCheck will fire if the AverageChecker contains X entries
