@@ -9,20 +9,12 @@ public class ClickCheck extends Check {
 
     @Override
     public void execute(User user) {
-
         if(user.getClicks() >= Variables.allowedClicks) {
-            user.addViolation(ViolationType.EASY);
-            if(user.getClicks() >= (Variables.allowedClicks + (Variables.allowedClicks/100)*10)) {
-                user.addViolation(ViolationType.NORMAL);
-            } else if(user.getClicks() >= (Variables.allowedClicks + (Variables.allowedClicks/100)*25)){
-                user.addViolation(ViolationType.HARD);
-            }
+            user.addViolation(ViolationType.NORMAL);
 
             if(!(Variables.sanctionateAtViolations > 0)) {
                 user.sanction(true, User.CheckType.CLICK);
             }
-
         }
-
     }
 }

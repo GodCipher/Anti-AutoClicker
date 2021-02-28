@@ -24,7 +24,7 @@ import java.util.Objects;
 
 public class Listeners implements Listener {
 
-    private Core core;
+    private final Core core;
     public Listeners(Core core) {
         this.core = core;
     }
@@ -66,7 +66,6 @@ public class Listeners implements Listener {
         }
     }
 
-    // need to be tested!
     @EventHandler
     public void onEntityClick(PlayerInteractAtEntityEvent e) {
         if (User.get(e.getPlayer().getUniqueId()).isRestricted()) {
@@ -81,58 +80,34 @@ public class Listeners implements Listener {
         if (!Core.lowTPS) {
             if (Variables.pingChecker) {
                 if (!(User.get(e.getPlayer().getUniqueId()).getPing() >= Variables.highestAllowedPing)) {
-
                     if (User.get(e.getPlayer().getUniqueId()).getLastRightClick() == null) {
                         User.get(e.getPlayer().getUniqueId()).setLastRightClick(System.currentTimeMillis());
                     }
-
                     if (User.get(e.getPlayer().getUniqueId()).getClicks() <= 15) {
-
                         if (!(System.currentTimeMillis() - User.get(e.getPlayer().getUniqueId()).getLastRightClick() <= 1)) {
-
                             if (e.getPlayer().getItemInHand().getType() == Material.AIR) {
-
                                 User.get(e.getPlayer().getUniqueId()).addClicks(1);
-
                             }
-
                         }
-
                     } else {
-
                         User.get(e.getPlayer().getUniqueId()).addClicks(1);
-
                     }
-
                     User.get(e.getPlayer().getUniqueId()).setLastRightClick(System.currentTimeMillis());
-
                 }
             } else {
-
                 if (User.get(e.getPlayer().getUniqueId()).getLastRightClick() == null) {
                     User.get(e.getPlayer().getUniqueId()).setLastRightClick(System.currentTimeMillis());
                 }
-
                 if (User.get(e.getPlayer().getUniqueId()).getClicks() <= 15) {
-
                     if (!(System.currentTimeMillis() - User.get(e.getPlayer().getUniqueId()).getLastRightClick() <= 1)) {
-
                         if (e.getPlayer().getItemInHand().getType() == Material.AIR) {
-
                             User.get(e.getPlayer().getUniqueId()).addClicks(1);
-
                         }
-
                     }
-
                 } else {
-
                     User.get(e.getPlayer().getUniqueId()).addClicks(1);
-
                 }
-
                 User.get(e.getPlayer().getUniqueId()).setLastRightClick(System.currentTimeMillis());
-
             }
         }
     }

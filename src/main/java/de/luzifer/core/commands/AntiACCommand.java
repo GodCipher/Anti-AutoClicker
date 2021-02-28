@@ -69,18 +69,21 @@ public class AntiACCommand implements CommandExecutor {
                 }
 
                 else if(args[0].equalsIgnoreCase("checkupdate")) {
-                    new UpdateChecker(Core.getInstance(), 74933).getVersion(version -> {
-                        if (!Core.getInstance().getDescription().getVersion().equals(version)) {
-                            p.sendMessage(" ");
-                            p.sendMessage(prefix + "§cThere is an update available");
-                            p.sendMessage("§ehttps://www.spigotmc.org/resources/anti-autoclicker-1-8-x-1-16-2.74933");
-                            p.sendMessage("§6§lYour current version : §e" + Core.getInstance().getDescription().getVersion());
-                            p.sendMessage("§6§lNewest version : §e" + version);
-                            p.sendMessage(" ");
-                        } else {
-                            p.sendMessage(" ");
-                            p.sendMessage(prefix + "§aThere is no update available");
-                            p.sendMessage(" ");
+                    Bukkit.getScheduler().runTaskAsynchronously(Core.getInstance(), () -> {
+                        UpdateChecker updateChecker = new UpdateChecker(Core.getInstance());
+                        if(!updateChecker.check()) {
+                            Bukkit.getScheduler().runTask(Core.getInstance(), () -> {
+                                for(Player player : Bukkit.getOnlinePlayers()) {
+                                    if(!player.hasPermission(Variables.perms) && !player.isOp()) {
+
+                                    } else {
+                                        player.sendMessage(" ");
+                                        player.sendMessage(Core.prefix + "§aAn update is available!");
+                                        player.sendMessage(Core.prefix + "§c" + Core.getInstance().getDescription().getVersion() + " §e-> §a" + updateChecker.getLast());
+                                        player.sendMessage(" ");
+                                    }
+                                }
+                            });
                         }
                     });
                     return true;

@@ -246,9 +246,7 @@ public class User {
 
     @Deprecated
     public void setClicks(int amount) {
-
         clicks = amount;
-
     }
 
     public void addClicks(int amount) {
@@ -262,13 +260,10 @@ public class User {
         List<Long> millis = DoubleClickCheck.latestClicks.get(this);
         millis.add(System.currentTimeMillis());
         DoubleClickCheck.latestClicks.put(this, millis);
-
     }
 
     public void removeClicks(int amount) {
-
         setClicks(getClicks()-amount);
-
     }
 
     public double getAverage() {
@@ -352,7 +347,8 @@ public class User {
     public enum CheckType {
         CLICK,
         AVERAGE,
-        DOUBLE_CLICK;
+        DOUBLE_CLICK,
+        LEVEL;
     }
 
     public void sanction(boolean b, CheckType checkType) {
@@ -371,8 +367,11 @@ public class User {
                 Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "equal averages/too many violations");
             } else if(checkType == CheckType.DOUBLE_CLICK) {
                 Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "double clicking/too many violations");
+            } else if(checkType == CheckType.LEVEL) {
+                Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "too fast increasing clicks/too many violations");
             } else {
                 Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "got detected/too many violations");
+
             }
         }
 
@@ -440,7 +439,7 @@ public class User {
 
                 shoutOutPunishment();
 
-                Bukkit.getScheduler().runTaskLater(Core.getInstance(), () -> setFrozen(false), 20* Variables.freezeTimeInSeconds);
+                Bukkit.getScheduler().runTaskLater(Core.getInstance(), () -> setFrozen(false), 20L * Variables.freezeTimeInSeconds);
             }
             informTeam();
         } else {
@@ -455,6 +454,7 @@ public class User {
             }
             informTeam();
         }
+        clearViolations();
     }
 
     /**
