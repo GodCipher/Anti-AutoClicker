@@ -13,16 +13,17 @@ import java.util.stream.Stream;
 public class UpdateChecker {
 
     private final Plugin plugin;
+    private final String urlLink = "https://raw.githubusercontent.com/Luziferium/Anti-Auto-Clicker/master/pom.xml";
 
     public UpdateChecker(Plugin plugin) {
         this.plugin = plugin;
     }
 
-    private String last;
+    private String last = "NOT_INITALIZED";
     public boolean check() {
         try {
 
-            HttpURLConnection connection = (HttpURLConnection) new URL("https://raw.githubusercontent.com/Luziferium/Anti-Auto-Clicker/master/pom.xml").openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL(urlLink).openConnection();
             connection.connect();
             Stream<String> list = new BufferedReader(new InputStreamReader(connection.getInputStream())).lines();
             for(String s : list.collect(Collectors.toList())) {
@@ -31,6 +32,7 @@ public class UpdateChecker {
                     break;
                 }
             }
+            connection.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
         }

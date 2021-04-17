@@ -37,10 +37,10 @@ public class User {
 
     public int clearViolations = 0;
 
-    private UUID uuid;
+    private final UUID uuid;
     private User check;
 
-    private static List<User> allUser = new ArrayList<>();
+    private static final List<User> allUser = new ArrayList<>();
 
     public static User get(UUID uuid) {
 
@@ -101,62 +101,51 @@ public class User {
     }
 
     public void pluginBan() {
-
         if(Variables.executeBanCommand.equals("") ||
                 Variables.executeBanCommand == null) {
 
-            SimpleDateFormat format = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             Date date = new Date();
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(date);
             calendar.add(Calendar.HOUR_OF_DAY, +Variables.unbanAfterHours);
             String date1 = format.format(calendar.getTime());
-            String bumper = org.apache.commons.lang.StringUtils.repeat("\n", 35);
             ArrayList<String> reasonList = new ArrayList<>(Variables.BAN_REASON);
-            String reason = bumper + "§cAnti§4AC \n " + String.join("\n ", reasonList).replace("&", "§").replaceAll("%date%", date1) + bumper;
-            getPlayer().kickPlayer(reason);
+            String reason = "§cAnti§4AC \n " + String.join("\n ", reasonList).replace("&", "§").replaceAll("%date%", date1);
             Bukkit.getBanList(BanList.Type.NAME).addBan(getPlayer().getName(), reason, calendar.getTime() , null);
+            getPlayer().kickPlayer(reason);
 
         } else {
-
             String execute = Variables.executeBanCommand;
             assert execute != null;
             execute = execute.replaceAll("%player%", getPlayer().getName()).replace("&", "§");
 
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), execute);
-
         }
     }
 
     public void pluginKick() {
-
         if(Variables.executeKickCommand.equals("") ||
                 Variables.executeKickCommand == null) {
 
             ArrayList<String> reasonList = new ArrayList<>(Variables.KICK_REASON);
             getPlayer().kickPlayer("§cAnti§4AC \n " + String.join("\n ", reasonList).replace("&", "§"));
-
         } else {
-
             String execute = Variables.executeKickCommand;
-            assert execute != null;
-            execute = execute.replace("%player%", getPlayer().getName()).replace("&", "§");
+            if(execute != null) {
+                execute = execute.replace("%player%", getPlayer().getName()).replace("&", "§");
 
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), execute);
-
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), execute);
+            }
         }
     }
 
     public Player getPlayer() {
-
         return Bukkit.getPlayer(uuid);
-
     }
 
     public OfflinePlayer getOfflinePlayer() {
-
         return Bukkit.getOfflinePlayer(uuid);
-
     }
 
     public Long getLastRightClick() {
@@ -190,58 +179,40 @@ public class User {
     }
 
     public int getClicks() {
-
         return clicks;
-
     }
 
     public void setNotified(boolean notified) {
-
         this.notified = notified;
-
     }
 
     public String getName() {
-
         return getPlayer().getName();
-
     }
 
     public boolean isNotified() {
-
         return notified;
-
     }
 
     public void setFrozen(boolean frozen) {
-
         this.frozen = frozen;
-
     }
 
     public void setFrozen(boolean frozen, int duration) {
-
         this.setFrozen(frozen);
         Bukkit.getScheduler().runTaskLater(Core.getInstance(), () -> this.setFrozen(!frozen), 20*duration);
-
     }
 
     public boolean isFrozen() {
-
         return frozen;
-
     }
 
     public void setRestricted(boolean restricted) {
-
         this.restricted = restricted;
-
     }
 
     public boolean isRestricted() {
-
         return restricted;
-
     }
 
     @Deprecated
@@ -250,7 +221,6 @@ public class User {
     }
 
     public void addClicks(int amount) {
-
         setClicks(getClicks()+amount);
 
         // Needed for DoubleClickCheck
@@ -267,46 +237,36 @@ public class User {
     }
 
     public double getAverage() {
-
         return round(calculateAverage(clicksAverage));
-
     }
 
     public List<Double> getClicksAverageCheckList() {
-
         return clicksAverageCheck;
-
     }
 
     public void setChecked(User user) {
-
         this.check = user;
-
     }
 
     public User getChecked() {
-
         return check;
-
     }
 
     public List<Integer> getClicksAverageList() {
-
         return clicksAverage;
-
     }
 
     public int getPing() {
-
         int ping = -1;
         try {
+            if(getPlayer() == null) return ping;
+
             Object entityPlayer = getPlayer().getClass().getMethod("getHandle").invoke(getPlayer());
             ping = (int) entityPlayer.getClass().getField("ping").get(entityPlayer);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
             e.printStackTrace();
         }
         return ping;
-
     }
 
     public boolean isBypassed() {
@@ -324,7 +284,6 @@ public class User {
             for(Player others : Bukkit.getOnlinePlayers()) {
                 Objects.requireNonNull(others.getLocation().getWorld()).spawnEntity(others.getLocation(), EntityType.FIREWORK);
             }
-
         }
     }
 
@@ -460,9 +419,7 @@ public class User {
     /**
      * Sanctions the user according to the set settings
      *
-     * If true: Involves the cl
-     *
-     * icks of the player in the decision
+     * If true: Involves the clicks of the player in the decision
      * If false: Just pays attention to the set settings in the config.yml
      *
      * @param b Specifies whether the user's click count is specifically considered when sanctioning

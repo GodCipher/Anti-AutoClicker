@@ -52,14 +52,14 @@ AntiAC:
 
 
 # LevelCheck Settings
-  LevelCheck-Level-Max: 40
+  LevelCheck-Level-Max: 25
   # Set the allowed difference between the players last clicks and the players current clicks
   # Shouldn't be set too low
 
 
 # DoubleClick Settings
   DoubleClick-Check-At-Clicks: 12
-  # Starts to check if the user clicks are over X
+  # Starts to check if the user clicks are over or at X
   # NOTE: It is NOT recommended to put this value under or at 10 (causes to 100% false positives)
 
 

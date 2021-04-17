@@ -6,6 +6,7 @@ import de.luzifer.core.api.profile.inventory.InsideLogGUI;
 import de.luzifer.core.api.profile.inventory.LogGUI;
 import de.luzifer.core.api.profile.inventory.ProfileGUI;
 import de.luzifer.core.utils.Variables;
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -47,6 +48,13 @@ public class Listeners implements Listener {
     public void onConsume(PlayerItemConsumeEvent e) {
         if(User.get(e.getPlayer().getUniqueId()).isRestricted()) {
             e.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onLogin(PlayerLoginEvent e) {
+        if(e.getPlayer().isBanned()) {
+            e.disallow(PlayerLoginEvent.Result.KICK_BANNED, Bukkit.getBanList(BanList.Type.NAME).getBanEntry(e.getPlayer().getName()).getReason());
         }
     }
 
@@ -134,6 +142,7 @@ public class Listeners implements Listener {
                     if((player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp())
                             || player.hasPermission(Objects.requireNonNull(Variables.perms)) && player.isOp() ) return;
                 }
+
                 if(!Core.lowTPS) {
                     if(Variables.pingChecker) {
                         if(!(User.get(player.getUniqueId()).getPing() >= Variables.highestAllowedPing)) {
@@ -142,9 +151,7 @@ public class Listeners implements Listener {
                     } else {
                         User.get(player.getUniqueId()).addClicks(1);
                     }
-
                 }
-
             }
         }
     }

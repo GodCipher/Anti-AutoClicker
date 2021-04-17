@@ -1,7 +1,6 @@
 package de.luzifer.core.api.profile.inventory;
 
 import com.cryptomorin.xseries.XMaterial;
-import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.pagesystem.PaginatedMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -31,7 +30,6 @@ public class LogGUI extends PaginatedMenu {
     public void handleEvent(InventoryClickEvent e) {
 
         Player player = (Player) e.getWhoClicked();
-        User user = User.get(player.getUniqueId());
 
         e.setCancelled(true);
 
