@@ -51,8 +51,6 @@ public class Core extends JavaPlugin {
 
     public void onEnable() {
         core = this;
-        days = Core.getInstance().getConfig().getInt("AntiAC.DeleteLogsAfterDays");
-        lowestAllowedTPS = getConfig().getInt("AntiAC.LowestAllowedTPS");
         Bukkit.getLogger().info("[AntiAC]");
         initialize();
         loadConfig();
@@ -120,7 +118,6 @@ public class Core extends JavaPlugin {
             return complete;
         }
 
-
     }
 
     private static Core core;
@@ -180,8 +177,6 @@ public class Core extends JavaPlugin {
         }
     }
 
-
-
     public void loadMessages() {
 
         Variables.init();
@@ -196,6 +191,9 @@ public class Core extends JavaPlugin {
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
+
+        days = Core.getInstance().getConfig().getInt("AntiAC.DeleteLogsAfterDays");
+        lowestAllowedTPS = getConfig().getInt("AntiAC.LowestAllowedTPS");
 
         if(getConfig().getBoolean("AntiAC.AutoNotification")) {
             setNotified();
