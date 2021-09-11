@@ -64,7 +64,7 @@ public class Core extends JavaPlugin {
 
     static class AntiACCommandTabCompleter implements TabCompleter {
 
-        final String[] ARGS = {"check", "version", "notify", "checkupdate", "profile"};
+        final String[] ARGS = {"check", "version", "notify", "checkupdate", "profile", "logs", "reload"};
         final String[] ARGS2 = {"on", "off"};
 
         @Override
@@ -283,20 +283,19 @@ public class Core extends JavaPlugin {
     }
 
     public static void sendActionBar(final Player player, final String message) {
-        if (!player.isOnline()) {
+        
+        if (!player.isOnline())
             return;
-        }
-        final ActionBarMessageEvent actionBarMessageEvent = new ActionBarMessageEvent(player, message);
+    
+        ActionBarMessageEvent actionBarMessageEvent = new ActionBarMessageEvent(player, message);
         Bukkit.getPluginManager().callEvent(actionBarMessageEvent);
-        if (actionBarMessageEvent.isCancelled()) {
+        if (actionBarMessageEvent.isCancelled())
             return;
-        }
-
-        if(Bukkit.getVersion().contains("1.16")) {
-
+    
+        if(getBukkitVersion() >= 16) {
+        
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
             return;
-
         }
 
         try {
@@ -375,5 +374,11 @@ public class Core extends JavaPlugin {
 
     static {
         Core.useOldMethods = false;
+    }
+    
+    private static double getBukkitVersion() {
+        
+        String version = Bukkit.getBukkitVersion().split("-")[0];
+        return Double.parseDouble(version.split("\\.")[1]);
     }
 }

@@ -29,10 +29,10 @@ public class AntiACCommand implements CommandExecutor {
 
             String perms = Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.NeededPermission")).toLowerCase();
             if(!p.hasPermission(perms) && !p.isOp()) {
-                p.sendMessage(" ");
+                
                 p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
                 p.sendMessage("§6https://www.spigotmc.org/resources/anti-autoclicker-1-8-x-1-16-2.74933");
-                p.sendMessage(" ");
+                
                 return true;
             }
 
@@ -46,9 +46,8 @@ public class AntiACCommand implements CommandExecutor {
                     Core.getInstance().reloadConfig();
                     Variables.init();
 
-                    p.sendMessage(" ");
                     p.sendMessage(prefix + "§7Config reloaded!");
-                    p.sendMessage(" ");
+                    
                     return true;
                 } else
 
@@ -62,9 +61,9 @@ public class AntiACCommand implements CommandExecutor {
                 } else
 
                 if(args[0].equalsIgnoreCase("version")) {
-                    p.sendMessage(" ");
+                    
                     p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
-                    p.sendMessage(" ");
+                    
                     return true;
                 }
 
@@ -73,16 +72,12 @@ public class AntiACCommand implements CommandExecutor {
                         UpdateChecker updateChecker = new UpdateChecker(Core.getInstance());
                         if(!updateChecker.check()) {
                             Bukkit.getScheduler().runTask(Core.getInstance(), () -> {
-                                p.sendMessage(" ");
                                 p.sendMessage(Core.prefix + "§aAn update is available!");
-                                p.sendMessage(Core.prefix + "§c" + Core.getInstance().getDescription().getVersion() + " §e-> §a" + updateChecker.getLast());
-                                p.sendMessage(" ");
+                                p.sendMessage(Core.prefix + "§c" + Core.getInstance().getDescription().getVersion() + " §e-> §a" + updateChecker.getLatestVersion());
                             });
                         } else {
                             Bukkit.getScheduler().runTask(Core.getInstance(), () -> {
-                                p.sendMessage(" ");
                                 p.sendMessage(Core.prefix + "§aYou have the latest version!");
-                                p.sendMessage(" ");
                             });
                         }
                     });
@@ -100,9 +95,7 @@ public class AntiACCommand implements CommandExecutor {
                     Player target = Bukkit.getPlayer(args[1]);
 
                     if(target == null) {
-                        p.sendMessage(" ");
                         Variables.PLAYER_OFFLINE.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
-                        p.sendMessage(" ");
                         return true;
                     }
 
@@ -119,27 +112,19 @@ public class AntiACCommand implements CommandExecutor {
                     if(args[1].equalsIgnoreCase("on")) {
                         if(!User.get(p.getUniqueId()).isNotified()) {
                             User.get(p.getUniqueId()).setNotified(true);
-                            p.sendMessage(" ");
                             Variables.NOTIFY_ACTIVATED.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
                         } else {
-                            p.sendMessage(" ");
                             Variables.NOTIFY_ALREADY_ACTIVATED.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
                         }
-                        p.sendMessage(" ");
                     } else if(args[1].equalsIgnoreCase("off")) {
                         if(User.get(p.getUniqueId()).isNotified()) {
                             User.get(p.getUniqueId()).setNotified(false);
-                            p.sendMessage(" ");
                             Variables.NOTIFY_DEACTIVATED.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
                         } else {
-                            p.sendMessage(" ");
                             Variables.NOTIFY_ALREADY_DEACTIVATED.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
                         }
-                        p.sendMessage(" ");
                     } else {
-                        p.sendMessage(" ");
                         p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
-                        p.sendMessage(" ");
                     }
                     return true;
                 }
@@ -147,26 +132,26 @@ public class AntiACCommand implements CommandExecutor {
                     Player t = Bukkit.getPlayer(args[1]);
                     if(t != null) {
                         User.get(p.getUniqueId()).setChecked(User.get(t.getUniqueId()));
-                        p.sendMessage(" ");
+                        
                         Variables.ON_CLICK_CHECK.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", t.getName())));
                     } else {
                         if(args[1].equalsIgnoreCase("off")) {
                             if(User.get(p.getUniqueId()).getChecked() == null) {
-                                p.sendMessage(" ");
+                                
                                 Variables.NOT_CHECKING_ANYONE.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
-                                p.sendMessage(" ");
+                                
                                 return true;
                             }
                             User.get(p.getUniqueId()).setChecked(null);
-                            p.sendMessage(" ");
+                            
                             Variables.ON_CLICK_CHECK_OFF.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
-                            p.sendMessage(" ");
+                            
                             return true;
                         }
-                        p.sendMessage(" ");
+                        
                         Variables.PLAYER_OFFLINE.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
                     }
-                    p.sendMessage(" ");
+                    
                 } else {
 
                     sendCommands(p);
@@ -180,7 +165,7 @@ public class AntiACCommand implements CommandExecutor {
     }
 
     private void sendCommands(Player p) {
-        p.sendMessage(" ");
+        
         p.sendMessage(prefix + "§6/antiac version");
         p.sendMessage(prefix + "§6/antiac checkupdate");
         p.sendMessage(prefix + "§6/antiac logs");
@@ -188,6 +173,6 @@ public class AntiACCommand implements CommandExecutor {
         p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
         p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
         p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
-        p.sendMessage(" ");
+        
     }
 }

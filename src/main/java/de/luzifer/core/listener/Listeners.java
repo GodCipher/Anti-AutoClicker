@@ -20,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.Objects;
 
@@ -30,6 +31,22 @@ public class Listeners implements Listener {
         this.core = core;
     }
 
+    @EventHandler
+    public void onKick(PlayerKickEvent e) {
+        
+        Player p = e.getPlayer();
+    
+        for(Player all : Bukkit.getOnlinePlayers()) {
+            if(User.get(all.getUniqueId()).getChecked() == User.get(p.getUniqueId())) {
+            
+                Variables.PLAYER_NOW_OFFLINE.forEach(var -> all.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", p.getName())));
+                User.get(all.getUniqueId()).setChecked(null);
+            
+            }
+        }
+        User.getAllUser().remove(User.get(p.getUniqueId()));
+    }
+    
     @EventHandler
     public void onBuild(BlockPlaceEvent e) {
         if(User.get(e.getPlayer().getUniqueId()).isRestricted()) {
@@ -76,6 +93,11 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onEntityClick(PlayerInteractAtEntityEvent e) {
+    
+        if(getBukkitVersion() == 8) {
+            if(e.getHand() == EquipmentSlot.OFF_HAND) return;
+        }
+        
         if (User.get(e.getPlayer().getUniqueId()).isRestricted()) {
             e.setCancelled(true);
         }
@@ -183,9 +205,7 @@ public class Listeners implements Listener {
         for(Player all : Bukkit.getOnlinePlayers()) {
             if(User.get(all.getUniqueId()).getChecked() == User.get(p.getUniqueId())) {
 
-                all.sendMessage(" ");
                 Variables.PLAYER_NOW_OFFLINE.forEach(var -> all.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", p.getName())));
-                all.sendMessage(" ");
 
                 User.get(all.getUniqueId()).setChecked(null);
 
@@ -203,6 +223,11 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onNormalClick(PlayerInteractEvent e) {
+        
+        if(getBukkitVersion() == 8) {
+            if(e.getHand() == EquipmentSlot.OFF_HAND) return;
+        }
+        
         if(User.get(e.getPlayer().getUniqueId()).isRestricted()) {
             e.setCancelled(true);
         }
@@ -223,5 +248,11 @@ public class Listeners implements Listener {
                 }
             }
         }
+    }
+    
+    private static double getBukkitVersion() {
+        
+        String version = Bukkit.getBukkitVersion().split("-")[0];
+        return Double.parseDouble(version.split("\\.")[1]);
     }
 }

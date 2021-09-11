@@ -36,7 +36,7 @@ public class User {
     private boolean notified = false;
 
     public int clearViolations = 0;
-
+    
     private final UUID uuid;
     private User check;
 
@@ -255,12 +255,17 @@ public class User {
     public List<Integer> getClicksAverageList() {
         return clicksAverage;
     }
-
+    
     public int getPing() {
+        
+        if(getBukkitVersion() >= 17)
+            return getPlayer().getPing();
+        
         int ping = -1;
         try {
+            
             if(getPlayer() == null) return ping;
-
+            
             Object entityPlayer = getPlayer().getClass().getMethod("getHandle").invoke(getPlayer());
             ping = (int) entityPlayer.getClass().getField("ping").get(entityPlayer);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
@@ -286,33 +291,40 @@ public class User {
             }
         }
     }
-
+    
     private void informTeam() {
+        
         if(Variables.informTeam) {
             for(Player team : Bukkit.getOnlinePlayers()) {
-                if(team.hasPermission(Objects.requireNonNull(Variables.perms))) {
-                    if(User.get(team.getUniqueId()).isNotified()) {
-                        team.sendMessage(" ");
-                        Variables.TEAM_NOTIFY.forEach(var -> team.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName())
-                                .replaceAll("%clicks%", String.valueOf(getClicks()))
-                                .replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
-                        team.sendMessage(" ");
-                    }
-                }
+                
+                if(team.equals(getPlayer())) continue;
+                informPlayerIfPermittedAndNotified(team);
             }
         }
     }
-
+    
+    private void informPlayerIfPermittedAndNotified(Player player) {
+        
+        if(player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp()) {
+            if(User.get(player.getUniqueId()).isNotified()) {
+                
+                Variables.TEAM_NOTIFY.forEach(var -> player.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", player.getName())
+                        .replaceAll("%clicks%", String.valueOf(getClicks()))
+                        .replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
+            }
+        }
+    }
+    
     public enum CheckType {
         CLICK,
         AVERAGE,
         DOUBLE_CLICK,
         LEVEL;
+    
     }
-
     public void sanction(boolean b, CheckType checkType) {
         if(Variables.consoleNotify) {
-
+            
             Variables.TEAM_NOTIFY.forEach(var -> Bukkit.getConsoleSender().sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName())
                     .replaceAll("%clicks%", String.valueOf(getClicks()))
                     .replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
@@ -330,15 +342,15 @@ public class User {
                 Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "too fast increasing clicks/too many violations");
             } else {
                 Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "got detected/too many violations");
-
+                
             }
         }
-
+        
         boolean ban = false;
         boolean kick = false;
         boolean kill = false;
         boolean freeze = false;
-
+        
         if(b) {
             if(Variables.playerBan) {
                 if(getClicks() >= Variables.banAtClicks) {
@@ -363,17 +375,17 @@ public class User {
         } else {
             if(Variables.playerBan)
                 ban = true;
-
+            
             if(Variables.playerKick)
                 kick = true;
-
+            
             if(Variables.playerKill)
                 kill = true;
-
+            
             if(Variables.playerFreeze)
                 freeze = true;
         }
-
+        
         if(ban) {
             shoutOutPunishment();
             pluginBan();
@@ -386,18 +398,18 @@ public class User {
         if(kill) {
             getPlayer().setHealth(0);
             Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
-
+            
             shoutOutPunishment();
             informTeam();
         } else
         if(freeze) {
             if(!isFrozen()) {
                 setFrozen(true);
-
+                
                 Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
-
+                
                 shoutOutPunishment();
-
+                
                 Bukkit.getScheduler().runTaskLater(Core.getInstance(), () -> setFrozen(false), 20L * Variables.freezeTimeInSeconds);
             }
             informTeam();
@@ -405,9 +417,9 @@ public class User {
             if(Variables.restrictPlayer) {
                 if(!isRestricted()) {
                     setRestricted(true);
-
+                    
                     Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
-
+                    
                     shoutOutPunishment();
                 }
             }
@@ -415,7 +427,7 @@ public class User {
         }
         clearViolations();
     }
-
+    
     /**
      * Sanctions the user according to the set settings
      *
@@ -443,6 +455,12 @@ public class User {
         BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+    
+    private double getBukkitVersion() {
+        
+        String version = Bukkit.getBukkitVersion().split("-")[0];
+        return Double.parseDouble(version.split("\\.")[1]);
     }
 
 }

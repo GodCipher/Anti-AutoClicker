@@ -52,7 +52,7 @@ AntiAC:
 
 
 # LevelCheck Settings
-  LevelCheck-Level-Max: 25
+  LevelCheck-Level-Max: 15
   # Set the allowed difference between the players last clicks and the players current clicks
   # Shouldn't be set too low
 
