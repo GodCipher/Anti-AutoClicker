@@ -11,36 +11,50 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class UpdateChecker {
-
-    private final Plugin plugin;
-    private final String urlLink = "https://raw.githubusercontent.com/Luziferium/Anti-Auto-Clicker/master/pom.xml";
-
+    
+    private static final String URL_LINK = "https://raw.githubusercontent.com/Luziferium/Anti-Auto-Clicker/master/pom.xml";
+    private final Plugin PLUGIN;
+    
+    private String latestVersion = "NOT_ASSIGNED";
+    
     public UpdateChecker(Plugin plugin) {
-        this.plugin = plugin;
+        this.PLUGIN = plugin;
     }
-
-    private String last = "NOT_INITALIZED";
+    
     public boolean check() {
+        
+        HttpURLConnection connection = null;
         try {
-
-            HttpURLConnection connection = (HttpURLConnection) new URL(urlLink).openConnection();
+            
+            connection = (HttpURLConnection) new URL(URL_LINK).openConnection();
             connection.connect();
-            Stream<String> list = new BufferedReader(new InputStreamReader(connection.getInputStream())).lines();
-            for(String s : list.collect(Collectors.toList())) {
-                if(s.toLowerCase().contains("<version>") && s.toLowerCase().contains("</version>")) {
-                    last = s.replace("<version>", "").replace("</version>", "").replaceAll(" " ,"");
-                    break;
-                }
-            }
-            connection.disconnect();
-        } catch (IOException e) {
+            
+            latestVersion = convertLatestVersionFromGitHub(connection);
+        } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if(connection != null)
+                connection.disconnect();
         }
-
-        return last.equalsIgnoreCase(plugin.getDescription().getVersion());
+        
+        return latestVersion.equalsIgnoreCase(PLUGIN.getDescription().getVersion());
     }
-
-    public String getLast() {
-        return last;
+    
+    /**
+     * Will just be assigned if {@link #check()} ran at least 1 time
+     */
+    public String getLatestVersion() {
+        return latestVersion;
     }
+    
+    private String convertLatestVersionFromGitHub(HttpURLConnection connection) throws IOException {
+        
+        Stream<String> list = new BufferedReader(new InputStreamReader(connection.getInputStream())).lines();
+        for(String s : list.collect(Collectors.toList())) {
+            if(s.toLowerCase().contains("<version>") && s.toLowerCase().contains("</version>"))
+                return s.replace("<version>", "").replace("</version>", "").replaceAll(" ", "");
+        }
+        return "NOT_FOUND";
+    }
+    
 }
