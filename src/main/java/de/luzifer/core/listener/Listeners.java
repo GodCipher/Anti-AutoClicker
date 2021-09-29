@@ -5,6 +5,7 @@ import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.InsideLogGUI;
 import de.luzifer.core.api.profile.inventory.LogGUI;
 import de.luzifer.core.api.profile.inventory.ProfileGUI;
+import de.luzifer.core.api.profile.inventory.pagesystem.Menu;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
@@ -77,24 +78,18 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onInvClick(InventoryClickEvent e) {
-        if(e.getView().getTopInventory().getHolder() instanceof ProfileGUI) {
-            ProfileGUI profileGUI = (ProfileGUI) e.getView().getTopInventory().getHolder();
-            profileGUI.handleEvent(e);
-        }
-        if(e.getView().getTopInventory().getHolder() instanceof LogGUI) {
-            LogGUI logGUI = (LogGUI) e.getView().getTopInventory().getHolder();
-            logGUI.handleEvent(e);
-        }
-        if(e.getView().getTopInventory().getHolder() instanceof InsideLogGUI) {
-            InsideLogGUI insideLogGUI = (InsideLogGUI) e.getView().getTopInventory().getHolder();
-            insideLogGUI.handleEvent(e);
+
+        if(e.getView().getTopInventory().getHolder() instanceof Menu) {
+
+            Menu menu = (Menu) e.getView().getTopInventory().getHolder();
+            menu.handleEvent(e);
         }
     }
 
     @EventHandler
     public void onEntityClick(PlayerInteractAtEntityEvent e) {
     
-        if(getBukkitVersion() == 8) {
+        if(getBukkitVersion() > 8) {
             if(e.getHand() == EquipmentSlot.OFF_HAND) return;
         }
         
@@ -152,12 +147,10 @@ public class Listeners implements Listener {
                     e.setCancelled(true);
                 }
 
-                if(!Bukkit.getServer().getVersion().contains("1.8")) {
+                if(getBukkitVersion() > 8) {
 
-                    if(e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) {
+                    if(e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)
                         return;
-                    }
-
                 }
 
                 if(Variables.bypass) {
@@ -190,9 +183,7 @@ public class Listeners implements Listener {
 
                     user.setNotified(true);
 
-                    p.sendMessage(" ");
                     Variables.NOTIFY_ACTIVATED.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
-                    p.sendMessage(" ");
                 }
             }, 15);
         }
@@ -206,9 +197,7 @@ public class Listeners implements Listener {
             if(User.get(all.getUniqueId()).getChecked() == User.get(p.getUniqueId())) {
 
                 Variables.PLAYER_NOW_OFFLINE.forEach(var -> all.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", p.getName())));
-
                 User.get(all.getUniqueId()).setChecked(null);
-
             }
         }
         User.getAllUser().remove(User.get(p.getUniqueId()));
@@ -224,7 +213,7 @@ public class Listeners implements Listener {
     @EventHandler
     public void onNormalClick(PlayerInteractEvent e) {
         
-        if(getBukkitVersion() == 8) {
+        if(getBukkitVersion() > 8) {
             if(e.getHand() == EquipmentSlot.OFF_HAND) return;
         }
         

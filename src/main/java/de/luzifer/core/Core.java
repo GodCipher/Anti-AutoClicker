@@ -3,9 +3,7 @@ package de.luzifer.core;
 import de.luzifer.core.api.events.ActionBarMessageEvent;
 import de.luzifer.core.api.manager.CheckManager;
 import de.luzifer.core.api.player.User;
-import de.luzifer.core.api.profile.inventory.InsideLogGUI;
-import de.luzifer.core.api.profile.inventory.LogGUI;
-import de.luzifer.core.api.profile.inventory.ProfileGUI;
+import de.luzifer.core.api.profile.inventory.pagesystem.Menu;
 import de.luzifer.core.checks.*;
 import de.luzifer.core.commands.AntiACCommand;
 import de.luzifer.core.extern.Metrics;
@@ -70,17 +68,18 @@ public class Core extends JavaPlugin {
         @Override
         public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
+            if(!sender.hasPermission(Variables.perms) && !sender.isOp())
+                return Collections.emptyList();
+
             final List<String> complete = new ArrayList<>();
 
             if(args.length == 1) {
 
                 StringUtil.copyPartialMatches(args[0], Arrays.asList(ARGS), complete);
-
                 Collections.sort(complete);
-
             } else if(args.length == 2) {
 
-                if(args[0].equalsIgnoreCase("check")) {
+                if(args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("profile")) {
 
                     List<String> playerNames = new ArrayList<>();
 
@@ -89,27 +88,12 @@ public class Core extends JavaPlugin {
                     }
 
                     Collections.sort(playerNames);
-
-                    return playerNames;
-
-                }
-
-                if(args[0].equalsIgnoreCase("profile")) {
-                    List<String> playerNames = new ArrayList<>();
-
-                    for(Player all : Bukkit.getOnlinePlayers()) {
-                        playerNames.add(all.getName());
-                    }
-
-                    Collections.sort(playerNames);
-
                     return playerNames;
                 }
 
                 if(args[0].equalsIgnoreCase("notify")) {
 
                     StringUtil.copyPartialMatches(args[1], Arrays.asList(ARGS2), complete);
-
                     Collections.sort(complete);
                 }
 
@@ -153,38 +137,21 @@ public class Core extends JavaPlugin {
         saveDefaultConfig();
 
         for(Player all : Bukkit.getOnlinePlayers()) {
-            if(all.getOpenInventory().getTopInventory().getHolder() instanceof ProfileGUI) {
+            if(all.getOpenInventory().getTopInventory().getHolder() instanceof Menu)
                 all.closeInventory();
-            }
-            if(all.getOpenInventory().getTopInventory().getHolder() instanceof LogGUI) {
-                all.closeInventory();
-            }
-            if(all.getOpenInventory().getTopInventory().getHolder() instanceof InsideLogGUI) {
-                all.closeInventory();
-            }
         }
-
     }
 
     public void initialize() {
         prefix = "§cAnti§4AC §8» ";
         new Metrics(this, 6473);
-        try {
-            Bukkit.getLogger().info("[AntiAC] Initialize complete");
-            Thread.sleep(50);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Bukkit.getLogger().info("[AntiAC] Initialize complete");
     }
 
     public void loadMessages() {
 
         Variables.init();
-
-        try {
-            Bukkit.getLogger().info("[AntiAC] Loading messages.yml complete");
-            Thread.sleep(50);
-        } catch (InterruptedException ignored) {}
+        Bukkit.getLogger().info("[AntiAC] Loading messages.yml complete");
     }
 
     public void loadConfig() {
@@ -205,20 +172,15 @@ public class Core extends JavaPlugin {
         if(getConfig().getBoolean("AntiAC.UpdateChecker")) {
             Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new UpdateTimer(this), 0, 20*60*5);
         }
-        try {
-            Bukkit.getLogger().info("[AntiAC] Loading config.yml complete");
-            Thread.sleep(50);
-        } catch (InterruptedException ignored) {}
+        Bukkit.getLogger().info("[AntiAC] Loading config.yml complete");
     }
 
     public void loadCommands() {
+
         Objects.requireNonNull(getCommand("antiac")).setExecutor(new AntiACCommand());
         Objects.requireNonNull(getCommand("antiac")).setTabCompleter(new AntiACCommandTabCompleter());
 
-        try {
-            Bukkit.getLogger().info("[AntiAC] Loading Commands complete");
-            Thread.sleep(50);
-        } catch (InterruptedException ignored) {}
+        Bukkit.getLogger().info("[AntiAC] Loading Commands complete");
     }
 
     public static void deleteLogs() {
@@ -236,26 +198,20 @@ public class Core extends JavaPlugin {
     }
 
     public void loadActionBar() {
+
         Core.plugin = this;
         Core.nmsver = Bukkit.getServer().getClass().getPackage().getName();
         Core.nmsver = Core.nmsver.substring(Core.nmsver.lastIndexOf(".") + 1);
         if (Core.nmsver.equalsIgnoreCase("v1_8_R1") || Core.nmsver.startsWith("v1_7_")) {
             Core.useOldMethods = true;
         }
-
-        try {
-            Bukkit.getLogger().info("[AntiAC] Loading ActionBarAPI complete");
-            Thread.sleep(50);
-        } catch (InterruptedException ignored) {}
+        Bukkit.getLogger().info("[AntiAC] Loading ActionBarAPI complete");
     }
 
     public void loadListener() {
-        Bukkit.getPluginManager().registerEvents(new Listeners(this), this);
 
-        try {
-            Bukkit.getLogger().info("[AntiAC] Loading Listeners complete");
-            Thread.sleep(50);
-        } catch (InterruptedException ignored) {}
+        Bukkit.getPluginManager().registerEvents(new Listeners(this), this);
+        Bukkit.getLogger().info("[AntiAC] Loading Listeners complete");
     }
 
     public void loadChecks() {

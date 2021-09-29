@@ -27,7 +27,7 @@ public class AntiACCommand implements CommandExecutor {
             }
             Player p = (Player) sender;
 
-            String perms = Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.NeededPermission")).toLowerCase();
+            String perms = Variables.perms.toLowerCase();
             if(!p.hasPermission(perms) && !p.isOp()) {
                 
                 p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
@@ -63,7 +63,6 @@ public class AntiACCommand implements CommandExecutor {
                 if(args[0].equalsIgnoreCase("version")) {
                     
                     p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
-                    
                     return true;
                 }
 
@@ -132,20 +131,17 @@ public class AntiACCommand implements CommandExecutor {
                     Player t = Bukkit.getPlayer(args[1]);
                     if(t != null) {
                         User.get(p.getUniqueId()).setChecked(User.get(t.getUniqueId()));
-                        
                         Variables.ON_CLICK_CHECK.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", t.getName())));
                     } else {
                         if(args[1].equalsIgnoreCase("off")) {
                             if(User.get(p.getUniqueId()).getChecked() == null) {
                                 
                                 Variables.NOT_CHECKING_ANYONE.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
-                                
                                 return true;
                             }
                             User.get(p.getUniqueId()).setChecked(null);
                             
                             Variables.ON_CLICK_CHECK_OFF.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
-                            
                             return true;
                         }
                         
