@@ -22,9 +22,8 @@ public class Timer implements Runnable {
 
             User user = User.get(all.getUniqueId());
 
-            if(user.isFrozen()) {
+            if(user.isFrozen())
                 Variables.PUNISHED.forEach(var -> all.sendMessage(Core.prefix + var.replace("&", "§")));
-            }
 
             user.getClicksAverageList().add(user.getClicks());
             user.getClicksAverageCheckList().add(user.getAverage());
@@ -33,15 +32,12 @@ public class Timer implements Runnable {
 
             dataContainer(user);
 
-            for(Check check : CheckManager.getChecks()) {
+            for(Check check : CheckManager.getChecks())
                 check.execute(user);
-            }
 
             cleanUp(user);
-
         }
         Core.deleteLogs();
-
     }
 
     private void sendActionBar(User user) {
