@@ -94,7 +94,7 @@ public class Listeners implements Listener {
     @EventHandler
     public void onEntityClick(PlayerInteractAtEntityEvent e) {
     
-        if(getBukkitVersion() == 8) {
+        if(getBukkitVersion() > 8) {
             if(e.getHand() == EquipmentSlot.OFF_HAND) return;
         }
         
@@ -152,7 +152,7 @@ public class Listeners implements Listener {
                     e.setCancelled(true);
                 }
 
-                if(!Bukkit.getServer().getVersion().contains("1.8")) {
+                if(getBukkitVersion() > 8) {
 
                     if(e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) {
                         return;
@@ -224,7 +224,7 @@ public class Listeners implements Listener {
     @EventHandler
     public void onNormalClick(PlayerInteractEvent e) {
         
-        if(getBukkitVersion() == 8) {
+        if(getBukkitVersion() > 8) {
             if(e.getHand() == EquipmentSlot.OFF_HAND) return;
         }
         
