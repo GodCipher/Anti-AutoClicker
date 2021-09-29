@@ -70,14 +70,15 @@ public class Core extends JavaPlugin {
         @Override
         public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
+            if(!sender.hasPermission(Variables.perms) && !sender.isOp())
+                return Collections.emptyList();
+
             final List<String> complete = new ArrayList<>();
 
             if(args.length == 1) {
 
                 StringUtil.copyPartialMatches(args[0], Arrays.asList(ARGS), complete);
-
                 Collections.sort(complete);
-
             } else if(args.length == 2) {
 
                 if(args[0].equalsIgnoreCase("check")) {
@@ -91,10 +92,10 @@ public class Core extends JavaPlugin {
                     Collections.sort(playerNames);
 
                     return playerNames;
-
                 }
 
                 if(args[0].equalsIgnoreCase("profile")) {
+
                     List<String> playerNames = new ArrayList<>();
 
                     for(Player all : Bukkit.getOnlinePlayers()) {
@@ -109,7 +110,6 @@ public class Core extends JavaPlugin {
                 if(args[0].equalsIgnoreCase("notify")) {
 
                     StringUtil.copyPartialMatches(args[1], Arrays.asList(ARGS2), complete);
-
                     Collections.sort(complete);
                 }
 
