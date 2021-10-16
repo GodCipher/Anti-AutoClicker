@@ -2,9 +2,16 @@
 AntiAC:
 
 # Permission Settings
-  NeededPermission: 'antiac.clicks'
-  # Permissions which are needed to execute the commands
-  # OP also works
+  NeededPermission: 'antiac'
+  # <second-level>.<top-level>
+  # The second-level permission. This is just a PART of the permission.
+  # Every command now has their own sub-permission.
+  # The top-level permission is ALWAYS the sub command
+    # For example: To execute /antiac profile <PLAYER> the permission <NeededPermission>.profile is needed. By default -> antiac.profile
+    # /antiac shows now only the commands a player is permitted to execute
+    # To receive automated update notifications <NeededPermission>.checkupdate is needed
+  # NOTE: <NeededPermission>.* or op still works. With one of those two the player can execute every command.
+    # Change <NeededPermission> with whatever you put there. By default: antiac
 
 
 

@@ -68,19 +68,22 @@ public class Core extends JavaPlugin {
         @Override
         public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
-            if(!sender.hasPermission(Variables.perms) && !sender.isOp())
-                return Collections.emptyList();
-
             final List<String> complete = new ArrayList<>();
-
+            
             if(args.length == 1) {
 
                 StringUtil.copyPartialMatches(args[0], Arrays.asList(ARGS), complete);
                 Collections.sort(complete);
+    
+                complete.removeIf(s -> !hasSubPermissions(sender, s));
+                return complete;
             } else if(args.length == 2) {
-
+    
+                if(!hasSubPermissions(sender, args[0]))
+                    return Collections.emptyList();
+                
                 if(args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("profile")) {
-
+    
                     List<String> playerNames = new ArrayList<>();
 
                     for(Player all : Bukkit.getOnlinePlayers()) {
@@ -92,16 +95,26 @@ public class Core extends JavaPlugin {
                 }
 
                 if(args[0].equalsIgnoreCase("notify")) {
-
+                    
                     StringUtil.copyPartialMatches(args[1], Arrays.asList(ARGS2), complete);
                     Collections.sort(complete);
+                    
+                    return complete;
                 }
 
             }
 
-            return complete;
+            return Collections.emptyList();
         }
-
+    
+        private boolean hasSubPermissions(CommandSender player, String perms) {
+            return player.hasPermission(Variables.perms + "." + perms) || hasPermission(player);
+        }
+    
+        private boolean hasPermission(CommandSender player) {
+            return player.hasPermission(Variables.perms + ".*") || player.isOp();
+        }
+        
     }
 
     private static Core core;

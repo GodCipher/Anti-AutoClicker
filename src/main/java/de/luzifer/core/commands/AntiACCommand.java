@@ -27,46 +27,57 @@ public class AntiACCommand implements CommandExecutor {
             }
             Player p = (Player) sender;
 
-            String perms = Variables.perms.toLowerCase();
-            if(!p.hasPermission(perms) && !p.isOp()) {
-                
-                p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
-                p.sendMessage("§6https://www.spigotmc.org/resources/anti-autoclicker-1-8-x-1-16-2.74933");
-                
-                return true;
-            }
-
             if(args.length == 0) {
+                
                 sendCommands(p);
                 return true;
             }
             else if(args.length == 1) {
 
                 if(args[0].equalsIgnoreCase("reload")) {
+                    
+                    if(!hasSubPermissions(p, "reload")) {
+    
+                        p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                        return true;
+                    }
+                    
                     Core.getInstance().reloadConfig();
                     Variables.init();
 
                     p.sendMessage(prefix + "§7Config reloaded!");
-                    
                     return true;
                 } else
 
                 if(args[0].equalsIgnoreCase("logs")) {
-
+    
+                    if(!hasSubPermissions(p, "logs")) {
+        
+                        p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                        return true;
+                    }
+                    
                     LogGUI logGUI = new LogGUI();
                     logGUI.buildGUI();
+                    
                     p.openInventory(logGUI.getInventory());
                     return true;
-
                 } else
 
                 if(args[0].equalsIgnoreCase("version")) {
-                    
+    
                     p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
                     return true;
                 }
 
                 else if(args[0].equalsIgnoreCase("checkupdate")) {
+    
+                    if(!hasSubPermissions(p, "checkupdate")) {
+        
+                        p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                        return true;
+                    }
+                    
                     Bukkit.getScheduler().runTaskAsynchronously(Core.getInstance(), () -> {
                         UpdateChecker updateChecker = new UpdateChecker(Core.getInstance());
                         if(!updateChecker.check()) {
@@ -85,12 +96,17 @@ public class AntiACCommand implements CommandExecutor {
 
                     sendCommands(p);
                     return true;
-
                 }
 
             } else if(args.length == 2) {
                 if (args[0].equalsIgnoreCase("profile")) {
-
+    
+                    if(!hasSubPermissions(p, "profile")) {
+        
+                        p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                        return true;
+                    }
+                    
                     Player target = Bukkit.getPlayer(args[1]);
 
                     if(target == null) {
@@ -105,9 +121,15 @@ public class AntiACCommand implements CommandExecutor {
                     profileGUI.buildGUI();
 
                     p.openInventory(profileGUI.getInventory());
-
                 } else
                 if(args[0].equalsIgnoreCase("notify")) {
+    
+                    if(!hasSubPermissions(p, "notify")) {
+        
+                        p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                        return true;
+                    }
+                    
                     if(args[1].equalsIgnoreCase("on")) {
                         if(!User.get(p.getUniqueId()).isNotified()) {
                             User.get(p.getUniqueId()).setNotified(true);
@@ -128,6 +150,13 @@ public class AntiACCommand implements CommandExecutor {
                     return true;
                 }
                 else if(args[0].equalsIgnoreCase("check")) {
+    
+                    if(!hasSubPermissions(p, "check")) {
+        
+                        p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                        return true;
+                    }
+                    
                     Player t = Bukkit.getPlayer(args[1]);
                     if(t != null) {
                         User.get(p.getUniqueId()).setChecked(User.get(t.getUniqueId()));
@@ -152,7 +181,6 @@ public class AntiACCommand implements CommandExecutor {
 
                     sendCommands(p);
                     return true;
-
                 }
             }
         }
@@ -160,15 +188,29 @@ public class AntiACCommand implements CommandExecutor {
         return false;
     }
 
+    private final String[] subCommands = {"version", "checkupdate", "logs", "reload", "profile", "check", "notify"};
     private void sendCommands(Player p) {
         
-        p.sendMessage(prefix + "§6/antiac version");
-        p.sendMessage(prefix + "§6/antiac checkupdate");
-        p.sendMessage(prefix + "§6/antiac logs");
-        p.sendMessage(prefix + "§6/antiac reload");
-        p.sendMessage(prefix + "§6/antiac profile <PLAYER>");
-        p.sendMessage(prefix + "§6/antiac check <PLAYER>/off");
-        p.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
+        int count = 0;
+        for(String s : subCommands) {
+            
+            if(hasSubPermissions(p, s)) {
+                
+                p.sendMessage(prefix + "§6/antiac " + s);
+                count++;
+            }
+        }
         
+        if(count == 0)
+            p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+        
+    }
+    
+    private boolean hasSubPermissions(Player player, String perms) {
+        return player.hasPermission(Variables.perms + "." + perms) || hasPermission(player);
+    }
+    
+    private boolean hasPermission(Player player) {
+        return player.hasPermission(Variables.perms + ".*") || player.isOp();
     }
 }
