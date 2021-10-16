@@ -295,11 +295,9 @@ public class User {
     private void informTeam() {
         
         if(Variables.informTeam) {
-            for(Player team : Bukkit.getOnlinePlayers()) {
-                
-                if(team.equals(getPlayer())) continue;
+
+            for(Player team : Bukkit.getOnlinePlayers())
                 informPlayerIfPermittedAndNotified(team);
-            }
         }
     }
     
@@ -308,7 +306,7 @@ public class User {
         if(player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp()) {
             if(User.get(player.getUniqueId()).isNotified()) {
                 
-                Variables.TEAM_NOTIFY.forEach(var -> player.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", player.getName())
+                Variables.TEAM_NOTIFY.forEach(var -> player.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName())
                         .replaceAll("%clicks%", String.valueOf(getClicks()))
                         .replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
             }
