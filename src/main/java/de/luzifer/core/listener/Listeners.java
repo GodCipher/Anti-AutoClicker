@@ -139,7 +139,7 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onEntityHit(EntityDamageByEntityEvent e) {
-        if(e.getDamager() instanceof Player) {
+        if(e.getDamager() instanceof Player && !e.getDamager().hasMetadata("NPC")) {
             if(e.getEntity() instanceof LivingEntity) {
                 Player player = (Player) e.getDamager();
 
