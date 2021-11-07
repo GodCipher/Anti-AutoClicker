@@ -78,8 +78,34 @@ This class we will now extend with Check:
 public class TestCheck extends Check {
 
     @Override
-    public void execute(User user) {
-        // everything in here will be executed
+    protected void onLoad() throws Exception {
+    
+	// do your thing when the Check loads
+        FileConfiguration fileConfiguration = loadConfiguration();
+        fileConfiguration.addDefault("Check.Wonderful", 5);
+        
+        fileConfiguration.save(file);
+    }
+    
+    @Override
+    protected void onUnload() throws Exception {
+        // do your thing when the Check unloads
+    }
+    
+    @Override
+    public void onSuccess(User user) {
+        // when the Check was successfull
+    }
+    
+    @Override
+    public void onFailure(User user) {
+        // when the Check wasn't successfull
+    }
+    
+    @Override
+    public boolean check(User user) {
+        // do whatever you have to do 
+        return false; // return wheter the Check was successfull or not
     }
     
 }
