@@ -4,17 +4,28 @@ import de.luzifer.core.api.check.Check;
 import de.luzifer.core.api.enums.ViolationType;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.utils.Variables;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public class ClickCheck extends Check {
-
+    
     @Override
-    public void execute(User user) {
-        if(user.getClicks() >= Variables.allowedClicks) {
+    public void onSuccess(User user) {
+        
+        if (Variables.sanctionateAtViolations > 0) {
             user.addViolation(ViolationType.NORMAL);
-
-            if(!(Variables.sanctionateAtViolations > 0)) {
-                user.sanction(true, User.CheckType.CLICK);
-            }
+            return;
         }
+        
+        user.sanction(true);
+    }
+    
+    @Override
+    public void onFailure(User user) {
+    
+    }
+    
+    @Override
+    public boolean check(User user) {
+        return user.getClicks() >= Variables.allowedClicks;
     }
 }

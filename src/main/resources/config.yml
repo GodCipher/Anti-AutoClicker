@@ -1,28 +1,28 @@
 # The plugin does not perceive clicks on the ground or in the air so well. But clicks against players or entities are generally 100% accurate
 AntiAC:
 
-# Permission Settings
+  # Permission Settings
   NeededPermission: 'antiac'
-  # <second-level>.<top-level>
-  # The second-level permission. This is just a PART of the permission.
-  # Every command now has their own sub-permission.
-  # The top-level permission is ALWAYS the sub command
+    # <second-level>.<top-level>
+    # The second-level permission. This is just a PART of the permission.
+    # Every command now has their own sub-permission.
+    # The top-level permission is ALWAYS the sub command
     # For example: To execute /antiac profile <PLAYER> the permission <NeededPermission>.profile is needed. By default -> antiac.profile
     # /antiac shows now only the commands a player is permitted to execute
-    # To receive automated update notifications <NeededPermission>.checkupdate is needed
+  # To receive automated update notifications <NeededPermission>.checkupdate is needed
   # NOTE: <NeededPermission>.* or op still works. With one of those two the player can execute every command.
-    # Change <NeededPermission> with whatever you put there. By default: antiac
+  # Change <NeededPermission> with whatever you put there. By default: antiac
 
 
 
-# Clicks Settings
+  # Clicks Settings
   AllowedClicks: 40
   # The number of clicks that are allowed
   # Could come to false positives if it is under 30
 
 
 
-# Profile Settings
+  # Profile Settings
   Profile-Store-As-Much-Data-In-One-DataContainer: 20
   # Set how much data a DataContainer saves (what will be displayed in the profile)
   # If it reached this amount, the DataContainer will be closed, posted to the profile and a new will be created
@@ -36,11 +36,11 @@ AntiAC:
   Profile-Do-Not-Store-Nothing: true
   # If on true: Doesn't store ClickCounts & their Averages when the clicks are 0
   # NOTE: Will not send the DataContainer into the Profile 'till X is reached
-    # Could take a long time, when the player doesn't click
+  # Could take a long time, when the player doesn't click
 
 
 
-# Violation Settings
+  # Violation Settings
   Just-Sanction-If-At-Violations: 20
   # (!!) SET TO -1 IF YOU WANT TO HAVE THAT DISABLED (!!)
   # Just punishes the detected player if he has X violations or more
@@ -58,20 +58,20 @@ AntiAC:
   # Clear the violation of a player, if he hasn't got any violation X minutes long
 
 
-# LevelCheck Settings
+  # LevelCheck Settings
   LevelCheck-Level-Max: 15
   # Set the allowed difference between the players last clicks and the players current clicks
   # Shouldn't be set too low
 
 
-# DoubleClick Settings
+  # DoubleClick Settings
   DoubleClick-Check-At-Clicks: 12
   # Starts to check if the user clicks are over or at X
   # NOTE: It is NOT recommended to put this value under or at 10 (causes to 100% false positives)
 
 
 
-# Average Settings
+  # Average Settings
   ClickAverageOfSeconds: 3
   # Summarizes the clicks from the last X seconds
 
@@ -84,13 +84,13 @@ AntiAC:
 
 
 
-# Normal Notification Settings
+  # Normal Notification Settings
   AutoNotification: true
   # Enables notifications for players with permissions after a reload or when they log in
 
 
 
-# Anti-Lag-False-Positives Settings
+  # Anti-Lag-False-Positives Settings
   TPSChecker: true
   # Checks the tps to prevent false detections because of lags
   # Stops the counting of the clicks while the low tps
@@ -110,13 +110,13 @@ AntiAC:
 
 
 
-# Update Settings
+  # Update Settings
   UpdateChecker: true
   # Check the plugin for updates and shout out a message if there is any
 
 
 
-# Bypass Settings
+  # Bypass Settings
   Bypass: true
   # If 'true' the clicks of the players with the perms BypassPermission will not be count
 
@@ -126,7 +126,7 @@ AntiAC:
 
 
 
-# Log Settings
+  # Log Settings
   Log: false
   # Store players who got detected in a file.
   # ATTENTION only recommended if sufficient memory space is available.
@@ -136,7 +136,7 @@ AntiAC:
 
 
 
-# Punishments configurations
+  # Punishments configurations
   InformTeam: true
   # Sends a message to someone with the permissions If a player got detected
 

@@ -1,6 +1,7 @@
 package de.luzifer.core.api.player;
 
 import de.luzifer.core.Core;
+import de.luzifer.core.api.check.Check;
 import de.luzifer.core.api.enums.ViolationType;
 import de.luzifer.core.api.log.Log;
 import de.luzifer.core.api.profile.Profile;
@@ -16,94 +17,83 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class User {
-
-    private int clicks = 0;
-
-    private Long lastRightClick;
-
-    private Profile profile;
-
+    
+    private static final List<User> allUser = new ArrayList<>();
     private final List<Integer> clicksAverage = new ArrayList<>();
     private final List<Double> clicksAverageCheck = new ArrayList<>();
-
+    
+    private final UUID uuid;
+    
+    public int clearViolations = 0;
+    
+    private int clicks = 0;
     private int violations = 0;
-
+    
+    private Long lastRightClick;
+    private User check;
+    private Profile profile;
+    
     private boolean frozen = false;
     private boolean restricted = false;
     private boolean notified = false;
-
-    public int clearViolations = 0;
     
-    private final UUID uuid;
-    private User check;
-
-    private static final List<User> allUser = new ArrayList<>();
-
-    public static User get(UUID uuid) {
-
-        if(!allUser.isEmpty()) {
-
-            for(User user : allUser) {
-
-                if(user.getUniqueID().equals(uuid)) {
-
-                    return user;
-
-                }
-
-            }
-
-            User user = new User(uuid);
-            Profile profile = new Profile(user);
-            user.setProfile(profile);
-            allUser.add(user);
-            return user;
-
-        } else {
-
-            User user = new User(uuid);
-            Profile profile = new Profile(user);
-            user.setProfile(profile);
-            allUser.add(user);
-            return user;
-
-        }
-
-    }
-
-    public static List<User> getAllUser() {
-
-        return allUser;
-
-    }
-
     private User(UUID uuid) {
-
         this.uuid = uuid;
-
     }
-
-    private UUID getUniqueID() {
-
-        return uuid;
-
+    
+    public static User get(UUID uuid) {
+        
+        if (!allUser.isEmpty()) {
+            
+            for (User user : allUser)
+                if (user.getUniqueID().equals(uuid))
+                    return user;
+            
+            User user = new User(uuid);
+            
+            Profile profile = new Profile(user);
+            user.setProfile(profile);
+            
+            allUser.add(user);
+            
+            return user;
+            
+        } else {
+            
+            User user = new User(uuid);
+            
+            Profile profile = new Profile(user);
+            user.setProfile(profile);
+            
+            allUser.add(user);
+            
+            return user;
+            
+        }
+        
     }
-
+    
+    public static List<User> getAllUser() {
+        return allUser;
+    }
+    
     public Profile getProfile() {
         return profile;
     }
-
-    private void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
+    
     public void pluginBan() {
-        if(Variables.executeBanCommand.equals("") ||
-                Variables.executeBanCommand == null) {
-
+        
+        if (Variables.executeBanCommand == null || Variables.executeBanCommand.isEmpty()) {
+            
             SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             Date date = new Date();
             Calendar calendar = new GregorianCalendar();
@@ -112,159 +102,158 @@ public class User {
             String date1 = format.format(calendar.getTime());
             ArrayList<String> reasonList = new ArrayList<>(Variables.BAN_REASON);
             String reason = "§cAnti§4AC \n " + String.join("\n ", reasonList).replace("&", "§").replaceAll("%date%", date1);
-            Bukkit.getBanList(BanList.Type.NAME).addBan(getPlayer().getName(), reason, calendar.getTime() , null);
+            Bukkit.getBanList(BanList.Type.NAME).addBan(getPlayer().getName(), reason, calendar.getTime(), null);
             getPlayer().kickPlayer(reason);
-
+            
         } else {
+            
             String execute = Variables.executeBanCommand;
-            assert execute != null;
             execute = execute.replaceAll("%player%", getPlayer().getName()).replace("&", "§");
-
+            
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), execute);
         }
     }
-
+    
     public void pluginKick() {
-        if(Variables.executeKickCommand.equals("") ||
-                Variables.executeKickCommand == null) {
-
+        
+        if (Variables.executeKickCommand == null || Variables.executeKickCommand.isEmpty()) {
+            
             ArrayList<String> reasonList = new ArrayList<>(Variables.KICK_REASON);
             getPlayer().kickPlayer("§cAnti§4AC \n " + String.join("\n ", reasonList).replace("&", "§"));
         } else {
+            
             String execute = Variables.executeKickCommand;
-            if(execute != null) {
-                execute = execute.replace("%player%", getPlayer().getName()).replace("&", "§");
-
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), execute);
-            }
+            execute = execute.replace("%player%", getPlayer().getName()).replace("&", "§");
+    
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), execute);
         }
     }
-
+    
     public Player getPlayer() {
         return Bukkit.getPlayer(uuid);
     }
-
+    
     public OfflinePlayer getOfflinePlayer() {
         return Bukkit.getOfflinePlayer(uuid);
     }
-
+    
     public Long getLastRightClick() {
         return lastRightClick;
     }
-
+    
     public void setLastRightClick(Long lastRightClick) {
         this.lastRightClick = lastRightClick;
     }
-
+    
     @Deprecated
     public void setViolations(int violations) {
         this.violations = violations;
     }
-
+    
     public void addViolation(ViolationType violationType) {
-        this.violations = violations+violationType.getViolations();
+        this.violations = violations + violationType.getViolations();
         this.clearViolations = 0;
     }
-
+    
     public void removeViolation(ViolationType violationType) {
-        this.violations = violations-violationType.getViolations();
+        this.violations = violations - violationType.getViolations();
     }
-
+    
     public void clearViolations() {
         this.violations = 0;
     }
-
+    
     public int getViolations() {
         return violations;
     }
-
+    
     public int getClicks() {
         return clicks;
     }
-
+    
     public void setNotified(boolean notified) {
         this.notified = notified;
     }
-
+    
     public String getName() {
         return getPlayer().getName();
     }
-
+    
     public boolean isNotified() {
         return notified;
     }
-
+    
     public void setFrozen(boolean frozen) {
         this.frozen = frozen;
     }
-
+    
     public void setFrozen(boolean frozen, int duration) {
         this.setFrozen(frozen);
-        Bukkit.getScheduler().runTaskLater(Core.getInstance(), () -> this.setFrozen(!frozen), 20*duration);
+        Bukkit.getScheduler().runTaskLater(Core.getInstance(), () -> this.setFrozen(!frozen), 20 * duration);
     }
-
+    
     public boolean isFrozen() {
         return frozen;
     }
-
+    
     public void setRestricted(boolean restricted) {
         this.restricted = restricted;
     }
-
+    
     public boolean isRestricted() {
         return restricted;
     }
-
+    
     @Deprecated
     public void setClicks(int amount) {
         clicks = amount;
     }
-
+    
     public void addClicks(int amount) {
-        setClicks(getClicks()+amount);
-
+        setClicks(getClicks() + amount);
+        
         // Needed for DoubleClickCheck
-        if(!DoubleClickCheck.latestClicks.containsKey(this)) {
+        if (!DoubleClickCheck.latestClicks.containsKey(this))
             DoubleClickCheck.latestClicks.put(this, new ArrayList<>());
-        }
+        
         List<Long> millis = DoubleClickCheck.latestClicks.get(this);
         millis.add(System.currentTimeMillis());
+        
         DoubleClickCheck.latestClicks.put(this, millis);
     }
-
+    
     public void removeClicks(int amount) {
-        setClicks(getClicks()-amount);
+        setClicks(getClicks() - amount);
     }
-
+    
     public double getAverage() {
         return round(calculateAverage(clicksAverage));
     }
-
+    
     public List<Double> getClicksAverageCheckList() {
         return clicksAverageCheck;
     }
-
+    
     public void setChecked(User user) {
         this.check = user;
     }
-
+    
     public User getChecked() {
         return check;
     }
-
+    
     public List<Integer> getClicksAverageList() {
         return clicksAverage;
     }
     
     public int getPing() {
         
-        if(getBukkitVersion() >= 17)
-            return getPlayer().getPing();
+        if (getBukkitVersion() >= 17) return getPlayer().getPing();
         
         int ping = -1;
         try {
             
-            if(getPlayer() == null) return ping;
+            if (getPlayer() == null) return ping;
             
             Object entityPlayer = getPlayer().getClass().getMethod("getHandle").invoke(getPlayer());
             ping = (int) entityPlayer.getClass().getField("ping").get(entityPlayer);
@@ -273,135 +262,68 @@ public class User {
         }
         return ping;
     }
-
+    
     public boolean isBypassed() {
-        return (getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) || getPlayer().isOp())
-                || getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) && getPlayer().isOp();
-    }
-
-    private void shoutOutPunishment() {
-        if(Variables.shoutOutPunishment) {
-            Objects.requireNonNull(getPlayer().getLocation().getWorld()).strikeLightningEffect(getPlayer().getLocation());
-            Bukkit.broadcastMessage("");
-            Variables.SHOUTOUT_PUNISHMENT.forEach(var -> Bukkit.broadcastMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName())));
-            Bukkit.broadcastMessage("");
-
-            for(Player others : Bukkit.getOnlinePlayers()) {
-                Objects.requireNonNull(others.getLocation().getWorld()).spawnEntity(others.getLocation(), EntityType.FIREWORK);
-            }
-        }
+        return (getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) || getPlayer().isOp()) || getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) && getPlayer().isOp();
     }
     
-    private void informTeam() {
+    public void sanction(boolean b, Check check) {
         
-        if(Variables.informTeam) {
-
-            for(Player team : Bukkit.getOnlinePlayers())
-                informPlayerIfPermittedAndNotified(team);
-        }
-    }
-    
-    private void informPlayerIfPermittedAndNotified(Player player) {
+        if (Variables.consoleNotify)
+            Variables.TEAM_NOTIFY.forEach(var -> Bukkit.getConsoleSender().sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName()).replaceAll("%clicks%", String.valueOf(getClicks())).replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
         
-        if(player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp()) {
-            if(User.get(player.getUniqueId()).isNotified()) {
-                
-                Variables.TEAM_NOTIFY.forEach(var -> player.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName())
-                        .replaceAll("%clicks%", String.valueOf(getClicks()))
-                        .replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
-            }
-        }
-    }
-    
-    public enum CheckType {
-        CLICK,
-        AVERAGE,
-        DOUBLE_CLICK,
-        LEVEL;
-    
-    }
-    public void sanction(boolean b, CheckType checkType) {
-        if(Variables.consoleNotify) {
-            
-            Variables.TEAM_NOTIFY.forEach(var -> Bukkit.getConsoleSender().sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName())
-                    .replaceAll("%clicks%", String.valueOf(getClicks()))
-                    .replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
-        }
-        if(Variables.log) {
-            if(checkType == null) {
-                Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "got detected/too many violations");
-            } else if(checkType == CheckType.CLICK) {
-                Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "many clicks/too many violations");
-            } else if(checkType == CheckType.AVERAGE) {
-                Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "equal averages/too many violations");
-            } else if(checkType == CheckType.DOUBLE_CLICK) {
-                Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "double clicking/too many violations");
-            } else if(checkType == CheckType.LEVEL) {
-                Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "too fast increasing clicks/too many violations");
-            } else {
-                Log.log(getPlayer(), getClicks(), getAverage(), Variables.allowedClicks, "got detected/too many violations");
-                
-            }
-        }
+        if (Variables.log)
+            Log.log(getPlayer(), getClicks(), getAverage(), check);
         
         boolean ban = false;
         boolean kick = false;
         boolean kill = false;
         boolean freeze = false;
         
-        if(b) {
-            if(Variables.playerBan) {
-                if(getClicks() >= Variables.banAtClicks) {
+        if (b) {
+            if (Variables.playerBan)
+                if (getClicks() >= Variables.banAtClicks)
                     ban = true;
-                }
-            }
-            if(Variables.playerKick) {
-                if(getClicks() >= Variables.kickAtClicks) {
+                
+            if (Variables.playerKick)
+                if (getClicks() >= Variables.kickAtClicks)
                     kick = true;
-                }
-            }
-            if(Variables.playerKill) {
-                if(getClicks() >= Variables.killAtClicks) {
+                
+            
+            if (Variables.playerKill)
+                if (getClicks() >= Variables.killAtClicks)
                     kill = true;
-                }
-            }
-            if(Variables.playerFreeze) {
-                if(getClicks() >= Variables.freezeAtClicks) {
+                
+            
+            if (Variables.playerFreeze)
+                if (getClicks() >= Variables.freezeAtClicks)
                     freeze = true;
-                }
-            }
         } else {
-            if(Variables.playerBan)
-                ban = true;
+            if (Variables.playerBan) ban = true;
             
-            if(Variables.playerKick)
-                kick = true;
+            if (Variables.playerKick) kick = true;
             
-            if(Variables.playerKill)
-                kill = true;
+            if (Variables.playerKill) kill = true;
             
-            if(Variables.playerFreeze)
-                freeze = true;
+            if (Variables.playerFreeze) freeze = true;
         }
         
-        if(ban) {
+        if (ban) {
             shoutOutPunishment();
             pluginBan();
             informTeam();
-        } else if(kick) {
+        } else if (kick) {
             shoutOutPunishment();
             pluginKick();
             informTeam();
-        } else
-        if(kill) {
+        } else if (kill) {
             getPlayer().setHealth(0);
             Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
             
             shoutOutPunishment();
             informTeam();
-        } else
-        if(freeze) {
-            if(!isFrozen()) {
+        } else if (freeze) {
+            if (!isFrozen()) {
                 setFrozen(true);
                 
                 Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
@@ -412,8 +334,8 @@ public class User {
             }
             informTeam();
         } else {
-            if(Variables.restrictPlayer) {
-                if(!isRestricted()) {
+            if (Variables.restrictPlayer) {
+                if (!isRestricted()) {
                     setRestricted(true);
                     
                     Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
@@ -428,7 +350,7 @@ public class User {
     
     /**
      * Sanctions the user according to the set settings
-     *
+     * <p>
      * If true: Involves the clicks of the player in the decision
      * If false: Just pays attention to the set settings in the config.yml
      *
@@ -437,10 +359,50 @@ public class User {
     public void sanction(boolean b) {
         sanction(b, null);
     }
-
+    
+    private UUID getUniqueID() {
+        
+        return uuid;
+        
+    }
+    
+    private void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+    
+    private void shoutOutPunishment() {
+        if (Variables.shoutOutPunishment) {
+            Objects.requireNonNull(getPlayer().getLocation().getWorld()).strikeLightningEffect(getPlayer().getLocation());
+            Variables.SHOUTOUT_PUNISHMENT.forEach(var -> Bukkit.broadcastMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName())));
+            
+            for (Player others : Bukkit.getOnlinePlayers()) {
+                Objects.requireNonNull(others.getLocation().getWorld()).spawnEntity(others.getLocation(), EntityType.FIREWORK);
+            }
+        }
+    }
+    
+    private void informTeam() {
+        
+        if (Variables.informTeam) {
+            
+            for (Player team : Bukkit.getOnlinePlayers())
+                informPlayerIfPermittedAndNotified(team);
+        }
+    }
+    
+    private void informPlayerIfPermittedAndNotified(Player player) {
+        
+        if (player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp()) {
+            if (User.get(player.getUniqueId()).isNotified()) {
+                
+                Variables.TEAM_NOTIFY.forEach(var -> player.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName()).replaceAll("%clicks%", String.valueOf(getClicks())).replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
+            }
+        }
+    }
+    
     private double calculateAverage(List<Integer> marks) {
         Integer sum = 0;
-        if(!marks.isEmpty()) {
+        if (!marks.isEmpty()) {
             for (Integer mark : marks) {
                 sum += mark;
             }
@@ -448,7 +410,7 @@ public class User {
         }
         return sum;
     }
-
+    
     private double round(double value) {
         BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(2, RoundingMode.HALF_UP);
@@ -460,5 +422,5 @@ public class User {
         String version = Bukkit.getBukkitVersion().split("-")[0];
         return Double.parseDouble(version.split("\\.")[1]);
     }
-
+    
 }

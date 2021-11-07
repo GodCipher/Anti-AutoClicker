@@ -18,97 +18,97 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class InsideLogGUI extends PaginatedMenu {
-
+    
     private File file;
-
+    
     public InsideLogGUI(File file) {
         this.file = file;
     }
-
+    
     @Override
     public String getTitle() {
-        return "§8[" + "§6" + (page+1) + "§8] §b" + file.getName().replaceAll(".yml", "");
+        return "§8[" + "§6" + (page + 1) + "§8] §b" + file.getName().replaceAll(".yml", "");
     }
-
+    
     @Override
     public int getSlots() {
         return 54;
     }
-
+    
     @Override
     public void handleEvent(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
         User user = User.get(player.getUniqueId());
-
+        
         e.setCancelled(true);
-
+        
         switch (e.getSlot()) {
-
+            
             case 45:
-                if(page != 0){
-                    page = page-1;
+                if (page != 0) {
+                    page = page - 1;
                     buildGUI();
                     player.openInventory(inv);
                 }
                 break;
             case 53:
                 List<String> playerNames = new ArrayList<>();
-
+                
                 FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-
-                for(String s : cfg.getStringList("LogList")) {
+                
+                for (String s : cfg.getStringList("LogList")) {
                     s = s.replaceAll(" ", "");
                     String[] sArray = s.split(Pattern.quote("|||"));
                     String playerName = sArray[0];
                     playerNames.add(playerName);
                 }
-
-                if(!((index + 1) >= playerNames.size())) {
-                    page = page+1;
+                
+                if (!((index + 1) >= playerNames.size())) {
+                    page = page + 1;
                     buildGUI();
                     player.openInventory(inv);
                 }
                 break;
         }
     }
-
+    
     @Override
     public Inventory getInventory() {
         return inv;
     }
-
+    
     public void buildGUI() {
-
+        
         build();
-
+        
         List<String> playerNames = new ArrayList<>();
-
+        
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-
-        for(String s : cfg.getStringList("LogList")) {
+        
+        for (String s : cfg.getStringList("LogList")) {
             s = s.replaceAll(" ", "");
             String[] sArray = s.split(Pattern.quote("|||"));
             String playerName = sArray[0];
             playerNames.add(playerName);
         }
-
-        for(int i = 0; i < getMaxItemsPerPage(); i++) {
-            index = getMaxItemsPerPage()*page+i;
-
-            if(index >= playerNames.size()) break;
-
-            if(playerNames.get(index) != null) {
-
+        
+        for (int i = 0; i < getMaxItemsPerPage(); i++) {
+            index = getMaxItemsPerPage() * page + i;
+            
+            if (index >= playerNames.size()) break;
+            
+            if (playerNames.get(index) != null) {
+                
                 addLogEntry(cfg, playerNames);
-
+                
             }
-
+            
         }
-
+        
         changeButtons(playerNames);
-
+        
     }
-
+    
     private void addLogEntry(FileConfiguration cfg, List<String> playerNames) {
         String name = cfg.getString("LogDetailed." + playerNames.get(index) + ".name");
         String uuid = cfg.getString("LogDetailed." + playerNames.get(index) + ".uuid");
@@ -117,11 +117,11 @@ public class InsideLogGUI extends PaginatedMenu {
         Double average = cfg.getDouble("LogDetailed." + playerNames.get(index) + ".average");
         Integer clicksToMuch = cfg.getInt("LogDetailed." + playerNames.get(index) + ".clicksToMuch");
         String logMessage = cfg.getString("LogDetailed." + playerNames.get(index) + ".logMessage");
-
+        
         ItemStack itemStack = new ItemStack(XMaterial.PAPER.parseMaterial());
         ItemMeta itemMeta = itemStack.getItemMeta();
-
-        itemMeta.setDisplayName("§cIndex: " + (index+1));
+        
+        itemMeta.setDisplayName("§cIndex: " + (index + 1));
         ArrayList<String> lore = new ArrayList<>();
         lore.add("§6Name: §e" + name);
         lore.add("§6UUID: §e" + uuid);
@@ -132,33 +132,33 @@ public class InsideLogGUI extends PaginatedMenu {
         lore.add("§6Log message: §e" + logMessage);
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
-
+        
         inv.addItem(itemStack);
     }
-
+    
     private void changeButtons(List<String> playerNames) {
-        if(page == 0) {
+        if (page == 0) {
             ItemStack backward = new ItemStack(Objects.requireNonNull(XMaterial.STONE_BUTTON.parseMaterial()));
             ItemMeta backwardMeta = backward.getItemMeta();
-
+            
             assert backwardMeta != null;
             backwardMeta.setDisplayName("§cThere is no previous page");
             backward.setItemMeta(backwardMeta);
-
+            
             inv.setItem(45, backward);
         }
-
-        if(!((index + 1) >= playerNames.size())) {
+        
+        if (!((index + 1) >= playerNames.size())) {
         } else {
             ItemStack forward = new ItemStack(Objects.requireNonNull(XMaterial.STONE_BUTTON.parseMaterial()));
             ItemMeta forwardMeta = forward.getItemMeta();
-
+            
             assert forwardMeta != null;
             forwardMeta.setDisplayName("§cThere is no next page");
             forward.setItemMeta(forwardMeta);
-
+            
             inv.setItem(53, forward);
         }
     }
-
+    
 }

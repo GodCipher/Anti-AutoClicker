@@ -2,7 +2,7 @@ package de.luzifer.core.timer;
 
 import de.luzifer.core.Core;
 import de.luzifer.core.api.check.Check;
-import de.luzifer.core.api.manager.CheckManager;
+import de.luzifer.core.api.check.CheckManager;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.storage.DataContainer;
 import de.luzifer.core.utils.Variables;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class Timer implements Runnable {
+public class CheckTimer implements Runnable {
 
     HashMap<UUID, DataContainer> containerHashMap = new HashMap<>();
 
@@ -33,11 +33,14 @@ public class Timer implements Runnable {
             dataContainer(user);
 
             for(Check check : CheckManager.getChecks())
-                check.execute(user);
+                if(check.isLoaded())
+                    if(check.check(user))
+                        check.onSuccess(user);
+                    else
+                        check.onFailure(user);
 
             cleanUp(user);
         }
-        Core.deleteLogs();
     }
 
     private void sendActionBar(User user) {

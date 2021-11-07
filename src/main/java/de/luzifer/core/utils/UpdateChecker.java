@@ -33,8 +33,7 @@ public class UpdateChecker {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(connection != null)
-                connection.disconnect();
+            if (connection != null) connection.disconnect();
         }
         
         return latestVersion.equalsIgnoreCase(PLUGIN.getDescription().getVersion());
@@ -50,8 +49,8 @@ public class UpdateChecker {
     private String convertLatestVersionFromGitHub(HttpURLConnection connection) throws IOException {
         
         Stream<String> list = new BufferedReader(new InputStreamReader(connection.getInputStream())).lines();
-        for(String s : list.collect(Collectors.toList())) {
-            if(s.toLowerCase().contains("<version>") && s.toLowerCase().contains("</version>"))
+        for (String s : list.collect(Collectors.toList())) {
+            if (s.toLowerCase().contains("<version>") && s.toLowerCase().contains("</version>"))
                 return s.replace("<version>", "").replace("</version>", "").replaceAll(" ", "");
         }
         return "NOT_FOUND";
