@@ -173,22 +173,18 @@ public class Core extends JavaPlugin {
     public void tpsChecker() {
         logger.info("Booting up TPSChecker");
         Bukkit.getScheduler().runTaskTimer(this, () -> {
+            
             Tick++;
             if (Tick == 20) {
+                
                 TPS = Tick;
                 Tick = 0;
+                
                 if (LastFinish + 1000 < System.currentTimeMillis())
                     TPS /= (System.currentTimeMillis() - LastFinish) / 1000;
+                
                 LastFinish = System.currentTimeMillis();
-                if (TPS < lowestAllowedTPS) {
-                    if (!lowTPS) {
-                        lowTPS = true;
-                    }
-                } else {
-                    if (lowTPS) {
-                        lowTPS = false;
-                    }
-                }
+                lowTPS = TPS < lowestAllowedTPS;
             }
         }, 1, 1);
     }
