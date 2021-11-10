@@ -30,12 +30,6 @@ public class Listeners implements Listener {
         this.core = core;
     }
     
-    private static double getBukkitVersion() {
-        
-        String version = Bukkit.getBukkitVersion().split("-")[0];
-        return Double.parseDouble(version.split("\\.")[1]);
-    }
-    
     @EventHandler
     public void onKick(PlayerKickEvent e) {
         
@@ -236,6 +230,12 @@ public class Listeners implements Listener {
                 }
             }
         }
+    }
+    
+    private double getBukkitVersion() {
+        
+        String version = Bukkit.getBukkitVersion().split("-")[0];
+        return Double.parseDouble(version.split("\\.")[1]);
     }
     
     private boolean hasSubPermission(Player player, String perms) {
