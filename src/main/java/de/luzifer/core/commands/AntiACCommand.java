@@ -5,15 +5,14 @@ import de.luzifer.core.api.check.CheckManager;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.LogGUI;
 import de.luzifer.core.api.profile.inventory.ProfileGUI;
-import de.luzifer.core.utils.UpdateChecker;
+import de.luzifer.core.version.UpdateChecker;
 import de.luzifer.core.utils.Variables;
+import de.luzifer.core.version.UpdateCheckerResult;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Objects;
 
 public class AntiACCommand implements CommandExecutor {
     
@@ -77,12 +76,13 @@ public class AntiACCommand implements CommandExecutor {
                     }
                     
                     Bukkit.getScheduler().runTaskAsynchronously(Core.getInstance(), () -> {
-                        UpdateChecker updateChecker = new UpdateChecker(Core.getInstance());
-                        if (!updateChecker.check()) {
+                        UpdateChecker updateChecker = new UpdateChecker(Core.getInstance().getLogger());
+                        UpdateCheckerResult updateCheckerResult = updateChecker.checkUpdate();
+                        if (updateCheckerResult.isUpdateAvailable()) {
                             
                             Bukkit.getScheduler().runTask(Core.getInstance(), () -> {
                                 sender.sendMessage(Core.prefix + "§aAn update is available!");
-                                sender.sendMessage(Core.prefix + "§c" + Core.getInstance().getDescription().getVersion() + " §e-> §a" + updateChecker.getLatestVersion());
+                                sender.sendMessage(Core.prefix + "§c" + updateCheckerResult.getOldVersion() + " §e-> §a" + updateCheckerResult.getNewVersion());
                             });
                         } else {
                             
