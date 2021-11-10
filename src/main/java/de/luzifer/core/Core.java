@@ -10,6 +10,7 @@ import de.luzifer.core.checks.ClickCheck;
 import de.luzifer.core.checks.DoubleClickCheck;
 import de.luzifer.core.checks.LevelCheck;
 import de.luzifer.core.commands.AntiACCommand;
+import de.luzifer.core.commands.AntiACCommandTabCompleter;
 import de.luzifer.core.extern.Metrics;
 import de.luzifer.core.listener.Listeners;
 import de.luzifer.core.timer.CheckTimer;
@@ -18,14 +19,10 @@ import de.luzifer.core.utils.Variables;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.StringUtil;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -33,11 +30,7 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -254,7 +247,7 @@ public class Core extends JavaPlugin {
     
     public void loadCommands() {
         
-        Objects.requireNonNull(getCommand("antiac")).setExecutor(new AntiACCommand());
+        Objects.requireNonNull(getCommand("antiac")).setExecutor(new AntiACCommand(this));
         Objects.requireNonNull(getCommand("antiac")).setTabCompleter(new AntiACCommandTabCompleter());
         
         logger.info("Loading Command(s) complete");
@@ -309,61 +302,5 @@ public class Core extends JavaPlugin {
                 }
             }, 15);
         }
-    }
-    
-    static class AntiACCommandTabCompleter implements TabCompleter {
-        
-        final String[] ARGS = {"check", "version", "notify", "checkupdate", "profile", "logs", "reload"};
-        final String[] ARGS2 = {"on", "off"};
-        
-        @Override
-        public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-            
-            final List<String> complete = new ArrayList<>();
-            
-            if (args.length == 1) {
-                
-                StringUtil.copyPartialMatches(args[0], Arrays.asList(ARGS), complete);
-                Collections.sort(complete);
-                
-                complete.removeIf(s -> !hasSubPermissions(sender, s));
-                return complete;
-            } else if (args.length == 2) {
-                
-                if (!hasSubPermissions(sender, args[0])) return Collections.emptyList();
-                
-                if (args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("profile")) {
-                    
-                    List<String> playerNames = new ArrayList<>();
-                    
-                    for (Player all : Bukkit.getOnlinePlayers()) {
-                        playerNames.add(all.getName());
-                    }
-                    
-                    Collections.sort(playerNames);
-                    return playerNames;
-                }
-                
-                if (args[0].equalsIgnoreCase("notify")) {
-                    
-                    StringUtil.copyPartialMatches(args[1], Arrays.asList(ARGS2), complete);
-                    Collections.sort(complete);
-                    
-                    return complete;
-                }
-                
-            }
-            
-            return Collections.emptyList();
-        }
-        
-        private boolean hasSubPermissions(CommandSender player, String perms) {
-            return player.hasPermission(Variables.perms + "." + perms) || hasPermission(player);
-        }
-        
-        private boolean hasPermission(CommandSender player) {
-            return player.hasPermission(Variables.perms + ".*") || player.isOp();
-        }
-        
     }
 }

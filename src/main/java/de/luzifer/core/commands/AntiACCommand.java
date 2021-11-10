@@ -19,6 +19,12 @@ public class AntiACCommand implements CommandExecutor {
     private final String[] subCommands = {"version", "checkupdate", "logs", "reload", "profile", "check", "notify"};
     private final String prefix = Core.prefix;
     
+    private final Core core;
+    
+    public AntiACCommand(Core core) {
+        this.core = core;
+    }
+    
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         
         if (command.getName().equalsIgnoreCase("antiac")) {
@@ -32,15 +38,15 @@ public class AntiACCommand implements CommandExecutor {
                 
                 if (args[0].equalsIgnoreCase("reload")) {
                     
-                    if (!hasSubPermissions(sender, "reload")) {
-                        sender.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                    if (!hasSubPermission(sender, "reload")) {
+                        sender.sendMessage(Core.prefix + "§7Current plugin version : " + core.getDescription().getVersion());
                         return true;
                     }
                     
                     CheckManager.unregisterAll();
                     
-                    Core.getInstance().reloadConfig();
-                    Core.getInstance().loadChecks();
+                    core.reloadConfig();
+                    core.loadChecks();
                     
                     Variables.init();
                     
@@ -55,8 +61,8 @@ public class AntiACCommand implements CommandExecutor {
                     
                     Player player = (Player) sender;
                     
-                    if (!hasSubPermissions(player, "logs")) {
-                        player.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                    if (!hasSubPermission(player, "logs")) {
+                        player.sendMessage(Core.prefix + "§7Current plugin version : " + core.getDescription().getVersion());
                         return true;
                     }
                     
@@ -66,27 +72,27 @@ public class AntiACCommand implements CommandExecutor {
                     player.openInventory(logGUI.getInventory());
                     return true;
                 } else if (args[0].equalsIgnoreCase("version")) {
-                    sender.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                    sender.sendMessage(Core.prefix + "§7Current plugin version : " + core.getDescription().getVersion());
                     return true;
                 } else if (args[0].equalsIgnoreCase("checkupdate")) {
                     
-                    if (!hasSubPermissions(sender, "checkupdate")) {
-                        sender.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                    if (!hasSubPermission(sender, "checkupdate")) {
+                        sender.sendMessage(Core.prefix + "§7Current plugin version : " + core.getDescription().getVersion());
                         return true;
                     }
                     
-                    Bukkit.getScheduler().runTaskAsynchronously(Core.getInstance(), () -> {
-                        UpdateChecker updateChecker = new UpdateChecker(Core.getInstance().getLogger());
+                    Bukkit.getScheduler().runTaskAsynchronously(core, () -> {
+                        UpdateChecker updateChecker = new UpdateChecker(core.getLogger());
                         UpdateCheckerResult updateCheckerResult = updateChecker.checkUpdate();
                         if (updateCheckerResult.isUpdateAvailable()) {
                             
-                            Bukkit.getScheduler().runTask(Core.getInstance(), () -> {
+                            Bukkit.getScheduler().runTask(core, () -> {
                                 sender.sendMessage(Core.prefix + "§aAn update is available!");
                                 sender.sendMessage(Core.prefix + "§c" + updateCheckerResult.getOldVersion() + " §e-> §a" + updateCheckerResult.getNewVersion());
                             });
                         } else {
                             
-                            Bukkit.getScheduler().runTask(Core.getInstance(), () -> {
+                            Bukkit.getScheduler().runTask(core, () -> {
                                 sender.sendMessage(Core.prefix + "§aYou have the latest version!");
                             });
                         }
@@ -107,8 +113,8 @@ public class AntiACCommand implements CommandExecutor {
                     
                     Player player = (Player) sender;
                     
-                    if (!hasSubPermissions(player, "profile")) {
-                        player.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                    if (!hasSubPermission(player, "profile")) {
+                        player.sendMessage(Core.prefix + "§7Current plugin version : " + core.getDescription().getVersion());
                         return true;
                     }
                     
@@ -135,8 +141,8 @@ public class AntiACCommand implements CommandExecutor {
                     
                     Player player = (Player) sender;
                     
-                    if (!hasSubPermissions(player, "notify")) {
-                        player.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                    if (!hasSubPermission(player, "notify")) {
+                        player.sendMessage(Core.prefix + "§7Current plugin version : " + core.getDescription().getVersion());
                         return true;
                     }
                     
@@ -167,8 +173,8 @@ public class AntiACCommand implements CommandExecutor {
                     
                     Player player = (Player) sender;
                     
-                    if (!hasSubPermissions(player, "check")) {
-                        player.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+                    if (!hasSubPermission(player, "check")) {
+                        player.sendMessage(Core.prefix + "§7Current plugin version : " + core.getDescription().getVersion());
                         return true;
                     }
                     
@@ -207,7 +213,7 @@ public class AntiACCommand implements CommandExecutor {
         int count = 0;
         for (String s : subCommands) {
             
-            if (hasSubPermissions(p, s)) {
+            if (hasSubPermission(p, s)) {
                 
                 p.sendMessage(prefix + "§6/antiac " + s);
                 count++;
@@ -215,10 +221,10 @@ public class AntiACCommand implements CommandExecutor {
         }
         
         if (count == 0)
-            p.sendMessage(Core.prefix + "§7Current plugin version : " + Core.getInstance().getDescription().getVersion());
+            p.sendMessage(Core.prefix + "§7Current plugin version : " + core.getDescription().getVersion());
     }
     
-    private boolean hasSubPermissions(CommandSender sender, String perms) {
+    private boolean hasSubPermission(CommandSender sender, String perms) {
         return sender.hasPermission(Variables.perms + "." + perms) || hasPermission(sender);
     }
     

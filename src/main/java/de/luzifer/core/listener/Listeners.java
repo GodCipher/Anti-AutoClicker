@@ -180,7 +180,7 @@ public class Listeners implements Listener {
         
         if (Variables.autoNotify) {
             Bukkit.getScheduler().runTaskLater(core, () -> {
-                if (hasSubPermissions(p, "notify")) {
+                if (hasSubPermission(p, "notify")) {
                     
                     user.setNotified(true);
                     Variables.NOTIFY_ACTIVATED.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
@@ -238,7 +238,7 @@ public class Listeners implements Listener {
         }
     }
     
-    private boolean hasSubPermissions(Player player, String perms) {
+    private boolean hasSubPermission(Player player, String perms) {
         return player.hasPermission(Variables.perms + "." + perms) || hasPermission(player);
     }
     
