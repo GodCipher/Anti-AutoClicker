@@ -206,18 +206,17 @@ public class Listeners implements Listener {
     
     @EventHandler
     public void onNormalClick(PlayerInteractEvent e) {
-        
-        if (getBukkitVersion() > 8) {
-            if (e.getHand() == EquipmentSlot.OFF_HAND) return;
-        }
-        
-        if (User.get(e.getPlayer().getUniqueId()).isRestricted()) {
+    
+        if (User.get(e.getPlayer().getUniqueId()).isRestricted())
             e.setCancelled(true);
-        }
-        if (Variables.bypass) {
+        
+        if (getBukkitVersion() > 8)
+            if (e.getHand() == EquipmentSlot.OFF_HAND) return;
+        
+        if (Variables.bypass)
             if ((e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) || e.getPlayer().isOp()) || e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) && e.getPlayer().isOp())
                 return;
-        }
+        
         if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             
             if (!Core.lowTPS) {
