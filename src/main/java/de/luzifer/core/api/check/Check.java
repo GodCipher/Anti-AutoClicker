@@ -71,6 +71,18 @@ public abstract class Check {
         return YamlConfiguration.loadConfiguration(file);
     }
     
+    protected void saveConfiguration(FileConfiguration fileConfiguration) {
+        
+        try {
+            
+            fileConfiguration.options().copyDefaults(true);
+            fileConfiguration.save(file);
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void createFiles(File path, File file) {
         
         if (!path.exists()) path.mkdir();
@@ -91,13 +103,7 @@ public abstract class Check {
         
         activated = fileConfiguration.getBoolean("Check.Activated");
         
-        try {
-            
-            fileConfiguration.options().copyDefaults(true);
-            fileConfiguration.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        saveConfiguration(fileConfiguration);
     }
     
     public abstract void onSuccess(User user);
