@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class UpdateChecker {
     
     private static final String URL_LINK = "https://raw.githubusercontent.com/Luziferium/Anti-Auto-Clicker/master/src/main/resources/version.txt";
-   
+    
     private final Logger logger;
     
     public UpdateChecker(Logger logger) {
@@ -25,29 +25,28 @@ public class UpdateChecker {
         
         String currentVersion;
         String latestVersion;
-    
-        try {
         
+        try {
+            
             connection = (HttpURLConnection) new URL(URL_LINK).openConnection();
             connection.connect();
-    
+            
             currentVersion = readLineFromInputStream(inputStream);
             latestVersion = readLineFromInputStream(connection.getInputStream());
-        
+            
         } catch (Exception e) {
             
             logger.warning("This seems wrong, either GitHub is down, the repository private or something else happened");
             return new UpdateCheckerResult(null, null, false);
-            
         }
-    
+        
         return new UpdateCheckerResult(latestVersion, currentVersion, !latestVersion.equals(currentVersion));
     }
     
     private InputStream getInputStream(String fileName) {
-    
+        
         InputStream resource = getClass().getResourceAsStream("/" + fileName);
-    
+        
         if (resource == null)
             throw new IllegalStateException("Corrupted JAR file, missing version.txt");
         
@@ -56,14 +55,14 @@ public class UpdateChecker {
     
     private String readLineFromInputStream(InputStream inputStream) {
         
-        try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
             return bufferedReader.readLine();
         } catch (IOException e) {
             logger.warning("Something exploded, reload/restart and try again");
             e.printStackTrace();
         }
         
-        return null;
+        return "INVALID";
     }
     
 }

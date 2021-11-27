@@ -27,17 +27,11 @@ public abstract class Check {
         name = this.getClass().getSimpleName();
         
         File path = new File(Core.getInstance().getDataFolder() + File.separator + "checks");
-        file = new File(path, name + "_config.yml");
+        file = new File(path, name.toLowerCase() + "_config.yml");
         
         createFiles(path, file);
         setupDefaults();
     }
-    
-    public abstract void onSuccess(User user);
-    
-    public abstract void onFailure(User user);
-    
-    public abstract boolean check(User user);
     
     public void load() throws Exception {
         
@@ -69,13 +63,13 @@ public abstract class Check {
         return activated;
     }
     
-    protected FileConfiguration loadConfiguration() {
-        return YamlConfiguration.loadConfiguration(file);
-    }
-    
     protected void onLoad() throws Exception {}
     
     protected void onUnload() throws Exception {}
+    
+    protected FileConfiguration loadConfiguration() {
+        return YamlConfiguration.loadConfiguration(file);
+    }
     
     private void createFiles(File path, File file) {
         
@@ -105,5 +99,11 @@ public abstract class Check {
             e.printStackTrace();
         }
     }
+    
+    public abstract void onSuccess(User user);
+    
+    public abstract void onFailure(User user);
+    
+    public abstract boolean check(User user);
     
 }

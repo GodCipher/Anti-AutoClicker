@@ -53,12 +53,6 @@ public class Core extends JavaPlugin {
         Core.useOldMethods = false;
     }
     
-    private final Logger logger = getLogger();
-    
-    public int lowestAllowedTPS;
-    private byte Tick = 0;
-    private double LastFinish = 0;
-    
     public static Core getInstance() {
         return core;
     }
@@ -170,6 +164,11 @@ public class Core extends JavaPlugin {
         return Double.parseDouble(version.split("\\.")[1]);
     }
     
+    private final Logger logger = getLogger();
+    public int lowestAllowedTPS;
+    private byte Tick = 0;
+    private double LastFinish = 0;
+    
     public void tpsChecker() {
         logger.info("Booting up TPSChecker");
         Bukkit.getScheduler().runTaskTimer(this, () -> {
@@ -190,6 +189,7 @@ public class Core extends JavaPlugin {
     }
     
     public void onDisable() {
+        
         saveDefaultConfig();
         
         for (Player all : Bukkit.getOnlinePlayers()) {
@@ -198,6 +198,7 @@ public class Core extends JavaPlugin {
     }
     
     public void onEnable() {
+        
         core = this;
         initialize();
         loadConfig();
@@ -243,8 +244,8 @@ public class Core extends JavaPlugin {
     
     public void loadCommands() {
         
-        Objects.requireNonNull(getCommand("antiac")).setExecutor(new AntiACCommand(this));
-        Objects.requireNonNull(getCommand("antiac")).setTabCompleter(new AntiACCommandTabCompleter());
+        getCommand("antiac").setExecutor(new AntiACCommand(this));
+        getCommand("antiac").setTabCompleter(new AntiACCommandTabCompleter());
         
         logger.info("Loading Command(s) complete");
     }
