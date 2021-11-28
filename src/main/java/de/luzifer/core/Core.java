@@ -150,16 +150,6 @@ public class Core extends JavaPlugin {
         }
     }
     
-    public static void sendActionBarToAllPlayers(final String message) {
-        sendActionBarToAllPlayers(message, -1);
-    }
-    
-    public static void sendActionBarToAllPlayers(final String message, final int duration) {
-        for (final Player p : Bukkit.getOnlinePlayers()) {
-            sendActionBar(p, message, duration);
-        }
-    }
-    
     private static double getBukkitVersion() {
         
         String version = Bukkit.getBukkitVersion().split("-")[0];
