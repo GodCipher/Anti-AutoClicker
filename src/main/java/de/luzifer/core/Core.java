@@ -15,6 +15,7 @@ import de.luzifer.core.extern.Metrics;
 import de.luzifer.core.listener.Listeners;
 import de.luzifer.core.timer.CheckTimer;
 import de.luzifer.core.timer.UpdateTimer;
+import de.luzifer.core.utils.InputStreamUtils;
 import de.luzifer.core.utils.Variables;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -25,6 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -165,9 +167,13 @@ public class Core extends JavaPlugin {
     }
     
     private final Logger logger = getLogger();
+    
     public int lowestAllowedTPS;
+    
     private byte Tick = 0;
     private double LastFinish = 0;
+    
+    private String pluginVersion;
     
     public void tpsChecker() {
         logger.info("Booting up TPSChecker");
@@ -201,6 +207,7 @@ public class Core extends JavaPlugin {
         
         core = this;
         initialize();
+        fetchPluginVersion();
         loadConfig();
         loadChecks();
         loadMessages();
@@ -299,5 +306,15 @@ public class Core extends JavaPlugin {
                 }
             }, 15);
         }
+    }
+    
+    public String getPluginVersion() {
+        return pluginVersion;
+    }
+    
+    private void fetchPluginVersion() {
+        
+        InputStream inputStream = InputStreamUtils.getInputStream("version.txt");
+        this.pluginVersion = InputStreamUtils.readLineFromInputStream(inputStream, logger);
     }
 }

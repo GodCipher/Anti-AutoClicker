@@ -20,9 +20,11 @@ public class AntiACCommand implements CommandExecutor {
     private final String prefix = Core.prefix;
     
     private final Core core;
+    private final UpdateChecker updateChecker;
     
     public AntiACCommand(Core core) {
         this.core = core;
+        this.updateChecker = new UpdateChecker(core);
     }
     
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -72,7 +74,7 @@ public class AntiACCommand implements CommandExecutor {
                     player.openInventory(logGUI.getInventory());
                     return true;
                 } else if (args[0].equalsIgnoreCase("version")) {
-                    sender.sendMessage(Core.prefix + "§7Current plugin version : " + core.getDescription().getVersion());
+                    sender.sendMessage(Core.prefix + "§7Current plugin version : " + core.getPluginVersion());
                     return true;
                 } else if (args[0].equalsIgnoreCase("checkupdate")) {
                     
@@ -82,8 +84,9 @@ public class AntiACCommand implements CommandExecutor {
                     }
                     
                     Bukkit.getScheduler().runTaskAsynchronously(core, () -> {
-                        UpdateChecker updateChecker = new UpdateChecker(core.getLogger());
+                        
                         UpdateCheckerResult updateCheckerResult = updateChecker.checkUpdate();
+                        
                         if (updateCheckerResult.isUpdateAvailable()) {
                             
                             Bukkit.getScheduler().runTask(core, () -> {

@@ -10,15 +10,18 @@ import org.bukkit.entity.Player;
 public class UpdateTimer implements Runnable {
     
     private final Core core;
+    private final UpdateChecker updateChecker;
     
     public UpdateTimer(Core core) {
+        
         this.core = core;
+        this.updateChecker = new UpdateChecker(core);
     }
     
     @Override
     public void run() {
         Bukkit.getScheduler().runTaskAsynchronously(core, () -> {
-            UpdateChecker updateChecker = new UpdateChecker(core.getLogger());
+            
             UpdateCheckerResult updateCheckerResult = updateChecker.checkUpdate();
             if (updateCheckerResult.isUpdateAvailable()) {
                 Bukkit.getScheduler().runTask(core, () -> {

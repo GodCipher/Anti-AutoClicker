@@ -3,12 +3,14 @@ package de.luzifer.core.timer;
 import de.luzifer.core.Core;
 import de.luzifer.core.api.check.Check;
 import de.luzifer.core.api.check.CheckManager;
+import de.luzifer.core.api.exceptions.IllegalClickModificationException;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.storage.DataContainer;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -32,12 +34,18 @@ public class CheckTimer implements Runnable {
 
             dataContainer(user);
 
-            for(Check check : CheckManager.getChecks())
+            int current_clicks = user.getClicks();
+            for(Check check : CheckManager.getChecks()) {
+                
                 if(check.isLoaded())
                     if(check.check(user))
                         check.onSuccess(user);
                     else
                         check.onFailure(user);
+                
+                if(current_clicks != user.getClicks())
+                    throw new IllegalClickModificationException(check);
+            }
 
             cleanUp(user);
         }
