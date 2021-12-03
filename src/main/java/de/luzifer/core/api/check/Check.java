@@ -33,6 +33,12 @@ public abstract class Check {
         setupDefaults();
     }
     
+    /**
+     * Will try to load the check according to the configurations.
+     *
+     * If the check is already loaded or can't be activated because it got disabled,
+     * it will skip the loading and NOT invoke the {@link #onLoad()} method.
+     */
     public void load() throws Exception {
         
         if (isLoaded() || !isActivated()) {
@@ -44,6 +50,12 @@ public abstract class Check {
         onLoad();
     }
     
+    /**
+     * Will try to unload the check.
+     *
+     * If the check is already unloaded, it will skip the unloading process incl.
+     * the invoking of {@link #onUnload()}.
+     */
     public void unload() throws Exception {
         
         if (!isLoaded()) {
@@ -63,8 +75,14 @@ public abstract class Check {
         return activated;
     }
     
+    /**
+     * This method will be invoked if the check gets loaded.
+     */
     protected void onLoad() throws Exception {}
     
+    /**
+     * This method will be invoked if the check gets unloaded.
+     */
     protected void onUnload() throws Exception {}
     
     protected FileConfiguration loadConfiguration() {
@@ -106,10 +124,28 @@ public abstract class Check {
         saveConfiguration(fileConfiguration);
     }
     
+    /**
+     * If the check detects something, in other words {@link #check(User)} returns true,
+     * this method will be invoked.
+     *
+     * @param user the user on which the check got executed on
+     */
     public abstract void onSuccess(User user);
     
+    /**
+     * If the check detects nothing, in other words {@link #check(User)} returns false,
+     * this method will be invoked.
+     *
+     * @param user the user on which the check got executed on
+     */
     public abstract void onFailure(User user);
     
+    /**
+     * Core functionality of the check. This method alone represents the check and will be executed
+     * every second on the player.
+     *
+     * @param user the user on which the check gets executed on
+     */
     public abstract boolean check(User user);
     
 }
