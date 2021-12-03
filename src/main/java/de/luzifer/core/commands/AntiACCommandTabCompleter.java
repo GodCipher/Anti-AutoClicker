@@ -30,6 +30,7 @@ public class AntiACCommandTabCompleter implements TabCompleter {
             
             complete.removeIf(s -> !hasSubPermission(sender, s));
             return complete;
+            
         } else if (args.length == 2) {
             
             if (!hasSubPermission(sender, args[0])) return Collections.emptyList();
