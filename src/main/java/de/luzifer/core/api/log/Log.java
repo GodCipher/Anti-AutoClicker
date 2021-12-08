@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class Log {
     static File file = new File("plugins/AntiAC/Logs", formatFile.format(dateFile) + ".yml");
     static FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
     
-    public static void log(Player player, Integer clicks, Double average, Check check) {
+    public static void log(Player player, Integer clicks, Double average, @Nullable Check check) {
         
         try {
             cfg.load(file);

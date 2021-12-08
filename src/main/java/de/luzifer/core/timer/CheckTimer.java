@@ -85,7 +85,7 @@ public class CheckTimer implements Runnable {
 
         if(Variables.sanctionateAtViolations > 0) {
             if(user.getViolations() >= Variables.sanctionateAtViolations) {
-                user.sanction(false);
+                user.sanction(null);
                 user.clearViolations();
             }
         }
