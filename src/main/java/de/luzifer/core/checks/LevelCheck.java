@@ -33,7 +33,7 @@ public class LevelCheck extends Check {
             return;
         }
         
-        user.sanction(false);
+        user.sanction(this);
     }
     
     @Override

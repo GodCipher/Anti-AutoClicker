@@ -267,7 +267,7 @@ public class User {
         return (getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) || getPlayer().isOp()) || getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) && getPlayer().isOp();
     }
     
-    public void sanction(boolean b, Check check) {
+    public void sanction(Check check) {
         
         if (Variables.consoleNotify)
             Variables.TEAM_NOTIFY.forEach(var -> Bukkit.getConsoleSender().sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName()).replaceAll("%clicks%", String.valueOf(getClicks())).replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
@@ -275,89 +275,36 @@ public class User {
         if (Variables.log)
             Log.log(getPlayer(), getClicks(), getAverage(), check);
         
-        boolean ban = false;
-        boolean kick = false;
-        boolean kill = false;
-        boolean freeze = false;
-        
-        if (b) {
-            if (Variables.playerBan)
-                if (getClicks() >= Variables.banAtClicks)
-                    ban = true;
-                
-            if (Variables.playerKick)
-                if (getClicks() >= Variables.kickAtClicks)
-                    kick = true;
-                
-            
-            if (Variables.playerKill)
-                if (getClicks() >= Variables.killAtClicks)
-                    kill = true;
-                
-            
-            if (Variables.playerFreeze)
-                if (getClicks() >= Variables.freezeAtClicks)
-                    freeze = true;
-        } else {
-            if (Variables.playerBan) ban = true;
-            
-            if (Variables.playerKick) kick = true;
-            
-            if (Variables.playerKill) kill = true;
-            
-            if (Variables.playerFreeze) freeze = true;
-        }
-        
-        if (ban) {
-            shoutOutPunishment();
+        if (Variables.playerBan) {
             pluginBan();
-            informTeam();
-        } else if (kick) {
-            shoutOutPunishment();
+        } else if (Variables.playerKick) {
             pluginKick();
-            informTeam();
-        } else if (kill) {
+        } else if (Variables.playerKill) {
+            
             getPlayer().setHealth(0);
             Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
+        } else if (Variables.playerFreeze) {
             
-            shoutOutPunishment();
-            informTeam();
-        } else if (freeze) {
             if (!isFrozen()) {
+                
                 setFrozen(true);
                 
                 Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
-                
-                shoutOutPunishment();
-                
                 Bukkit.getScheduler().runTaskLater(Core.getInstance(), () -> setFrozen(false), 20L * Variables.freezeTimeInSeconds);
             }
-            informTeam();
-        } else {
-            if (Variables.restrictPlayer) {
-                if (!isRestricted()) {
-                    setRestricted(true);
-                    
-                    Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
-                    
-                    shoutOutPunishment();
-                }
+        } else if (Variables.restrictPlayer) {
+            
+            if (!isRestricted()) {
+                
+                setRestricted(true);
+        
+                Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
             }
-            informTeam();
         }
+        
+        shoutOutPunishment();
+        informTeam();
         clearViolations();
-    }
-    
-    /**
-     * Sanctions the user according to the set settings
-     * <p>
-     * If true: Involves the clicks of the player in the decision
-     * If false: Just pays attention to the set settings in the config.yml
-     *
-     * @param b Specifies whether the user's click count is specifically considered when sanctioning
-     */
-    public void sanction(boolean b) {
-        sanction(b, null);
     }
     
     private UUID getUniqueID() {

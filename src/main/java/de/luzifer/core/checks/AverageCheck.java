@@ -34,7 +34,7 @@ public class AverageCheck extends Check {
         }
         
         cleanup(user);
-        user.sanction(false);
+        user.sanction(this);
     }
     
     @Override

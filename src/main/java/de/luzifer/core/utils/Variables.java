@@ -33,7 +33,7 @@ public class Variables {
     
     public static boolean consoleNotify, log, playerBan, shoutOutPunishment, informTeam, playerKick, playerKill, playerFreeze, restrictPlayer, bypass, pingChecker, autoNotify, doNotStoreNothing;
     
-    public static int unbanAfterHours, freezeTimeInSeconds, banAtClicks, kickAtClicks, killAtClicks, freezeAtClicks, highestAllowedPing, clearVLMinutes, storeAsManyData, removeAfterExist, sanctionateAtViolations;
+    public static int unbanAfterHours, freezeTimeInSeconds, highestAllowedPing, clearVLMinutes, storeAsManyData, removeAfterExist, sanctionateAtViolations;
     
     public static void init() {
         
@@ -113,10 +113,6 @@ public class Variables {
     private static void configInts() {
         unbanAfterHours = Core.getInstance().getConfig().getInt("AntiAC.UnbanAfterHours");
         freezeTimeInSeconds = Core.getInstance().getConfig().getInt("AntiAC.FreezeTimeInSeconds");
-        banAtClicks = Core.getInstance().getConfig().getInt("AntiAC.BanAtClicks");
-        kickAtClicks = Core.getInstance().getConfig().getInt("AntiAC.KickAtClicks");
-        killAtClicks = Core.getInstance().getConfig().getInt("AntiAC.KillAtClicks");
-        freezeAtClicks = Core.getInstance().getConfig().getInt("AntiAC.FreezeAtClicks");
         highestAllowedPing = Core.getInstance().getConfig().getInt("AntiAC.HighestAllowedPing");
         clearVLMinutes = Core.getInstance().getConfig().getInt("AntiAC.Clear-Violations-After-Minutes-Of-Non-Adding");
         storeAsManyData = Core.getInstance().getConfig().getInt("AntiAC.Profile-Store-As-Much-Data-In-One-DataContainer");

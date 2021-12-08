@@ -123,15 +123,9 @@ AntiAC:
   # Player is frozen FreezeTimeInSeconds seconds
   # PlayerFreeze must be true
 
-  FreezeAtClicks: 50
-  # Freeze the player when he has reached this number of clicks. PlayerFreeze must be true
-
   PlayerKill: true
   # If a player got discovered for AutoClicker he gets killed
   # PlayerKill overwrites PlayerFreeze, RestrictPlayer
-
-  KillAtClicks: 55
-  # Kill the player when he reached this number of clicks. PlayerKill must be true
 
   PlayerKick: false
   # If a player got discovered for AutoClicker he gets kicked
@@ -142,9 +136,6 @@ AntiAC:
   # For example: 'kick %player% 14'
   # The Console must be able to execute the command!
 
-  KickAtClicks: 60
-  # Kick the player when he has reached this number of clicks. PlayerKick must be true
-
   PlayerBan: false
   # If a player got discovered for AutoClicker he gets banned
   # ATTENTION -> bans the player from the server where he got detected // NOT BUNGEE //
@@ -154,9 +145,6 @@ AntiAC:
   # At ExecuteCommand you can insert your ban command to ban players. If it stay clear, it'll be the plugin ban.
   # For example : 'ban %player% 14'
   # The Console must be able to execute the command!
-
-  BanAtClicks: 70
-  # Ban the player when he has reached this number of clicks. PlayerBan must be true
 
   UnbanAfterHours: 1
   # Unban the player after UnbanAfterHours hours
