@@ -6,7 +6,7 @@ import de.luzifer.core.api.check.CheckManager;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.pagesystem.Menu;
 import de.luzifer.core.checks.AverageCheck;
-import de.luzifer.core.checks.ClickCheck;
+import de.luzifer.core.checks.ClickLimitCheck;
 import de.luzifer.core.checks.DoubleClickCheck;
 import de.luzifer.core.checks.LevelCheck;
 import de.luzifer.core.commands.AntiACCommand;
@@ -156,6 +156,7 @@ public class Core extends JavaPlugin {
         return Double.parseDouble(version.split("\\.")[1]);
     }
     
+    private final CheckManager checkManager = new CheckManager();
     private final Logger logger = getLogger();
     
     public int lowestAllowedTPS;
@@ -230,7 +231,7 @@ public class Core extends JavaPlugin {
         
         if (getConfig().getBoolean("AntiAC.TPSChecker")) tpsChecker();
         
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new CheckTimer(), 0, 20);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new CheckTimer(checkManager), 0, 20);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Core::deleteLogs, 0, 20 * 60 * 60 * 12 /* 12 hours */);
         
         if (getConfig().getBoolean("AntiAC.UpdateChecker"))
@@ -267,14 +268,14 @@ public class Core extends JavaPlugin {
     
     public void loadChecks() {
         
-        CheckManager.registerCheck(new AverageCheck());
-        CheckManager.registerCheck(new ClickCheck());
-        CheckManager.registerCheck(new DoubleClickCheck());
-        CheckManager.registerCheck(new LevelCheck());
+        checkManager.registerCheck(new AverageCheck());
+        checkManager.registerCheck(new ClickLimitCheck());
+        checkManager.registerCheck(new DoubleClickCheck());
+        checkManager.registerCheck(new LevelCheck());
         
         Bukkit.getScheduler().runTaskLater(this, () -> {
             
-            for (Check check : CheckManager.getChecks()) {
+            for (Check check : checkManager.getChecks()) {
                 try {
                     check.load();
                 } catch (Exception e) {
@@ -282,9 +283,23 @@ public class Core extends JavaPlugin {
                 }
             }
             
-            logger.info("Loaded " + (int) CheckManager.getChecks().stream().filter(Check::isLoaded).count() + " Check(s)");
+            logger.info("Loaded " + (int) checkManager.getChecks().stream().filter(Check::isLoaded).count() + " Check(s)");
         }, 1);
         
+    }
+    
+    public void reloadChecks() {
+        
+        for(Check check : checkManager.getChecks()) {
+            try {
+                check.unload();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        checkManager.unregisterAll();
+        loadChecks();
     }
     
     public void setNotified() {

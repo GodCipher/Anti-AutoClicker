@@ -118,40 +118,7 @@ public class ProfileGUI extends PaginatedMenu {
                 lore.add("§8+" + (dataContainers.get(index).getClicksList().size() - i1) + " more...");
                 break;
             } else {
-                setupDataContainerLoreColor(lore, dataContainers, i1);
-            }
-        }
-    }
-    
-    private void setupDataContainerLoreColor(List<String> lore, List<DataContainer> dataContainers, int i1) {
-        if (Variables.allowedClicks - dataContainers.get(index).getClicksList().get(i1) <= 8) {
-            if (!(Variables.allowedClicks - dataContainers.get(index).getClicksList().get(i1) <= 0)) {
-                
-                if (dataContainers.get(index).getClicksList().get(i1) >= 100 && dataContainers.get(index).getClicksList().get(i1) <= 999) {
-                    lore.add("§c" + dataContainers.get(index).getClicksList().get(i1) + "                         §6" + dataContainers.get(index).getAveragesList().get(i1));
-                } else if (dataContainers.get(index).getClicksList().get(i1) >= 10 && dataContainers.get(index).getClicksList().get(i1) <= 99) {
-                    lore.add("§c" + dataContainers.get(index).getClicksList().get(i1) + "                           §6" + dataContainers.get(index).getAveragesList().get(i1));
-                } else {
-                    lore.add("§c" + dataContainers.get(index).getClicksList().get(i1) + "                            §6" + dataContainers.get(index).getAveragesList().get(i1));
-                }
-            } else {
-                
-                if (dataContainers.get(index).getClicksList().get(i1) >= 100 && dataContainers.get(index).getClicksList().get(i1) <= 999) {
-                    lore.add("§4" + dataContainers.get(index).getClicksList().get(i1) + "                         §6" + dataContainers.get(index).getAveragesList().get(i1));
-                } else if (dataContainers.get(index).getClicksList().get(i1) >= 10 && dataContainers.get(index).getClicksList().get(i1) <= 99) {
-                    lore.add("§4" + dataContainers.get(index).getClicksList().get(i1) + "                           §6" + dataContainers.get(index).getAveragesList().get(i1));
-                } else {
-                    lore.add("§4" + dataContainers.get(index).getClicksList().get(i1) + "                            §6" + dataContainers.get(index).getAveragesList().get(i1));
-                }
-            }
-        } else {
-            
-            if (dataContainers.get(index).getClicksList().get(i1) >= 100 && dataContainers.get(index).getClicksList().get(i1) <= 999) {
-                lore.add("§a" + dataContainers.get(index).getClicksList().get(i1) + "                         §6" + dataContainers.get(index).getAveragesList().get(i1));
-            } else if (dataContainers.get(index).getClicksList().get(i1) >= 10 && dataContainers.get(index).getClicksList().get(i1) <= 99) {
-                lore.add("§a" + dataContainers.get(index).getClicksList().get(i1) + "                           §6" + dataContainers.get(index).getAveragesList().get(i1));
-            } else {
-                lore.add("§a" + dataContainers.get(index).getClicksList().get(i1) + "                            §6" + dataContainers.get(index).getAveragesList().get(i1));
+                lore.add("§7" + dataContainers.get(index).getClicksList().get(i1) + "                            §6" + dataContainers.get(index).getAveragesList().get(i1));
             }
         }
     }

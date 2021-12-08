@@ -45,10 +45,8 @@ public class AntiACCommand implements CommandExecutor {
                         return true;
                     }
                     
-                    CheckManager.unregisterAll();
-                    
                     core.reloadConfig();
-                    core.loadChecks();
+                    core.reloadChecks();
                     
                     Variables.init();
                     

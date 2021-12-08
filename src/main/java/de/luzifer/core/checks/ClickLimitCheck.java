@@ -1,20 +1,14 @@
 package de.luzifer.core.checks;
 
-import de.luzifer.core.Core;
 import de.luzifer.core.api.check.Check;
 import de.luzifer.core.api.enums.ViolationType;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.utils.Variables;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.HashMap;
-
-public class LevelCheck extends Check {
+public class ClickLimitCheck extends Check {
     
-    private final HashMap<User, Integer> lastClick = new HashMap<>();
-    
-    private int max_difference;
+    private int click_limit;
     
     @Override
     protected void onLoad() throws Exception {
@@ -22,7 +16,7 @@ public class LevelCheck extends Check {
         FileConfiguration configuration = loadConfiguration();
         setupDefaults(configuration);
         
-        max_difference = configuration.getInt("Check.Max-Difference");
+        click_limit = configuration.getInt("Check.Click-Limit");
     }
     
     @Override
@@ -33,7 +27,7 @@ public class LevelCheck extends Check {
             return;
         }
         
-        user.sanction(false);
+        user.sanction(true);
     }
     
     @Override
@@ -41,18 +35,12 @@ public class LevelCheck extends Check {
     
     @Override
     public boolean check(User user) {
-        
-        if (!lastClick.containsKey(user)) lastClick.put(user, user.getClicks());
-        
-        lastClick.put(user, user.getClicks());
-        
-        return user.getClicks() - lastClick.get(user) >= max_difference;
+        return user.getClicks() >= click_limit;
     }
     
     private void setupDefaults(FileConfiguration fileConfiguration) {
         
-        fileConfiguration.addDefault("Check.Max-Difference", 25);
+        fileConfiguration.addDefault("Check.Click-Limit", 40);
         saveConfiguration(fileConfiguration);
     }
-    
 }

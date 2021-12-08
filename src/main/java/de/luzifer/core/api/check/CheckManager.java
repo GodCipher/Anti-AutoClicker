@@ -5,25 +5,25 @@ import java.util.List;
 
 public class CheckManager {
     
-    private static final List<Check> checks = new ArrayList<>();
+    private final List<Check> checks = new ArrayList<>();
     
-    public static void registerCheck(Check check) {
+    public void registerCheck(Check check) {
         checks.add(check);
     }
     
-    public static void unregisterCheck(Check check) {
+    public void unregisterCheck(Check check) {
         checks.remove(check);
     }
     
-    public static void unregisterAll() {
+    public void unregisterAll() {
         checks.clear();
     }
     
-    public static List<Check> getChecks() {
+    public List<Check> getChecks() {
         return checks;
     }
     
-    public static boolean isRegisteredCheck(Check check) {
+    public boolean isRegisteredCheck(Check check) {
         return checks.contains(check);
     }
 }

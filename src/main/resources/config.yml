@@ -15,13 +15,6 @@ AntiAC:
 
 
 
-  # Clicks Settings
-  AllowedClicks: 40
-  # The number of clicks that are allowed
-  # Could come to false positives if it is under 30
-
-
-
   # Profile Settings
   Profile-Store-As-Much-Data-In-One-DataContainer: 20
   # Set how much data a DataContainer saves (what will be displayed in the profile)
@@ -56,31 +49,6 @@ AntiAC:
 
   Clear-Violations-After-Minutes-Of-Non-Adding: 5
   # Clear the violation of a player, if he hasn't got any violation X minutes long
-
-
-  # LevelCheck Settings
-  LevelCheck-Level-Max: 15
-  # Set the allowed difference between the players last clicks and the players current clicks
-  # Shouldn't be set too low
-
-
-  # DoubleClick Settings
-  DoubleClick-Check-At-Clicks: 12
-  # Starts to check if the user clicks are over or at X
-  # NOTE: It is NOT recommended to put this value under or at 10 (causes to 100% false positives)
-
-
-
-  # Average Settings
-  ClickAverageOfSeconds: 3
-  # Summarizes the clicks from the last X seconds
-
-  AverageCheckAtEntries: 3
-  # AverageCheck will fire if the AverageChecker contains X entries
-
-  AverageCheckNeededClicks: 15
-  # AverageCheck will fire if the player have more clicks than X
-  # Could come to false positives if it is under 15
 
 
 

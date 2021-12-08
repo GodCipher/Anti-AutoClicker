@@ -15,9 +15,14 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class CheckTimer implements Runnable {
+    
+    private final CheckManager checkManager;
+    private final HashMap<UUID, DataContainer> containerHashMap = new HashMap<>();
 
-    HashMap<UUID, DataContainer> containerHashMap = new HashMap<>();
-
+    public CheckTimer(CheckManager checkManager) {
+        this.checkManager = checkManager;
+    }
+    
     public void run() {
 
         for(Player all : Bukkit.getOnlinePlayers()) {
@@ -35,7 +40,7 @@ public class CheckTimer implements Runnable {
             dataContainer(user);
 
             int current_clicks = user.getClicks();
-            for(Check check : CheckManager.getChecks()) {
+            for(Check check : checkManager.getChecks()) {
                 
                 if(check.isLoaded())
                     if(check.check(user))
@@ -52,38 +57,25 @@ public class CheckTimer implements Runnable {
     }
 
     private void sendActionBar(User user) {
+        
         if(user.getChecked() != null) {
 
             String message1 = "§4§l" + user.getChecked().getName();
             String message2;
-
-            if(Variables.allowedClicks - user.getChecked().getClicks() <= 8) {
-                if(!(Variables.allowedClicks - user.getChecked().getClicks() <= 0)) {
-                    message2 = " §e§l-> §cClicks : §c§l" + user.getChecked().getClicks() + " §6Average : §6§l" + user.getChecked().getAverage();
-                } else {
-                    message2 = " §e§l-> §cClicks : §4§l" + user.getChecked().getClicks()+ " §6Average : §6§l" + user.getChecked().getAverage();
-                }
-            } else {
-                message2 = " §e§l-> §cClicks : §a§l" + user.getChecked().getClicks()+ " §6Average : §6§l" + user.getChecked().getAverage();
-            }
-
+    
+            message2 = " §e§l-> §cClicks : §7§l" + user.getChecked().getClicks()+ " §6Average : §6§l" + user.getChecked().getAverage();
             message2 = message2 + " §6VL: §e" + user.getChecked().getViolations();
 
-            if(Core.lowTPS) {
+            if(Core.lowTPS)
                 message2 = " §e§l-> §c§lCannot be checked -> §4§lLowTPS";
-            }
 
-            if(Variables.pingChecker) {
-                if(user.getChecked().getPing() >= Variables.highestAllowedPing) {
+            if(Variables.pingChecker)
+                if(user.getChecked().getPing() >= Variables.highestAllowedPing)
                     message2 = " §e§l-> §c§lCannot be checked -> §4§lPing §8(§4" + user.getChecked().getPing() + "§8)";
-                }
-            }
 
-            if(Variables.bypass) {
-                if(user.getChecked().isBypassed()) {
+            if(Variables.bypass)
+                if(user.getChecked().isBypassed())
                     message2 = " §e§l-> §c§lCannot be checked -> §4§lBypassed";
-                }
-            }
 
             Core.sendActionBar(user.getPlayer(), message1 + message2);
         }
@@ -109,13 +101,6 @@ public class CheckTimer implements Runnable {
             user.setRestricted(false);
         }
 
-        if(user.getClicksAverageCheckList().size() >= Variables.clickAverageOfSeconds) {
-            user.getClicksAverageCheckList().remove(0);
-        }
-
-        if(user.getClicksAverageList().size() >= Variables.clickAverageOfSeconds) {
-            user.getClicksAverageList().remove(0);
-        }
         user.setClicks(0);
     }
 

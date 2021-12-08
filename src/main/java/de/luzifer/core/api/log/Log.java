@@ -24,8 +24,7 @@ public class Log {
         
         try {
             cfg.load(file);
-        } catch (Exception e) {
-        }
+        } catch (Exception ignored) {}
         
         List<String> logList;
         if (file.exists()) {
@@ -62,7 +61,6 @@ public class Log {
         cfg.set("LogDetailed." + player.getName() + ".date", format.format(date));
         cfg.set("LogDetailed." + player.getName() + ".clicks", clicks);
         cfg.set("LogDetailed." + player.getName() + ".average", average);
-        cfg.set("LogDetailed." + player.getName() + ".clicksToMuch", clicks - Variables.allowedClicks);
         cfg.set("LogDetailed." + player.getName() + ".logMessage", "Logged by " + check != null ? check.getClass().getSimpleName() : "System");
         
         try {
