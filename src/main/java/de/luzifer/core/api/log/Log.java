@@ -62,7 +62,7 @@ public class Log {
         cfg.set("LogDetailed." + player.getName() + ".date", format.format(date));
         cfg.set("LogDetailed." + player.getName() + ".clicks", clicks);
         cfg.set("LogDetailed." + player.getName() + ".average", average);
-        cfg.set("LogDetailed." + player.getName() + ".logMessage", "Logged by " + check != null ? check.getClass().getSimpleName() : "System");
+        cfg.set("LogDetailed." + player.getName() + ".logMessage", "Logged by " + (check != null ? check.getClass().getSimpleName() : "System"));
         
         try {
             cfg.save(file);
