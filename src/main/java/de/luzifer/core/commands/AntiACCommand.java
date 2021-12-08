@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 public class AntiACCommand implements CommandExecutor {
     
-    private final String[] subCommands = {"version", "checkupdate", "logs", "reload", "profile", "check", "notify", "punish"};
+    private final String[] subCommands = {"version", "checkupdate", "logs", "reload", "profile", "check", "punish", "notify"};
     private final String prefix = Core.prefix;
     
     private final Core core;
@@ -234,6 +234,17 @@ public class AntiACCommand implements CommandExecutor {
         for (String s : subCommands) {
             
             if (hasSubPermission(p, s)) {
+                
+                switch (s) {
+                    case "profile":
+                    case "check":
+                    case "punish":
+                        s += " <player>";
+                        break;
+                    case "notify":
+                        s += " <on/off>";
+                        break;
+                }
                 
                 p.sendMessage(prefix + "§6/antiac " + s);
                 count++;
