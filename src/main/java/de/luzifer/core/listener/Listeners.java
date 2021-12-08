@@ -1,5 +1,6 @@
 package de.luzifer.core.listener;
 
+import com.cryptomorin.xseries.XMaterial;
 import de.luzifer.core.Core;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.pagesystem.Menu;
@@ -20,11 +21,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Listeners implements Listener {
     
     private final Core core;
+    
+    private final List<UUID> rod_click = new ArrayList<>();
     
     public Listeners(Core core) {
         this.core = core;
@@ -86,18 +92,16 @@ public class Listeners implements Listener {
     
     @EventHandler
     public void onEntityClick(PlayerInteractAtEntityEvent e) {
-        
-        if (getBukkitVersion() > 8) {
-            if (e.getHand() == EquipmentSlot.OFF_HAND) return;
-        }
-        
-        if (User.get(e.getPlayer().getUniqueId()).isRestricted()) {
-            e.setCancelled(true);
-        }
-        if (Variables.bypass) {
+    
+        if (Variables.bypass)
             if ((e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) || e.getPlayer().isOp()) || e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) && e.getPlayer().isOp())
                 return;
-        }
+            
+        if (getBukkitVersion() > 8)
+            if (e.getHand() == EquipmentSlot.OFF_HAND) return;
+    
+        if (User.get(e.getPlayer().getUniqueId()).isRestricted())
+            e.setCancelled(true);
         
         if (!Core.lowTPS) {
             if (Variables.pingChecker) {
@@ -139,19 +143,16 @@ public class Listeners implements Listener {
         if (e.getDamager() instanceof Player && !e.getDamager().hasMetadata("NPC")) {
             if (e.getEntity() instanceof LivingEntity) {
                 Player player = (Player) e.getDamager();
-                
-                if (User.get(player.getUniqueId()).isRestricted()) {
-                    e.setCancelled(true);
-                }
-                
-                if (getBukkitVersion() > 8) {
-                    
-                    if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) return;
-                }
-                
-                if (Variables.bypass) {
+  
+                if (Variables.bypass)
                     if ((player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp()) || player.hasPermission(Objects.requireNonNull(Variables.perms)) && player.isOp())
                         return;
+    
+                if (User.get(player.getUniqueId()).isRestricted())
+                    e.setCancelled(true);
+    
+                if (getBukkitVersion() > 8) {
+                    if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) return;
                 }
                 
                 if (!Core.lowTPS) {
@@ -207,15 +208,21 @@ public class Listeners implements Listener {
     @EventHandler
     public void onNormalClick(PlayerInteractEvent e) {
     
-        if (User.get(e.getPlayer().getUniqueId()).isRestricted())
-            e.setCancelled(true);
-        
-        if (getBukkitVersion() > 8)
-            if (e.getHand() == EquipmentSlot.OFF_HAND) return;
-        
         if (Variables.bypass)
             if ((e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) || e.getPlayer().isOp()) || e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) && e.getPlayer().isOp())
                 return;
+            
+        if (User.get(e.getPlayer().getUniqueId()).isRestricted())
+            e.setCancelled(true);
+    
+        if (getBukkitVersion() > 8)
+            if (e.getHand() == EquipmentSlot.OFF_HAND) return;
+            
+        if(e.getItem() != null && e.getItem().getType() == XMaterial.FISHING_ROD.parseMaterial())
+            if(cancelledDuplicateRodClick(e.getPlayer().getUniqueId(), e.getAction()))
+                return;
+        
+        System.out.println(e.getAction());
         
         if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             
@@ -229,6 +236,21 @@ public class Listeners implements Listener {
                 }
             }
         }
+    }
+    
+    private boolean cancelledDuplicateRodClick(UUID uuid, Action action) {
+        
+        if(action == Action.RIGHT_CLICK_AIR) {
+            rod_click.add(uuid);
+        } else if(action == Action.LEFT_CLICK_AIR) {
+            
+            if(rod_click.contains(uuid)) {
+                rod_click.remove(uuid);
+                return true;
+            }
+        }
+        
+        return false;
     }
     
     private double getBukkitVersion() {
