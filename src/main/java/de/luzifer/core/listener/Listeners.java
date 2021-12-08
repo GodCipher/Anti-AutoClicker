@@ -222,8 +222,6 @@ public class Listeners implements Listener {
             if(cancelledDuplicateRodClick(e.getPlayer().getUniqueId(), e.getAction()))
                 return;
         
-        System.out.println(e.getAction());
-        
         if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             
             if (!Core.lowTPS) {
