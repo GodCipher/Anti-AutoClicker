@@ -39,6 +39,9 @@ Ban-Reason:
   - '&cYour ban will expire on'
   - '&4%date%'
 #
+Punished-Player:
+  - '&cYou have punished &4%player%'
+#
 Punished:
   - '&cYou have been punished by the AutoClicker detection'
 #

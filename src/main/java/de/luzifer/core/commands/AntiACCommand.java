@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 public class AntiACCommand implements CommandExecutor {
     
-    private final String[] subCommands = {"version", "checkupdate", "logs", "reload", "profile", "check", "notify"};
+    private final String[] subCommands = {"version", "checkupdate", "logs", "reload", "profile", "check", "notify", "punish"};
     private final String prefix = Core.prefix;
     
     private final Core core;
@@ -198,6 +198,25 @@ public class AntiACCommand implements CommandExecutor {
                         
                         Variables.PLAYER_OFFLINE.forEach(var -> player.sendMessage(Core.prefix + var.replace("&", "§")));
                     }
+                    
+                } else if(args[0].equalsIgnoreCase("punish")) {
+    
+                    if (!hasSubPermission(sender, "punish")) {
+                        sender.sendMessage(Core.prefix + "§7Current plugin version : " + core.getPluginVersion());
+                        return true;
+                    }
+    
+                    Player target = Bukkit.getPlayer(args[1]);
+                    
+                    if (target == null) {
+                        Variables.PLAYER_OFFLINE.forEach(var -> sender.sendMessage(Core.prefix + var.replace("&", "§")));
+                        return true;
+                    }
+    
+                    User targetUser = User.get(target.getUniqueId());
+                    targetUser.sanction(null);
+                    
+                    Variables.PUNISHED_PLAYER.forEach(var -> sender.sendMessage(Core.prefix + var.replace("&", "§").replace("%player%", target.getName())));
                     
                 } else {
                     sendCommands(sender);

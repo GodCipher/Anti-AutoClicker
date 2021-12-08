@@ -274,7 +274,9 @@ public class User {
         
         if (Variables.log)
             Log.log(getPlayer(), getClicks(), getAverage(), check);
-        
+    
+        shoutOutPunishment();
+    
         if (Variables.playerBan) {
             pluginBan();
         } else if (Variables.playerKick) {
@@ -302,7 +304,6 @@ public class User {
             }
         }
         
-        shoutOutPunishment();
         informTeam();
         clearViolations();
     }

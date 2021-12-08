@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AntiACCommandTabCompleter implements TabCompleter {
     
-    private final String[] ARGS = {"check", "version", "notify", "checkupdate", "profile", "logs", "reload"};
+    private final String[] ARGS = {"check", "version", "notify", "checkupdate", "profile", "logs", "reload", "punish"};
     private final String[] ARGS2 = {"on", "off"};
     
     @Override
@@ -35,7 +35,7 @@ public class AntiACCommandTabCompleter implements TabCompleter {
             
             if (!hasSubPermission(sender, args[0])) return Collections.emptyList();
             
-            if (args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("profile")) {
+            if (args[0].equalsIgnoreCase("check") || args[0].equalsIgnoreCase("profile") || args[0].equalsIgnoreCase("punish")) {
                 
                 List<String> playerNames = new ArrayList<>();
                 

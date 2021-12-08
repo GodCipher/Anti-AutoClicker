@@ -28,6 +28,7 @@ public class Variables {
     public static ArrayList<String> PUNISHED = new ArrayList<>();
     public static ArrayList<String> SHOUTOUT_PUNISHMENT = new ArrayList<>();
     public static ArrayList<String> TEAM_NOTIFY = new ArrayList<>();
+    public static ArrayList<String> PUNISHED_PLAYER = new ArrayList<>();
     
     public static String executeBanCommand, executeKickCommand, perms;
     
@@ -51,6 +52,7 @@ public class Variables {
         PUNISHED = new ArrayList<>();
         SHOUTOUT_PUNISHMENT = new ArrayList<>();
         TEAM_NOTIFY = new ArrayList<>();
+        PUNISHED_PLAYER = new ArrayList<>();
         
         if (!file.exists()) {
             try {
@@ -88,6 +90,7 @@ public class Variables {
         PUNISHED.addAll(cfg.getStringList("Punished"));
         SHOUTOUT_PUNISHMENT.addAll(cfg.getStringList("ShoutOut-Punishment"));
         TEAM_NOTIFY.addAll(cfg.getStringList("Team-Notify"));
+        PUNISHED_PLAYER.addAll(cfg.getStringList("Punished-Player"));
         
         executeBanCommand = Core.getInstance().getConfig().getString("AntiAC.ExecuteBanCommand");
         executeKickCommand = Core.getInstance().getConfig().getString("AntiAC.ExecuteKickCommand");
