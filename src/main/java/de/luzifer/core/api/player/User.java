@@ -334,18 +334,14 @@ public class User {
         if (Variables.informTeam) {
             
             for (Player team : Bukkit.getOnlinePlayers())
-                informPlayerIfPermittedAndNotified(team);
+                informPlayerIfNotified(team);
         }
     }
     
-    private void informPlayerIfPermittedAndNotified(Player player) {
-        
-        if (player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp()) {
-            if (User.get(player.getUniqueId()).isNotified()) {
-                
-                Variables.TEAM_NOTIFY.forEach(var -> player.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName()).replaceAll("%clicks%", String.valueOf(getClicks())).replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
-            }
-        }
+    private void informPlayerIfNotified(Player player) {
+    
+        if (User.get(player.getUniqueId()).isNotified())
+            Variables.TEAM_NOTIFY.forEach(var -> player.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName()).replaceAll("%clicks%", String.valueOf(getClicks())).replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
     }
     
     private double calculateAverage(List<Integer> marks) {
