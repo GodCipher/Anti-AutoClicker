@@ -1,7 +1,7 @@
 package de.luzifer.core.model.profile.inventory;
 
 import com.cryptomorin.xseries.XMaterial;
-import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.user.User;
 import de.luzifer.core.model.profile.inventory.pagesystem.PaginatedMenu;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

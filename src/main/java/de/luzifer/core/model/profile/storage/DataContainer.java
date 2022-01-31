@@ -1,6 +1,6 @@
 package de.luzifer.core.model.profile.storage;
 
-import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.user.User;
 import de.luzifer.core.model.profile.Profile;
 import de.luzifer.core.model.profile.inventory.ProfileGUI;
 import org.bukkit.Bukkit;

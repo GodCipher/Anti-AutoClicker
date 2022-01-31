@@ -2,7 +2,7 @@ package de.luzifer.core.checks;
 
 import de.luzifer.core.model.check.Check;
 import de.luzifer.core.model.enums.ViolationType;
-import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.user.User;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.configuration.file.FileConfiguration;
 

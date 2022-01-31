@@ -4,7 +4,7 @@ import de.luzifer.core.Core;
 import de.luzifer.core.model.check.Check;
 import de.luzifer.core.model.check.CheckManager;
 import de.luzifer.core.model.exceptions.IllegalClickModificationException;
-import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.user.User;
 import de.luzifer.core.model.profile.storage.DataContainer;
 import de.luzifer.core.utils.ActionBarUtil;
 import de.luzifer.core.utils.Variables;

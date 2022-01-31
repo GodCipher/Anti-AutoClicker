@@ -3,7 +3,7 @@ package de.luzifer.core;
 import de.luzifer.core.model.check.Check;
 import de.luzifer.core.model.check.CheckManager;
 import de.luzifer.core.model.log.Log;
-import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.user.User;
 import de.luzifer.core.model.profile.inventory.pagesystem.Menu;
 import de.luzifer.core.checks.AverageCheck;
 import de.luzifer.core.checks.ClickLimitCheck;

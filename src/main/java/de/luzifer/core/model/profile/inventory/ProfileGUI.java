@@ -2,7 +2,7 @@ package de.luzifer.core.model.profile.inventory;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.Lists;
-import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.user.User;
 import de.luzifer.core.model.profile.inventory.pagesystem.PaginatedMenu;
 import de.luzifer.core.model.profile.storage.DataContainer;
 import de.luzifer.core.utils.Variables;

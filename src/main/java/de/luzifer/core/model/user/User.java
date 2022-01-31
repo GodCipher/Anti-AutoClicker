@@ -1,4 +1,4 @@
-package de.luzifer.core.model.player;
+package de.luzifer.core.model.user;
 
 import de.luzifer.core.Core;
 import de.luzifer.core.model.check.Check;
@@ -60,7 +60,7 @@ public class User {
             
             User user = new User(uuid);
             
-            Profile profile = new Profile(user);
+            Profile profile = new Profile();
             user.setProfile(profile);
             
             allUser.add(user);
@@ -71,7 +71,7 @@ public class User {
             
             User user = new User(uuid);
             
-            Profile profile = new Profile(user);
+            Profile profile = new Profile();
             user.setProfile(profile);
             
             allUser.add(user);

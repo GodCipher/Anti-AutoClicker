@@ -1,7 +1,7 @@
 package de.luzifer.core.model.check;
 
 import de.luzifer.core.Core;
-import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.user.User;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

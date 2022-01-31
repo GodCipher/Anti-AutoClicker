@@ -1,7 +1,7 @@
 package de.luzifer.core.commands;
 
 import de.luzifer.core.Core;
-import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.user.User;
 import de.luzifer.core.model.profile.inventory.LogGUI;
 import de.luzifer.core.model.profile.inventory.ProfileGUI;
 import de.luzifer.core.version.UpdateChecker;

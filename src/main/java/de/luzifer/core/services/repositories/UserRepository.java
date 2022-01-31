@@ -1,6 +1,6 @@
 package de.luzifer.core.services.repositories;
 
-import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.user.User;
 import de.luzifer.core.model.exceptions.UserNotFoundException;
 
 import java.util.HashSet;
