@@ -1,5 +1,8 @@
 package de.luzifer.core;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import de.luzifer.core.listener.ArmAnimationListener;
 import de.luzifer.core.model.check.Check;
 import de.luzifer.core.model.check.CheckManager;
 import de.luzifer.core.model.log.Log;
@@ -47,6 +50,13 @@ public class Core extends JavaPlugin {
     private double LastFinish = 0;
     
     private String pluginVersion;
+    
+    private ProtocolManager protocolManager;
+    
+    @Override
+    public void onLoad() {
+        protocolManager = ProtocolLibrary.getProtocolManager();
+    }
     
     public void onDisable() {
         
@@ -175,6 +185,8 @@ public class Core extends JavaPlugin {
     }
     
     private void loadListener() {
+        
+        protocolManager.addPacketListener(new ArmAnimationListener());
         
         Bukkit.getPluginManager().registerEvents(new Listeners(this), this);
         logger.info("Loading Listener(s) complete");

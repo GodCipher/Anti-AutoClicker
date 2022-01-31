@@ -3,6 +3,8 @@ author: Luziferium
 version: ${project.version}
 main: de.luzifer.core.Core
 api-version: 1.13
+depend:
+  - ProtocolLib
 
 commands:
   antiac:
