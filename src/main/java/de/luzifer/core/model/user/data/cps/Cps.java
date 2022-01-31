@@ -1,4 +1,4 @@
-package de.luzifer.core.model.user.cps;
+package de.luzifer.core.model.user.data.cps;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;

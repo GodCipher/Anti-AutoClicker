@@ -1,4 +1,4 @@
-package de.luzifer.core.model.user.violation;
+package de.luzifer.core.model.user.data.violation;
 
 import de.luzifer.core.Core;
 
