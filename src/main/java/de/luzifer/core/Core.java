@@ -10,6 +10,7 @@ import de.luzifer.core.checks.LevelCheck;
 import de.luzifer.core.commands.AntiACCommand;
 import de.luzifer.core.commands.AntiACCommandTabCompleter;
 import de.luzifer.core.extern.Metrics;
+import de.luzifer.core.listener.bukkit.InventoryListener;
 import de.luzifer.core.listener.bukkit.RestrictionListener;
 import de.luzifer.core.listener.packet.ArmAnimationListener;
 import de.luzifer.core.listener.bukkit.Listeners;
@@ -190,6 +191,7 @@ public class Core extends JavaPlugin {
         
         protocolManager.addPacketListener(new ArmAnimationListener(this, PacketType.Play.Client.ARM_ANIMATION));
         Bukkit.getPluginManager().registerEvents(new RestrictionListener(), this);
+        Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         
         Bukkit.getPluginManager().registerEvents(new Listeners(this), this);
         logger.info("Loading Listener(s) complete");

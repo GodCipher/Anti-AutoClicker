@@ -81,9 +81,6 @@ public class Listeners implements Listener {
             
         if (getBukkitVersion() > 8)
             if (e.getHand() == EquipmentSlot.OFF_HAND) return;
-    
-        if (User.get(e.getPlayer().getUniqueId()).isRestricted())
-            e.setCancelled(true);
         
         if (!Core.lowTPS) {
             if (Variables.pingChecker) {
@@ -129,9 +126,6 @@ public class Listeners implements Listener {
                 if (Variables.bypass)
                     if ((player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp()) || player.hasPermission(Objects.requireNonNull(Variables.perms)) && player.isOp())
                         return;
-    
-                if (User.get(player.getUniqueId()).isRestricted())
-                    e.setCancelled(true);
     
                 if (getBukkitVersion() > 8) {
                     if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) return;
@@ -186,9 +180,6 @@ public class Listeners implements Listener {
         if (Variables.bypass)
             if ((e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) || e.getPlayer().isOp()) || e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) && e.getPlayer().isOp())
                 return;
-            
-        if (User.get(e.getPlayer().getUniqueId()).isRestricted())
-            e.setCancelled(true);
     
         if (getBukkitVersion() > 8)
             if (e.getHand() == EquipmentSlot.OFF_HAND) return;
