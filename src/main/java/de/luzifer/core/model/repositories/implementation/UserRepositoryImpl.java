@@ -1,8 +1,8 @@
-package de.luzifer.core.services.repositories.implementation;
+package de.luzifer.core.model.repositories.implementation;
 
 import de.luzifer.core.model.user.User;
 import de.luzifer.core.model.exceptions.UserNotFoundException;
-import de.luzifer.core.services.repositories.UserRepository;
+import de.luzifer.core.model.repositories.UserRepository;
 
 import java.util.HashSet;
 import java.util.Set;

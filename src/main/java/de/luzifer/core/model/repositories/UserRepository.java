@@ -1,4 +1,4 @@
-package de.luzifer.core.services.repositories;
+package de.luzifer.core.model.repositories;
 
 import de.luzifer.core.model.user.User;
 
