@@ -1,6 +1,6 @@
 package de.luzifer.core.utils;
 
-import de.luzifer.core.model.events.ActionBarMessageEvent;
+import de.luzifer.core.model.events.actionbarapi.ActionBarMessageEvent;
 import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
