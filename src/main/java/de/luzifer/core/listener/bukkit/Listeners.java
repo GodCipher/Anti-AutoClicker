@@ -2,7 +2,6 @@ package de.luzifer.core.listener.bukkit;
 
 import com.cryptomorin.xseries.XMaterial;
 import de.luzifer.core.Core;
-import de.luzifer.core.model.profile.inventory.pagesystem.Menu;
 import de.luzifer.core.model.user.User;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.BanList;
@@ -15,7 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -59,16 +57,6 @@ public class Listeners implements Listener {
     public void onLogin(PlayerLoginEvent e) {
         if (e.getPlayer().isBanned()) {
             e.disallow(PlayerLoginEvent.Result.KICK_BANNED, Bukkit.getBanList(BanList.Type.NAME).getBanEntry(e.getPlayer().getName()).getReason());
-        }
-    }
-    
-    @EventHandler
-    public void onInvClick(InventoryClickEvent e) {
-        
-        if (e.getView().getTopInventory().getHolder() instanceof Menu) {
-            
-            Menu menu = (Menu) e.getView().getTopInventory().getHolder();
-            menu.handleEvent(e);
         }
     }
     
