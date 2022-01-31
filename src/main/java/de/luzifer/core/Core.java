@@ -48,26 +48,6 @@ public class Core extends JavaPlugin {
     
     private String pluginVersion;
     
-    public void tpsChecker() {
-        
-        logger.info("Booting up TPSChecker");
-        Bukkit.getScheduler().runTaskTimer(this, () -> {
-            
-            Tick++;
-            if (Tick == 20) {
-                
-                TPS = Tick;
-                Tick = 0;
-                
-                if (LastFinish + 1000 < System.currentTimeMillis())
-                    TPS /= (System.currentTimeMillis() - LastFinish) / 1000;
-                
-                LastFinish = System.currentTimeMillis();
-                lowTPS = TPS < lowestAllowedTPS;
-            }
-        }, 1, 1);
-    }
-    
     public void onDisable() {
         
         saveDefaultConfig();
@@ -90,54 +70,6 @@ public class Core extends JavaPlugin {
         
         ActionBarUtil.load();
         logger.info("Loading ActionBarAPI complete");
-    }
-    
-    public void initialize() {
-        
-        prefix = "§cAnti§4AC §8» ";
-        new Metrics(this, 6473);
-        logger.info("Initialize complete");
-    }
-    
-    public void loadMessages() {
-        
-        Variables.init();
-        logger.info("Loading messages.yml complete");
-    }
-    
-    public void loadConfig() {
-        
-        getConfig().options().copyDefaults();
-        saveDefaultConfig();
-    
-        Log.load();
-        lowestAllowedTPS = getConfig().getInt("AntiAC.LowestAllowedTPS");
-        
-        if (getConfig().getBoolean("AntiAC.AutoNotification")) setNotified();
-        
-        if (getConfig().getBoolean("AntiAC.TPSChecker")) tpsChecker();
-        
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new CheckTimer(checkManager), 0, 20);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Log::deleteLogs, 0, 20 * 60 * 60 * 12 /* 12 hours */);
-        
-        if (getConfig().getBoolean("AntiAC.UpdateChecker"))
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new UpdateTimer(this), 0, 20 * 60 * 5);
-        
-        logger.info("Loading config.yml complete");
-    }
-    
-    public void loadCommands() {
-        
-        getCommand("antiac").setExecutor(new AntiACCommand(this));
-        getCommand("antiac").setTabCompleter(new AntiACCommandTabCompleter());
-        
-        logger.info("Loading Command(s) complete");
-    }
-    
-    public void loadListener() {
-        
-        Bukkit.getPluginManager().registerEvents(new Listeners(this), this);
-        logger.info("Loading Listener(s) complete");
     }
     
     public void loadChecks() {
@@ -176,7 +108,79 @@ public class Core extends JavaPlugin {
         loadChecks();
     }
     
-    public void setNotified() {
+    public String getPluginVersion() {
+        return pluginVersion;
+    }
+    
+    private void tpsChecker() {
+        
+        logger.info("Booting up TPSChecker");
+        Bukkit.getScheduler().runTaskTimer(this, () -> {
+            
+            Tick++;
+            if (Tick == 20) {
+                
+                TPS = Tick;
+                Tick = 0;
+                
+                if (LastFinish + 1000 < System.currentTimeMillis())
+                    TPS /= (System.currentTimeMillis() - LastFinish) / 1000;
+                
+                LastFinish = System.currentTimeMillis();
+                lowTPS = TPS < lowestAllowedTPS;
+            }
+        }, 1, 1);
+    }
+    
+    private void initialize() {
+        
+        prefix = "§cAnti§4AC §8» ";
+        new Metrics(this, 6473);
+        logger.info("Initialize complete");
+    }
+    
+    private void loadMessages() {
+        
+        Variables.init();
+        logger.info("Loading messages.yml complete");
+    }
+    
+    private void loadConfig() {
+        
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
+        
+        Log.load();
+        lowestAllowedTPS = getConfig().getInt("AntiAC.LowestAllowedTPS");
+        
+        if (getConfig().getBoolean("AntiAC.AutoNotification")) setNotified();
+        
+        if (getConfig().getBoolean("AntiAC.TPSChecker")) tpsChecker();
+        
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new CheckTimer(checkManager), 0, 20);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Log::deleteLogs, 0, 20 * 60 * 60 * 12 /* 12 hours */);
+        
+        if (getConfig().getBoolean("AntiAC.UpdateChecker"))
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new UpdateTimer(this), 0, 20 * 60 * 5);
+        
+        logger.info("Loading config.yml complete");
+    }
+    
+    private void loadCommands() {
+        
+        getCommand("antiac").setExecutor(new AntiACCommand(this));
+        getCommand("antiac").setTabCompleter(new AntiACCommandTabCompleter());
+        
+        logger.info("Loading Command(s) complete");
+    }
+    
+    private void loadListener() {
+        
+        Bukkit.getPluginManager().registerEvents(new Listeners(this), this);
+        logger.info("Loading Listener(s) complete");
+    }
+    
+    private void setNotified() {
         for (Player all : Bukkit.getOnlinePlayers()) {
             Bukkit.getScheduler().runTaskLater(this, () -> {
                 if (all.hasPermission(Objects.requireNonNull(getConfig().getString("AntiAC.NeededPermission"))) || all.isOp()) {
@@ -185,10 +189,6 @@ public class Core extends JavaPlugin {
                 }
             }, 15);
         }
-    }
-    
-    public String getPluginVersion() {
-        return pluginVersion;
     }
     
     private void fetchPluginVersion() {
