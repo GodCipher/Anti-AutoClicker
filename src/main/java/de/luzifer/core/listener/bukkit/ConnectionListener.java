@@ -38,5 +38,4 @@ public class ConnectionListener implements Listener {
             e.disallow(PlayerLoginEvent.Result.KICK_BANNED, Bukkit.getBanList(BanList.Type.NAME).getBanEntry(e.getPlayer().getName()).getReason());
         }
     }
-    
 }
