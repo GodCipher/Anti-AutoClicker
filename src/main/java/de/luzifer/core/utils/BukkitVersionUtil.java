@@ -1,12 +1,10 @@
 package de.luzifer.core.utils;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 
+@UtilityClass
 public class BukkitVersionUtil {
-
-    private BukkitVersionUtil() {
-        // util class
-    }
 
     public static double get() {
         return current();
