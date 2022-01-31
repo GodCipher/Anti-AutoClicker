@@ -35,7 +35,7 @@ public abstract class Check {
     
     /**
      * Will try to load the check according to the configurations.
-     *
+     * <p>
      * If the check is already loaded or can't be activated because it got disabled,
      * it will skip the loading and NOT invoke the {@link #onLoad()} method.
      */
@@ -52,7 +52,7 @@ public abstract class Check {
     
     /**
      * Will try to unload the check.
-     *
+     * <p>
      * If the check is already unloaded, it will skip the unloading process incl.
      * the invoking of {@link #onUnload()}.
      */
@@ -74,6 +74,14 @@ public abstract class Check {
     public boolean isActivated() {
         return activated;
     }
+    
+    /**
+     * If the check detects nothing, in other words {@link #check(User)} returns false,
+     * this method will be invoked.
+     *
+     * @param user the user on which the check got executed on
+     */
+    protected void onFailure(User user) {}
     
     /**
      * This method will be invoked if the check gets loaded.
@@ -131,14 +139,6 @@ public abstract class Check {
      * @param user the user on which the check got executed on
      */
     public abstract void onSuccess(User user);
-    
-    /**
-     * If the check detects nothing, in other words {@link #check(User)} returns false,
-     * this method will be invoked.
-     *
-     * @param user the user on which the check got executed on
-     */
-    public abstract void onFailure(User user);
     
     /**
      * Core functionality of the check. This method alone represents the check and will be executed

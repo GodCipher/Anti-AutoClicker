@@ -25,9 +25,6 @@ public class DoubleClickCheck extends Check {
     }
     
     @Override
-    public void onFailure(User user) {}
-    
-    @Override
     public boolean check(User user) {
     
         if (!latestClicks.containsKey(user)) latestClicks.put(user, new ArrayList<>());

@@ -37,9 +37,6 @@ public class LevelCheck extends Check {
     }
     
     @Override
-    public void onFailure(User user) {}
-    
-    @Override
     public boolean check(User user) {
         
         if (!lastClick.containsKey(user)) lastClick.put(user, user.getClicks());

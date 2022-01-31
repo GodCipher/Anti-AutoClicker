@@ -31,9 +31,6 @@ public class ClickLimitCheck extends Check {
     }
     
     @Override
-    public void onFailure(User user) {}
-    
-    @Override
     public boolean check(User user) {
         return user.getClicks() >= click_limit;
     }
