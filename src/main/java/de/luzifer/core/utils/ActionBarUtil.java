@@ -20,7 +20,7 @@ public class ActionBarUtil {
         useOldMethods = false;
     }
     
-    public static void load() {
+    public void load() {
         
         ActionBarUtil.nmsver = Bukkit.getServer().getClass().getPackage().getName();
         ActionBarUtil.nmsver = ActionBarUtil.nmsver.substring(nmsver.lastIndexOf(".") + 1);
@@ -28,7 +28,7 @@ public class ActionBarUtil {
         if (ActionBarUtil.nmsver.equalsIgnoreCase("v1_8_R1") || ActionBarUtil.nmsver.startsWith("v1_7_")) ActionBarUtil.useOldMethods = true;
     }
     
-    public static void sendActionBar(final Player player, final String message) {
+    public void sendActionBar(final Player player, final String message) {
         
         if (!player.isOnline()) return;
         
@@ -84,7 +84,7 @@ public class ActionBarUtil {
         }
     }
     
-    private static double getBukkitVersion() {
+    private double getBukkitVersion() {
         
         String version = Bukkit.getBukkitVersion().split("-")[0];
         return Double.parseDouble(version.split("\\.")[1]);

@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 @UtilityClass
 public class InputStreamUtils {
     
-    public static InputStream getInputStream(String fileName) {
+    public InputStream getInputStream(String fileName) {
         
         InputStream resource = Core.class.getResourceAsStream("/" + fileName);
         
@@ -22,7 +22,7 @@ public class InputStreamUtils {
         return resource;
     }
     
-    public static String readLineFromInputStream(InputStream inputStream, Logger logger) {
+    public String readLineFromInputStream(InputStream inputStream, Logger logger) {
         
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
             return bufferedReader.readLine();
