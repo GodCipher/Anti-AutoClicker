@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+@Deprecated
 public class Listeners implements Listener {
     
     private final Core core;
