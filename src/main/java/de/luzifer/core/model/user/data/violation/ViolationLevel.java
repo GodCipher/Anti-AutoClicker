@@ -4,7 +4,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
-@EqualsAndHashCode
 public class ViolationLevel {
     int level;
 }
