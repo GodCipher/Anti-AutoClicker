@@ -1,4 +1,4 @@
-package de.luzifer.core.api.profile.inventory.pagesystem;
+package de.luzifer.core.model.profile.inventory.pagesystem;
 
 import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.inventory.ItemStack;

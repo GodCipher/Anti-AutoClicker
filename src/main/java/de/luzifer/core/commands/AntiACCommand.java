@@ -1,10 +1,9 @@
 package de.luzifer.core.commands;
 
 import de.luzifer.core.Core;
-import de.luzifer.core.api.check.CheckManager;
-import de.luzifer.core.api.player.User;
-import de.luzifer.core.api.profile.inventory.LogGUI;
-import de.luzifer.core.api.profile.inventory.ProfileGUI;
+import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.profile.inventory.LogGUI;
+import de.luzifer.core.model.profile.inventory.ProfileGUI;
 import de.luzifer.core.version.UpdateChecker;
 import de.luzifer.core.utils.Variables;
 import de.luzifer.core.version.UpdateCheckerResult;

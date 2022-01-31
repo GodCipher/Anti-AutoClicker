@@ -1,4 +1,4 @@
-package de.luzifer.core.api.enums;
+package de.luzifer.core.model.enums;
 
 import de.luzifer.core.Core;
 

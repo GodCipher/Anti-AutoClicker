@@ -1,10 +1,10 @@
-package de.luzifer.core.api.profile.inventory;
+package de.luzifer.core.model.profile.inventory;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.Lists;
-import de.luzifer.core.api.player.User;
-import de.luzifer.core.api.profile.inventory.pagesystem.PaginatedMenu;
-import de.luzifer.core.api.profile.storage.DataContainer;
+import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.profile.inventory.pagesystem.PaginatedMenu;
+import de.luzifer.core.model.profile.storage.DataContainer;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

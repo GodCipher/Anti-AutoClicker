@@ -2,8 +2,8 @@ package de.luzifer.core.listener;
 
 import com.cryptomorin.xseries.XMaterial;
 import de.luzifer.core.Core;
-import de.luzifer.core.api.player.User;
-import de.luzifer.core.api.profile.inventory.pagesystem.Menu;
+import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.profile.inventory.pagesystem.Menu;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;

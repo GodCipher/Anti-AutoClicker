@@ -1,10 +1,10 @@
-package de.luzifer.core.api.player;
+package de.luzifer.core.model.player;
 
 import de.luzifer.core.Core;
-import de.luzifer.core.api.check.Check;
-import de.luzifer.core.api.enums.ViolationType;
-import de.luzifer.core.api.log.Log;
-import de.luzifer.core.api.profile.Profile;
+import de.luzifer.core.model.check.Check;
+import de.luzifer.core.model.enums.ViolationType;
+import de.luzifer.core.model.log.Log;
+import de.luzifer.core.model.profile.Profile;
 import de.luzifer.core.checks.DoubleClickCheck;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.BanList;

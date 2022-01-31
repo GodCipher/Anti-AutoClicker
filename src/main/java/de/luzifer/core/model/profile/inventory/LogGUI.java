@@ -1,7 +1,7 @@
-package de.luzifer.core.api.profile.inventory;
+package de.luzifer.core.model.profile.inventory;
 
 import com.cryptomorin.xseries.XMaterial;
-import de.luzifer.core.api.profile.inventory.pagesystem.PaginatedMenu;
+import de.luzifer.core.model.profile.inventory.pagesystem.PaginatedMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;

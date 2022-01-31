@@ -1,8 +1,8 @@
 package de.luzifer.core.checks;
 
-import de.luzifer.core.api.check.Check;
-import de.luzifer.core.api.enums.ViolationType;
-import de.luzifer.core.api.player.User;
+import de.luzifer.core.model.check.Check;
+import de.luzifer.core.model.enums.ViolationType;
+import de.luzifer.core.model.player.User;
 import de.luzifer.core.utils.Variables;
 
 import java.util.ArrayList;

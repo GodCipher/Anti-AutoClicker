@@ -1,6 +1,6 @@
-package de.luzifer.core.api.exceptions;
+package de.luzifer.core.model.exceptions;
 
-import de.luzifer.core.api.check.Check;
+import de.luzifer.core.model.check.Check;
 
 import java.text.MessageFormat;
 

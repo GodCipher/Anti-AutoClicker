@@ -1,4 +1,4 @@
-package de.luzifer.core.api.events;
+package de.luzifer.core.model.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

@@ -1,6 +1,6 @@
-package de.luzifer.core.api.profile;
+package de.luzifer.core.model.profile;
 
-import de.luzifer.core.api.profile.storage.DataContainer;
+import de.luzifer.core.model.profile.storage.DataContainer;
 import de.luzifer.core.utils.Variables;
 
 import java.util.ArrayList;

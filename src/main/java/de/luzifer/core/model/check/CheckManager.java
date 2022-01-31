@@ -1,4 +1,4 @@
-package de.luzifer.core.api.check;
+package de.luzifer.core.model.check;
 
 import java.util.ArrayList;
 import java.util.List;

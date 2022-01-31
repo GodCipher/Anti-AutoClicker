@@ -1,8 +1,8 @@
-package de.luzifer.core.api.profile.storage;
+package de.luzifer.core.model.profile.storage;
 
-import de.luzifer.core.api.player.User;
-import de.luzifer.core.api.profile.Profile;
-import de.luzifer.core.api.profile.inventory.ProfileGUI;
+import de.luzifer.core.model.player.User;
+import de.luzifer.core.model.profile.Profile;
+import de.luzifer.core.model.profile.inventory.ProfileGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
