@@ -2,6 +2,7 @@ package de.luzifer.core.listener.bukkit;
 
 import de.luzifer.core.model.repositories.UserRepository;
 import de.luzifer.core.model.user.User;
+import lombok.AllArgsConstructor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,9 +14,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+@AllArgsConstructor
 public class RestrictionListener implements Listener {
     
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     
     @EventHandler
     public void onBuild(BlockPlaceEvent event) {

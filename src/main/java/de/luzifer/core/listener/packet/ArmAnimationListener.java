@@ -9,10 +9,12 @@ import org.bukkit.plugin.Plugin;
 
 public class ArmAnimationListener extends PacketAdapter {
     
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     
-    public ArmAnimationListener(Plugin plugin, PacketType... types) {
+    public ArmAnimationListener(Plugin plugin, UserRepository userRepository, PacketType... types) {
         super(plugin, types);
+        
+        this.userRepository = userRepository;
     }
     
     @Override

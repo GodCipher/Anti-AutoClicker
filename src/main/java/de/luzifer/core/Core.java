@@ -10,6 +10,7 @@ import de.luzifer.core.checks.LevelCheck;
 import de.luzifer.core.commands.AntiACCommand;
 import de.luzifer.core.commands.AntiACCommandTabCompleter;
 import de.luzifer.core.extern.Metrics;
+import de.luzifer.core.listener.bukkit.ConnectionListener;
 import de.luzifer.core.listener.bukkit.InventoryListener;
 import de.luzifer.core.listener.bukkit.RestrictionListener;
 import de.luzifer.core.listener.packet.ArmAnimationListener;
@@ -17,6 +18,8 @@ import de.luzifer.core.model.check.Check;
 import de.luzifer.core.model.check.CheckManager;
 import de.luzifer.core.model.log.Log;
 import de.luzifer.core.model.profile.inventory.pagesystem.Menu;
+import de.luzifer.core.model.repositories.UserRepository;
+import de.luzifer.core.model.repositories.implementations.UserRepositoryImpl;
 import de.luzifer.core.model.user.User;
 import de.luzifer.core.timer.CheckTimer;
 import de.luzifer.core.timer.UpdateTimer;
@@ -43,6 +46,7 @@ public class Core extends JavaPlugin {
         return core;
     }
     
+    private final UserRepository userRepository = new UserRepositoryImpl();
     private final CheckManager checkManager = new CheckManager();
     private final Logger logger = getLogger();
     
@@ -188,9 +192,10 @@ public class Core extends JavaPlugin {
     
     private void loadListener() {
         
-        protocolManager.addPacketListener(new ArmAnimationListener(this, PacketType.Play.Client.ARM_ANIMATION));
+        protocolManager.addPacketListener(new ArmAnimationListener(this, userRepository, PacketType.Play.Client.ARM_ANIMATION));
         
-        Bukkit.getPluginManager().registerEvents(new RestrictionListener(), this);
+        Bukkit.getPluginManager().registerEvents(new RestrictionListener(userRepository), this);
+        Bukkit.getPluginManager().registerEvents(new ConnectionListener(userRepository), this);
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         
         // Bukkit.getPluginManager().registerEvents(new Listeners(this), this);

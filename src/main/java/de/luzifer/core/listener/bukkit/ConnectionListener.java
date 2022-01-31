@@ -4,6 +4,7 @@ import de.luzifer.core.Core;
 import de.luzifer.core.model.repositories.UserRepository;
 import de.luzifer.core.model.user.User;
 import de.luzifer.core.utils.Variables;
+import lombok.AllArgsConstructor;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,9 +13,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 
+@AllArgsConstructor
 public class ConnectionListener implements Listener {
     
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     
     @EventHandler
     public void onKick(PlayerKickEvent e) {
