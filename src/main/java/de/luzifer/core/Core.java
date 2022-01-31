@@ -13,7 +13,6 @@ import de.luzifer.core.extern.Metrics;
 import de.luzifer.core.listener.bukkit.InventoryListener;
 import de.luzifer.core.listener.bukkit.RestrictionListener;
 import de.luzifer.core.listener.packet.ArmAnimationListener;
-import de.luzifer.core.listener.bukkit.Listeners;
 import de.luzifer.core.model.check.Check;
 import de.luzifer.core.model.check.CheckManager;
 import de.luzifer.core.model.log.Log;
@@ -190,10 +189,11 @@ public class Core extends JavaPlugin {
     private void loadListener() {
         
         protocolManager.addPacketListener(new ArmAnimationListener(this, PacketType.Play.Client.ARM_ANIMATION));
+        
         Bukkit.getPluginManager().registerEvents(new RestrictionListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
         
-        Bukkit.getPluginManager().registerEvents(new Listeners(this), this);
+        // Bukkit.getPluginManager().registerEvents(new Listeners(this), this);
         logger.info("Loading Listener(s) complete");
     }
     
