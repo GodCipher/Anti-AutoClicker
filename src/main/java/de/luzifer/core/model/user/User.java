@@ -6,6 +6,7 @@ import de.luzifer.core.model.enums.ViolationType;
 import de.luzifer.core.model.log.Log;
 import de.luzifer.core.model.profile.Profile;
 import de.luzifer.core.checks.DoubleClickCheck;
+import de.luzifer.core.utils.BukkitVersionUtil;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
@@ -247,20 +248,7 @@ public class User {
     }
     
     public int getPing() {
-        
-        if (getBukkitVersion() >= 17) return getPlayer().getPing();
-        
-        int ping = -1;
-        try {
-            
-            if (getPlayer() == null) return ping;
-            
-            Object entityPlayer = getPlayer().getClass().getMethod("getHandle").invoke(getPlayer());
-            ping = (int) entityPlayer.getClass().getField("ping").get(entityPlayer);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        return ping;
+        return determineUserPing();
     }
     
     public boolean isBypassed() {
@@ -360,11 +348,18 @@ public class User {
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
-    
-    private double getBukkitVersion() {
-        
-        String version = Bukkit.getBukkitVersion().split("-")[0];
-        return Double.parseDouble(version.split("\\.")[1]);
+
+    private int determineUserPing() {
+
+        if (BukkitVersionUtil.is(17) || BukkitVersionUtil.isOver(17))
+            return this.getPlayer().getPing();
+
+        try {
+            Object entityPlayer = getPlayer().getClass().getMethod("getHandle").invoke(getPlayer());
+            return (int) entityPlayer.getClass().getField("ping").get(entityPlayer);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
-    
 }
