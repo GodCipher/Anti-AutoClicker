@@ -2,6 +2,7 @@ package de.luzifer.core;
 
 import de.luzifer.core.api.check.Check;
 import de.luzifer.core.api.check.CheckManager;
+import de.luzifer.core.api.log.Log;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.pagesystem.Menu;
 import de.luzifer.core.checks.AverageCheck;
@@ -21,12 +22,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -36,26 +32,10 @@ public class Core extends JavaPlugin {
     public static boolean lowTPS = false;
     public static double TPS = 0;
     
-    private static int days = 0;
-    
     private static Core core;
     
     public static Core getInstance() {
         return core;
-    }
-    
-    public static void deleteLogs() {
-        Date xDaysAgo = Date.from(Instant.now().minus(Duration.ofDays(days)));
-        SimpleDateFormat formatFile = new SimpleDateFormat("dd MMMM yyyy");
-        
-        if (new Date().after(xDaysAgo)) {
-            File file = new File("plugins/AntiAC/Logs", formatFile.format(xDaysAgo) + ".yml");
-            
-            if (file.exists()) {
-                file.delete();
-                getInstance().logger.info(" Deleted log of ///| " + formatFile.format(xDaysAgo) + " |///");
-            }
-        }
     }
     
     private final CheckManager checkManager = new CheckManager();
@@ -69,6 +49,7 @@ public class Core extends JavaPlugin {
     private String pluginVersion;
     
     public void tpsChecker() {
+        
         logger.info("Booting up TPSChecker");
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             
@@ -112,6 +93,7 @@ public class Core extends JavaPlugin {
     }
     
     public void initialize() {
+        
         prefix = "§cAnti§4AC §8» ";
         new Metrics(this, 6473);
         logger.info("Initialize complete");
@@ -127,8 +109,8 @@ public class Core extends JavaPlugin {
         
         getConfig().options().copyDefaults();
         saveDefaultConfig();
-        
-        days = Core.getInstance().getConfig().getInt("AntiAC.DeleteLogsAfterDays");
+    
+        Log.load();
         lowestAllowedTPS = getConfig().getInt("AntiAC.LowestAllowedTPS");
         
         if (getConfig().getBoolean("AntiAC.AutoNotification")) setNotified();
@@ -136,7 +118,7 @@ public class Core extends JavaPlugin {
         if (getConfig().getBoolean("AntiAC.TPSChecker")) tpsChecker();
         
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new CheckTimer(checkManager), 0, 20);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Core::deleteLogs, 0, 20 * 60 * 60 * 12 /* 12 hours */);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Log::deleteLogs, 0, 20 * 60 * 60 * 12 /* 12 hours */);
         
         if (getConfig().getBoolean("AntiAC.UpdateChecker"))
             Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new UpdateTimer(this), 0, 20 * 60 * 5);

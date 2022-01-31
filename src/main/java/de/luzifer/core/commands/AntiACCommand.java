@@ -24,7 +24,7 @@ public class AntiACCommand implements CommandExecutor {
     
     public AntiACCommand(Core core) {
         this.core = core;
-        this.updateChecker = new UpdateChecker(core);
+        this.updateChecker = new UpdateChecker(core.getLogger(), core.getPluginVersion());
     }
     
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

@@ -1,6 +1,7 @@
 package de.luzifer.core.utils;
 
 import de.luzifer.core.Core;
+import lombok.experimental.UtilityClass;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Logger;
 
+@UtilityClass
 public class InputStreamUtils {
     
     public static InputStream getInputStream(String fileName) {

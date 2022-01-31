@@ -1,6 +1,7 @@
 package de.luzifer.core.utils;
 
 import de.luzifer.core.Core;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+@UtilityClass
 public class Variables {
     
     private static final File file = new File("plugins/AntiAC", "messages.yml");

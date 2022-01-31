@@ -1,7 +1,7 @@
 package de.luzifer.core.api.log;
 
+import de.luzifer.core.Core;
 import de.luzifer.core.api.check.Check;
-import de.luzifer.core.utils.Variables;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -9,17 +9,25 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Log {
     
-    static Date dateFile = new Date();
-    static SimpleDateFormat formatFile = new SimpleDateFormat("dd MMMM yyyy");
+    private static int days;
     
-    static File file = new File("plugins/AntiAC/Logs", formatFile.format(dateFile) + ".yml");
-    static FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+    private static final Date dateFile = new Date();
+    private static final SimpleDateFormat formatFile = new SimpleDateFormat("dd MMMM yyyy");
+    
+    private static final File file = new File("plugins/AntiAC/Logs", formatFile.format(dateFile) + ".yml");
+    private static final FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+    
+    public static void load() {
+        days = Core.getInstance().getConfig().getInt("AntiAC.DeleteLogsAfterDays");
+    }
     
     public static void log(Player player, Integer clicks, Double average, @Nullable Check check) {
         
@@ -68,6 +76,20 @@ public class Log {
             cfg.save(file);
         } catch (Exception ignored) {}
         
+    }
+    
+    public static void deleteLogs() {
+        Date xDaysAgo = Date.from(Instant.now().minus(Duration.ofDays(days)));
+        SimpleDateFormat formatFile = new SimpleDateFormat("dd MMMM yyyy");
+        
+        if (new Date().after(xDaysAgo)) {
+            File file = new File("plugins/AntiAC/Logs", formatFile.format(xDaysAgo) + ".yml");
+            
+            if (file.exists()) {
+                file.delete();
+                Core.getInstance().getLogger().info(" Deleted log of ///| " + formatFile.format(xDaysAgo) + " |///");
+            }
+        }
     }
     
     public static boolean isLogged(Player player) {

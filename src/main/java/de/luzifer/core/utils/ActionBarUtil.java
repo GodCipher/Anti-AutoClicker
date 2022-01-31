@@ -1,6 +1,7 @@
 package de.luzifer.core.utils;
 
 import de.luzifer.core.api.events.ActionBarMessageEvent;
+import lombok.experimental.UtilityClass;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+@UtilityClass
 public class ActionBarUtil {
     
     private static String nmsver;

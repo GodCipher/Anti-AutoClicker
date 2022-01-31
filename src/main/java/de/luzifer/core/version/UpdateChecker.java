@@ -1,23 +1,19 @@
 package de.luzifer.core.version;
 
-import de.luzifer.core.Core;
 import de.luzifer.core.utils.InputStreamUtils;
+import lombok.AllArgsConstructor;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Logger;
 
+@AllArgsConstructor
 public class UpdateChecker {
     
     private static final String URL_LINK = "https://raw.githubusercontent.com/Luziferium/Anti-Auto-Clicker/master/src/main/resources/version.txt";
     
     private final Logger logger;
     private final String currentVersion;
-    
-    public UpdateChecker(Core core) {
-        this.logger = core.getLogger();
-        this.currentVersion = core.getPluginVersion();
-    }
     
     public UpdateCheckerResult checkUpdate() {
         

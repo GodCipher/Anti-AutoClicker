@@ -15,7 +15,7 @@ public class UpdateTimer implements Runnable {
     public UpdateTimer(Core core) {
         
         this.core = core;
-        this.updateChecker = new UpdateChecker(core);
+        this.updateChecker = new UpdateChecker(core.getLogger(), core.getPluginVersion());
     }
     
     @Override
