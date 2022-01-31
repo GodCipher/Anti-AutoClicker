@@ -1,4 +1,4 @@
-package de.luzifer.core.model.repositories.implementation;
+package de.luzifer.core.model.repositories.implementations;
 
 import de.luzifer.core.model.user.User;
 import de.luzifer.core.model.exceptions.UserNotFoundException;
