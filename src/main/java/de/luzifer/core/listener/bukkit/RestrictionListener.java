@@ -1,8 +1,8 @@
 package de.luzifer.core.listener.bukkit;
 
 import com.google.inject.Inject;
+import de.luzifer.core.model.repositories.UserRepository;
 import de.luzifer.core.model.user.User;
-import de.luzifer.core.services.repositories.UserRepository;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
