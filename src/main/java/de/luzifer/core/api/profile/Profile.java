@@ -1,6 +1,5 @@
 package de.luzifer.core.api.profile;
 
-import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.storage.DataContainer;
 import de.luzifer.core.utils.Variables;
 
@@ -10,10 +9,6 @@ import java.util.List;
 public class Profile {
     
     private final List<DataContainer> dataContainers = new ArrayList<>();
-    
-    private final User user;
-    
-    public Profile(User user) {this.user = user;}
     
     public List<DataContainer> getDataContainers() {
         return dataContainers;
@@ -31,10 +26,6 @@ public class Profile {
         if (dataContainers.size() > Variables.removeAfterExist) {
             dataContainers.remove(0);
         }
-    }
-    
-    public User getOwner() {
-        return user;
     }
     
 }
