@@ -1,6 +1,5 @@
 package de.luzifer.core.listener.bukkit;
 
-import com.google.inject.Inject;
 import de.luzifer.core.model.repositories.UserRepository;
 import de.luzifer.core.model.user.User;
 import org.bukkit.entity.Player;
@@ -16,7 +15,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class RestrictionListener implements Listener {
     
-    @Inject
     private UserRepository userRepository;
     
     @EventHandler
