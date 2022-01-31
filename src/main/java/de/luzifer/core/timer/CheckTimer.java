@@ -4,33 +4,34 @@ import de.luzifer.core.Core;
 import de.luzifer.core.model.check.Check;
 import de.luzifer.core.model.check.CheckManager;
 import de.luzifer.core.model.exceptions.IllegalClickModificationException;
-import de.luzifer.core.model.user.User;
 import de.luzifer.core.model.profile.storage.DataContainer;
+import de.luzifer.core.model.repositories.UserRepository;
+import de.luzifer.core.model.user.User;
 import de.luzifer.core.utils.ActionBarUtil;
 import de.luzifer.core.utils.Variables;
+import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.UUID;
 
+@AllArgsConstructor
 public class CheckTimer implements Runnable {
-    
-    private final CheckManager checkManager;
+
     private final HashMap<UUID, DataContainer> containerHashMap = new HashMap<>();
 
-    public CheckTimer(CheckManager checkManager) {
-        this.checkManager = checkManager;
-    }
-    
+    private final CheckManager checkManager;
+    private final UserRepository userRepository;
+
     public void run() {
 
-        for(Player all : Bukkit.getOnlinePlayers()) {
+        for(Player players : Bukkit.getOnlinePlayers()) {
 
-            User user = User.get(all.getUniqueId());
+            User user = userRepository.read(players.getUniqueId());
 
             if(user.isFrozen())
-                Variables.PUNISHED.forEach(var -> all.sendMessage(Core.prefix + var.replace("&", "§")));
+                Variables.PUNISHED.forEach(var -> players.sendMessage(Core.prefix + var.replace("&", "§")));
 
             user.getClicksAverageList().add(user.getClicks());
             user.getClicksAverageCheckList().add(user.getAverage());

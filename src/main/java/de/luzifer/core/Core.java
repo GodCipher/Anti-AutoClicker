@@ -173,7 +173,7 @@ public class Core extends JavaPlugin {
         
         if (getConfig().getBoolean("AntiAC.TPSChecker")) tpsChecker();
         
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new CheckTimer(checkManager), 0, 20);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new CheckTimer(checkManager, userRepository), 0, 20);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Log::deleteLogs, 0, 20 * 60 * 60 * 12 /* 12 hours */);
         
         if (getConfig().getBoolean("AntiAC.UpdateChecker"))
