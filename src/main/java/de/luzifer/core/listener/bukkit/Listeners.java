@@ -1,4 +1,4 @@
-package de.luzifer.core.listener;
+package de.luzifer.core.listener.bukkit;
 
 import com.cryptomorin.xseries.XMaterial;
 import de.luzifer.core.Core;
