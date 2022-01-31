@@ -1,7 +1,6 @@
 package de.luzifer.core;
 
 import de.luzifer.core.api.check.Check;
-import de.luzifer.core.api.events.ActionBarMessageEvent;
 import de.luzifer.core.api.check.CheckManager;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.pagesystem.Menu;
@@ -15,20 +14,15 @@ import de.luzifer.core.extern.Metrics;
 import de.luzifer.core.listener.Listeners;
 import de.luzifer.core.timer.CheckTimer;
 import de.luzifer.core.timer.UpdateTimer;
+import de.luzifer.core.utils.ActionBarUtil;
 import de.luzifer.core.utils.InputStreamUtils;
 import de.luzifer.core.utils.Variables;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
@@ -39,21 +33,12 @@ import java.util.logging.Logger;
 public class Core extends JavaPlugin {
     
     public static String prefix;
-    
     public static boolean lowTPS = false;
-    
     public static double TPS = 0;
     
-    private static Plugin plugin;
-    private static String nmsver;
-    private static boolean useOldMethods;
-    
     private static int days = 0;
-    private static Core core;
     
-    static {
-        Core.useOldMethods = false;
-    }
+    private static Core core;
     
     public static Core getInstance() {
         return core;
@@ -71,89 +56,6 @@ public class Core extends JavaPlugin {
                 getInstance().logger.info(" Deleted log of ///| " + formatFile.format(xDaysAgo) + " |///");
             }
         }
-    }
-    
-    public static void sendActionBar(final Player player, final String message) {
-        
-        if (!player.isOnline()) return;
-        
-        ActionBarMessageEvent actionBarMessageEvent = new ActionBarMessageEvent(player, message);
-        Bukkit.getPluginManager().callEvent(actionBarMessageEvent);
-        if (actionBarMessageEvent.isCancelled()) return;
-        
-        if (getBukkitVersion() >= 16) {
-            
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
-            return;
-        }
-        
-        try {
-            final Class<?> craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + Core.nmsver + ".entity.CraftPlayer");
-            final Object craftPlayer = craftPlayerClass.cast(player);
-            final Class<?> packetPlayOutChatClass = Class.forName("net.minecraft.server." + Core.nmsver + ".PacketPlayOutChat");
-            final Class<?> packetClass = Class.forName("net.minecraft.server." + Core.nmsver + ".Packet");
-            Object packet;
-            if (Core.useOldMethods) {
-                final Class<?> chatSerializerClass = Class.forName("net.minecraft.server." + Core.nmsver + ".ChatSerializer");
-                final Class<?> iChatBaseComponentClass = Class.forName("net.minecraft.server." + Core.nmsver + ".IChatBaseComponent");
-                final Method m3 = chatSerializerClass.getDeclaredMethod("a", String.class);
-                final Object cbc = iChatBaseComponentClass.cast(m3.invoke(chatSerializerClass, "{\"text\": \"" + message + "\"}"));
-                packet = packetPlayOutChatClass.getConstructor(iChatBaseComponentClass, Byte.TYPE).newInstance(cbc, 2);
-            } else {
-                final Class<?> chatComponentTextClass = Class.forName("net.minecraft.server." + Core.nmsver + ".ChatComponentText");
-                final Class<?> iChatBaseComponentClass = Class.forName("net.minecraft.server." + Core.nmsver + ".IChatBaseComponent");
-                try {
-                    final Class<?> chatMessageTypeClass = Class.forName("net.minecraft.server." + Core.nmsver + ".ChatMessageType");
-                    final Object[] chatMessageTypes = chatMessageTypeClass.getEnumConstants();
-                    Object chatMessageType = null;
-                    for (final Object obj : chatMessageTypes) {
-                        if (obj.toString().equals("GAME_INFO")) {
-                            chatMessageType = obj;
-                        }
-                    }
-                    final Object chatCompontentText = chatComponentTextClass.getConstructor(String.class).newInstance(message);
-                    packet = packetPlayOutChatClass.getConstructor(iChatBaseComponentClass, chatMessageTypeClass).newInstance(chatCompontentText, chatMessageType);
-                } catch (ClassNotFoundException cnfe) {
-                    final Object chatCompontentText2 = chatComponentTextClass.getConstructor(String.class).newInstance(message);
-                    packet = packetPlayOutChatClass.getConstructor(iChatBaseComponentClass, Byte.TYPE).newInstance(chatCompontentText2, (byte) 2);
-                }
-            }
-            final Method craftPlayerHandleMethod = craftPlayerClass.getDeclaredMethod("getHandle");
-            final Object craftPlayerHandle = craftPlayerHandleMethod.invoke(craftPlayer);
-            final Field playerConnectionField = craftPlayerHandle.getClass().getDeclaredField("playerConnection");
-            final Object playerConnection = playerConnectionField.get(craftPlayerHandle);
-            final Method sendPacketMethod = playerConnection.getClass().getDeclaredMethod("sendPacket", packetClass);
-            sendPacketMethod.invoke(playerConnection, packet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public static void sendActionBar(final Player player, final String message, int duration) {
-        sendActionBar(player, message);
-        if (duration >= 0) {
-            new BukkitRunnable() {
-                
-                public void run() {
-                    Core.sendActionBar(player, "");
-                }
-            }.runTaskLaterAsynchronously(Core.plugin, duration + 1);
-        }
-        while (duration > 40) {
-            duration -= 40;
-            new BukkitRunnable() {
-                
-                public void run() {
-                    Core.sendActionBar(player, message);
-                }
-            }.runTaskLaterAsynchronously(Core.plugin, duration);
-        }
-    }
-    
-    private static double getBukkitVersion() {
-        
-        String version = Bukkit.getBukkitVersion().split("-")[0];
-        return Double.parseDouble(version.split("\\.")[1]);
     }
     
     private final CheckManager checkManager = new CheckManager();
@@ -204,7 +106,9 @@ public class Core extends JavaPlugin {
         loadMessages();
         loadListener();
         loadCommands();
-        loadActionBar();
+        
+        ActionBarUtil.load();
+        logger.info("Loading ActionBarAPI complete");
     }
     
     public void initialize() {
@@ -248,18 +152,6 @@ public class Core extends JavaPlugin {
         logger.info("Loading Command(s) complete");
     }
     
-    public void loadActionBar() {
-        
-        Core.plugin = this;
-        
-        Core.nmsver = Bukkit.getServer().getClass().getPackage().getName();
-        Core.nmsver = Core.nmsver.substring(Core.nmsver.lastIndexOf(".") + 1);
-        
-        if (Core.nmsver.equalsIgnoreCase("v1_8_R1") || Core.nmsver.startsWith("v1_7_")) Core.useOldMethods = true;
-        
-        logger.info("Loading ActionBarAPI complete");
-    }
-    
     public void loadListener() {
         
         Bukkit.getPluginManager().registerEvents(new Listeners(this), this);
@@ -290,7 +182,7 @@ public class Core extends JavaPlugin {
     
     public void reloadChecks() {
         
-        for(Check check : checkManager.getChecks()) {
+        for (Check check : checkManager.getChecks()) {
             try {
                 check.unload();
             } catch (Exception e) {

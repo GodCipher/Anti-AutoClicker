@@ -81,7 +81,7 @@ public abstract class Check {
      *
      * @param user the user on which the check got executed on
      */
-    protected void onFailure(User user) {}
+    public void onFailure(User user) {}
     
     /**
      * This method will be invoked if the check gets loaded.

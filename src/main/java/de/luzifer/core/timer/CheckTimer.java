@@ -6,11 +6,11 @@ import de.luzifer.core.api.check.CheckManager;
 import de.luzifer.core.api.exceptions.IllegalClickModificationException;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.storage.DataContainer;
+import de.luzifer.core.utils.ActionBarUtil;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -77,7 +77,7 @@ public class CheckTimer implements Runnable {
                 if(user.getChecked().isBypassed())
                     message2 = " §e§l-> §c§lCannot be checked -> §4§lBypassed";
 
-            Core.sendActionBar(user.getPlayer(), message1 + message2);
+            ActionBarUtil.sendActionBar(user.getPlayer(), message1 + message2);
         }
     }
 
