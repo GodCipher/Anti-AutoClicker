@@ -6,7 +6,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Punisher {
     
-    public void punishUser(User user, Punishment punishment) {
+    public void applyPunishment(User user, Punishment punishment) {
         punishment.punish(user);
     }
     
