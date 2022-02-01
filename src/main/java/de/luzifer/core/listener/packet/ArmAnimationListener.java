@@ -3,8 +3,10 @@ package de.luzifer.core.listener.packet;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import de.luzifer.core.model.events.PlayerClickEvent;
 import de.luzifer.core.model.repositories.UserRepository;
 import de.luzifer.core.model.user.User;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 public class ArmAnimationListener extends PacketAdapter {
@@ -22,5 +24,7 @@ public class ArmAnimationListener extends PacketAdapter {
         
         User user = userRepository.read(event.getPlayer().getUniqueId());
         user.addClicks(1);
+        
+        Bukkit.getPluginManager().callEvent(new PlayerClickEvent(user));
     }
 }
