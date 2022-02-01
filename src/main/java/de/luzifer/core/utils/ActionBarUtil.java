@@ -22,10 +22,10 @@ public class ActionBarUtil {
     
     public void load() {
         
-        ActionBarUtil.nmsver = Bukkit.getServer().getClass().getPackage().getName();
-        ActionBarUtil.nmsver = ActionBarUtil.nmsver.substring(nmsver.lastIndexOf(".") + 1);
+        nmsver = Bukkit.getServer().getClass().getPackage().getName();
+        nmsver = nmsver.substring(nmsver.lastIndexOf(".") + 1);
     
-        if (ActionBarUtil.nmsver.equalsIgnoreCase("v1_8_R1") || ActionBarUtil.nmsver.startsWith("v1_7_")) ActionBarUtil.useOldMethods = true;
+        if (nmsver.equalsIgnoreCase("v1_8_R1") || nmsver.startsWith("v1_7_")) useOldMethods = true;
     }
     
     public void sendActionBar(final Player player, final String message) {
@@ -36,8 +36,7 @@ public class ActionBarUtil {
         Bukkit.getPluginManager().callEvent(actionBarMessageEvent);
         if (actionBarMessageEvent.isCancelled()) return;
         
-        if (getBukkitVersion() >= 16) {
-            
+        if (BukkitVersionUtil.isOver(15) /* 16+ */) {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
             return;
         }
@@ -83,11 +82,5 @@ public class ActionBarUtil {
             e.printStackTrace();
         }
     }
-    
-    private double getBukkitVersion() {
-        
-        String version = Bukkit.getBukkitVersion().split("-")[0];
-        return Double.parseDouble(version.split("\\.")[1]);
-    }
-    
+
 }

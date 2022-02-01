@@ -352,7 +352,7 @@ public class User {
 
     private int determineUserPing() {
 
-        if (BukkitVersionUtil.is(17) || BukkitVersionUtil.isOver(17))
+        if (BukkitVersionUtil.isEquals(17) || BukkitVersionUtil.isOver(17))
             return this.getPlayer().getPing();
 
         try {

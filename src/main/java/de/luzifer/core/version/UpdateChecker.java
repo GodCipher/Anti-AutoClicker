@@ -16,13 +16,12 @@ public class UpdateChecker {
     private final String currentVersion;
     
     public UpdateCheckerResult checkUpdate() {
-        
-        HttpURLConnection connection;
+
         String latestVersion;
         
         try {
-            
-            connection = (HttpURLConnection) new URL(URL_LINK).openConnection();
+
+            HttpURLConnection connection = (HttpURLConnection) new URL(URL_LINK).openConnection();
             connection.connect();
             
             latestVersion = InputStreamUtils.readLineFromInputStream(connection.getInputStream(), logger);
