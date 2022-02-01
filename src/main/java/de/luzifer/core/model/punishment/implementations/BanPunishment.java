@@ -40,5 +40,6 @@ public class BanPunishment implements Punishment {
         String reason = "§cAnti§4AC \n " + String.join("\n ", reasons).replace("&", "§").replace("%date%", finalDate);
 
         Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), reason, calendar.getTime(), "AntiAC");
+        player.kickPlayer(reason);
     }
 }
