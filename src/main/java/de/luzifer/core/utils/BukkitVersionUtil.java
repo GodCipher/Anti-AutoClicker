@@ -11,10 +11,14 @@ public class BukkitVersionUtil {
     }
 
     public boolean isOver(double version) {
+        return current() > version;
+    }
+
+    public boolean isUnder(double version) {
         return current() < version;
     }
 
-    public boolean is(double version) {
+    public boolean isEquals(double version) {
         return current() == version;
     }
 

@@ -14,7 +14,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -351,7 +350,7 @@ public class User {
 
     private int determineUserPing() {
 
-        if (BukkitVersionUtil.is(17) || BukkitVersionUtil.isOver(17))
+        if (BukkitVersionUtil.isEquals(17) || BukkitVersionUtil.isOver(17))
             return this.getPlayer().getPing();
 
         try {
