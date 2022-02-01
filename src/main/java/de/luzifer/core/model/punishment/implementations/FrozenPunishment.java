@@ -15,12 +15,12 @@ public class FrozenPunishment implements Punishment {
     public void punish(User user) {
         map.put(user.getUuid(), DEFAULT_DURATION);
     }
+    
+    public void punish(User user, int duration) {
+        map.put(user.getUuid(), duration);
+    }
 
     public boolean isPunished(User user) {
         return map.containsKey(user.getUuid());
-    }
-
-    public void punish(User user, int duration) {
-        map.put(user.getUuid(), duration);
     }
 }
