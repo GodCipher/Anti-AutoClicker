@@ -20,7 +20,7 @@ public abstract class Check {
     private boolean activated;
     private boolean loaded;
     
-    public Check() {
+    protected Check() {
         
         logger = Core.getInstance().getLogger();
         
