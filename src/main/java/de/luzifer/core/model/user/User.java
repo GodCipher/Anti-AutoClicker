@@ -14,7 +14,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
@@ -82,7 +81,7 @@ public class User {
         }
         
     }
-    
+
     public static List<User> getAllUser() {
         return allUser;
     }
@@ -160,7 +159,7 @@ public class User {
         this.violations = violations - violationType.getViolations();
     }
     
-    public void clearViolations() {
+    public void resetViolations() {
         this.violations = 0;
     }
     
@@ -250,6 +249,10 @@ public class User {
     public int getPing() {
         return determineUserPing();
     }
+
+    public UUID getUuid() {
+        return this.getPlayer().getUniqueId();
+    }
     
     public boolean isBypassed() {
         return (getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) || getPlayer().isOp()) || getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) && getPlayer().isOp();
@@ -293,13 +296,11 @@ public class User {
         }
         
         informTeam();
-        clearViolations();
+        resetViolations();
     }
     
     private UUID getUniqueID() {
-        
         return uuid;
-        
     }
     
     private void setProfile(Profile profile) {
