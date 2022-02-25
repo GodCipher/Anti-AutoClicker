@@ -15,8 +15,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.ArrayList;
@@ -108,36 +106,6 @@ public class Listeners implements Listener {
     }
     
     @EventHandler
-    public void onConnect(PlayerJoinEvent e) {
-        Player p = e.getPlayer();
-        User user = User.get(p.getUniqueId());
-        
-        if (Variables.autoNotify) {
-            Bukkit.getScheduler().runTaskLater(core, () -> {
-                if (hasSubPermission(p, "notify")) {
-                    
-                    user.setNotified(true);
-                    Variables.NOTIFY_ACTIVATED.forEach(var -> p.sendMessage(Core.prefix + var.replace("&", "§")));
-                }
-            }, 15);
-        }
-    }
-    
-    @EventHandler
-    public void onQuit(PlayerQuitEvent e) {
-        Player p = e.getPlayer();
-        
-        for (Player all : Bukkit.getOnlinePlayers()) {
-            if (User.get(all.getUniqueId()).getChecked() == User.get(p.getUniqueId())) {
-                
-                Variables.PLAYER_NOW_OFFLINE.forEach(var -> all.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", p.getName())));
-                User.get(all.getUniqueId()).setChecked(null);
-            }
-        }
-        User.getAllUser().remove(User.get(p.getUniqueId()));
-    }
-    
-    @EventHandler
     public void onNormalClick(PlayerInteractEvent e) {
     
         if (Variables.bypass)
@@ -185,12 +153,5 @@ public class Listeners implements Listener {
         String version = Bukkit.getBukkitVersion().split("-")[0];
         return Double.parseDouble(version.split("\\.")[1]);
     }
-    
-    private boolean hasSubPermission(Player player, String perms) {
-        return player.hasPermission(Variables.perms + "." + perms) || hasPermission(player);
-    }
-    
-    private boolean hasPermission(Player player) {
-        return player.hasPermission(Variables.perms + ".*") || player.isOp();
-    }
+
 }
