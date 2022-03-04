@@ -5,7 +5,6 @@ import de.luzifer.core.Core;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.pagesystem.Menu;
 import de.luzifer.core.utils.Variables;
-import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -18,7 +17,13 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.ArrayList;
@@ -70,13 +75,6 @@ public class Listeners implements Listener {
     public void onConsume(PlayerItemConsumeEvent e) {
         if (User.get(e.getPlayer().getUniqueId()).isRestricted()) {
             e.setCancelled(true);
-        }
-    }
-    
-    @EventHandler
-    public void onLogin(PlayerLoginEvent e) {
-        if (e.getPlayer().isBanned()) {
-            e.disallow(PlayerLoginEvent.Result.KICK_BANNED, Bukkit.getBanList(BanList.Type.NAME).getBanEntry(e.getPlayer().getName()).getReason());
         }
     }
     
