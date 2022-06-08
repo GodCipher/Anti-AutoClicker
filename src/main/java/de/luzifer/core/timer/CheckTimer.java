@@ -29,9 +29,6 @@ public class CheckTimer implements Runnable {
 
         for(Player all : Bukkit.getOnlinePlayers()) {
 
-            if(Variables.excludeBedrockPlayers && FloodgateApi.getInstance().isFloodgatePlayer(all.getUniqueId()))
-                return;
-
             User user = User.get(all.getUniqueId());
 
             if(user.isFrozen())
@@ -44,17 +41,21 @@ public class CheckTimer implements Runnable {
 
             dataContainer(user);
 
-            int current_clicks = user.getClicks();
-            for(Check check : checkManager.getChecks()) {
-                
-                if(check.isLoaded())
-                    if(check.check(user))
-                        check.onSuccess(user);
-                    else
-                        check.onFailure(user);
-                
-                if(current_clicks != user.getClicks())
-                    throw new IllegalClickModificationException(check);
+            // Just execute the checks on them if the player is NOT a bedrock player
+            if(!(Variables.excludeBedrockPlayers && FloodgateApi.getInstance().isFloodgatePlayer(all.getUniqueId()))) {
+
+                int current_clicks = user.getClicks();
+                for(Check check : checkManager.getChecks()) {
+
+                    if(check.isLoaded())
+                        if(check.check(user))
+                            check.onSuccess(user);
+                        else
+                            check.onFailure(user);
+
+                    if(current_clicks != user.getClicks())
+                        throw new IllegalClickModificationException(check);
+                }
             }
 
             cleanUp(user);
