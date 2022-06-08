@@ -13,7 +13,11 @@ AntiAC:
   # NOTE: <NeededPermission>.* or op still works. With one of those two the player can execute every command.
   # Change <NeededPermission> with whatever you put there. By default: antiac
 
-
+  # Bedrock Settings
+  ExcludeBedrockPlayers: true
+  # Experimental setting to exclude bedrock players since they always false positive.
+  # This is just a "hacky way" to prevent false positives.
+  # NOTE: Only useful for bedrock-supporting servers
 
   # Profile Settings
   Profile-Store-As-Much-Data-In-One-DataContainer: 20

@@ -9,6 +9,8 @@ import de.luzifer.core.api.profile.storage.DataContainer;
 import de.luzifer.core.utils.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.geysermc.floodgate.api.FloodgateApi;
+import org.geysermc.floodgate.api.player.FloodgatePlayer;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -26,6 +28,9 @@ public class CheckTimer implements Runnable {
     public void run() {
 
         for(Player all : Bukkit.getOnlinePlayers()) {
+
+            if(Variables.excludeBedrockPlayers && FloodgateApi.getInstance().isFloodgatePlayer(all.getUniqueId()))
+                return;
 
             User user = User.get(all.getUniqueId());
 
