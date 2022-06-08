@@ -1,6 +1,9 @@
 # The plugin does not perceive clicks on the ground or in the air so well. But clicks against players or entities are generally 100% accurate
 AntiAC:
 
+  # Additional Settings
+  Prefix: "§cAnti§4AC §8» "
+
   # Permission Settings
   NeededPermission: 'antiac'
     # <second-level>.<top-level>

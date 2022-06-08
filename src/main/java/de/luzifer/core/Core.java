@@ -208,7 +208,6 @@ public class Core extends JavaPlugin {
     }
     
     public void initialize() {
-        prefix = "§cAnti§4AC §8» ";
         new Metrics(this, 6473);
         logger.info("Initialize complete");
     }
@@ -223,8 +222,9 @@ public class Core extends JavaPlugin {
         
         getConfig().options().copyDefaults();
         saveDefaultConfig();
-        
-        days = Core.getInstance().getConfig().getInt("AntiAC.DeleteLogsAfterDays");
+
+        prefix = getConfig().getString("AntiAC.Prefix"); // Soon moving to Variables.class
+        days = getConfig().getInt("AntiAC.DeleteLogsAfterDays");
         lowestAllowedTPS = getConfig().getInt("AntiAC.LowestAllowedTPS");
         
         if (getConfig().getBoolean("AntiAC.AutoNotification")) setNotified();
@@ -250,12 +250,12 @@ public class Core extends JavaPlugin {
     
     public void loadActionBar() {
         
-        Core.plugin = this;
+        plugin = this;
         
-        Core.nmsver = Bukkit.getServer().getClass().getPackage().getName();
-        Core.nmsver = Core.nmsver.substring(Core.nmsver.lastIndexOf(".") + 1);
+        nmsver = Bukkit.getServer().getClass().getPackage().getName();
+        nmsver = nmsver.substring(nmsver.lastIndexOf(".") + 1);
         
-        if (Core.nmsver.equalsIgnoreCase("v1_8_R1") || Core.nmsver.startsWith("v1_7_")) Core.useOldMethods = true;
+        if (nmsver.equalsIgnoreCase("v1_8_R1") || Core.nmsver.startsWith("v1_7_")) Core.useOldMethods = true;
         
         logger.info("Loading ActionBarAPI complete");
     }
