@@ -9,63 +9,64 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Variables {
     
-    private static final File file = new File("plugins/AntiAC", "messages.yml");
+    private static final File MESSAGES_FILE = new File("plugins/AntiAC", "messages.yml");
     
-    public static ArrayList<String> PLAYER_OFFLINE = new ArrayList<>();
-    public static ArrayList<String> NOTIFY_ACTIVATED = new ArrayList<>();
-    public static ArrayList<String> NOTIFY_DEACTIVATED = new ArrayList<>();
-    public static ArrayList<String> NOTIFY_ALREADY_ACTIVATED = new ArrayList<>();
-    public static ArrayList<String> NOTIFY_ALREADY_DEACTIVATED = new ArrayList<>();
-    public static ArrayList<String> ON_CLICK_CHECK = new ArrayList<>();
-    public static ArrayList<String> ON_CLICK_CHECK_OFF = new ArrayList<>();
-    public static ArrayList<String> NOT_CHECKING_ANYONE = new ArrayList<>();
-    public static ArrayList<String> BAN_REASON = new ArrayList<>();
-    public static ArrayList<String> KICK_REASON = new ArrayList<>();
-    public static ArrayList<String> PLAYER_NOW_OFFLINE = new ArrayList<>();
-    public static ArrayList<String> PUNISHED = new ArrayList<>();
-    public static ArrayList<String> SHOUTOUT_PUNISHMENT = new ArrayList<>();
-    public static ArrayList<String> TEAM_NOTIFY = new ArrayList<>();
-    public static ArrayList<String> PUNISHED_PLAYER = new ArrayList<>();
+    public static final List<String> PLAYER_OFFLINE = new ArrayList<>();
+    public static final List<String> NOTIFY_ACTIVATED = new ArrayList<>();
+    public static final List<String> NOTIFY_DEACTIVATED = new ArrayList<>();
+    public static final List<String> NOTIFY_ALREADY_ACTIVATED = new ArrayList<>();
+    public static final List<String> NOTIFY_ALREADY_DEACTIVATED = new ArrayList<>();
+    public static final List<String> ON_CLICK_CHECK = new ArrayList<>();
+    public static final List<String> ON_CLICK_CHECK_OFF = new ArrayList<>();
+    public static final List<String> NOT_CHECKING_ANYONE = new ArrayList<>();
+    public static final List<String> BAN_REASON = new ArrayList<>();
+    public static final List<String> KICK_REASON = new ArrayList<>();
+    public static final List<String> PLAYER_NOW_OFFLINE = new ArrayList<>();
+    public static final List<String> PUNISHED = new ArrayList<>();
+    public static final List<String> SHOUTOUT_PUNISHMENT = new ArrayList<>();
+    public static final List<String> TEAM_NOTIFY = new ArrayList<>();
+    public static final List<String> PUNISHED_PLAYER = new ArrayList<>();
     
     public static String executeBanCommand, executeKickCommand, perms;
     
     public static boolean consoleNotify, log, playerBan, shoutOutPunishment, informTeam, playerKick, playerKill, playerFreeze, restrictPlayer, bypass, pingChecker, autoNotify, doNotStoreNothing;
     
-    public static int unbanAfterHours, freezeTimeInSeconds, highestAllowedPing, clearVLMinutes, storeAsManyData, removeAfterExist, sanctionateAtViolations;
+    public static int restrictForSeconds, unbanAfterHours, freezeTimeInSeconds, highestAllowedPing, clearVLMinutes, storeAsManyData, removeAfterExist, sanctionateAtViolations;
     
     public static void init() {
         
-        PLAYER_OFFLINE = new ArrayList<>();
-        NOTIFY_ACTIVATED = new ArrayList<>();
-        NOTIFY_DEACTIVATED = new ArrayList<>();
-        NOTIFY_ALREADY_ACTIVATED = new ArrayList<>();
-        NOTIFY_ALREADY_DEACTIVATED = new ArrayList<>();
-        ON_CLICK_CHECK = new ArrayList<>();
-        ON_CLICK_CHECK_OFF = new ArrayList<>();
-        NOT_CHECKING_ANYONE = new ArrayList<>();
-        BAN_REASON = new ArrayList<>();
-        KICK_REASON = new ArrayList<>();
-        PLAYER_NOW_OFFLINE = new ArrayList<>();
-        PUNISHED = new ArrayList<>();
-        SHOUTOUT_PUNISHMENT = new ArrayList<>();
-        TEAM_NOTIFY = new ArrayList<>();
-        PUNISHED_PLAYER = new ArrayList<>();
+        PLAYER_OFFLINE.clear();
+        NOTIFY_ACTIVATED.clear();
+        NOTIFY_DEACTIVATED.clear();
+        NOTIFY_ALREADY_ACTIVATED.clear();
+        NOTIFY_ALREADY_DEACTIVATED.clear();
+        ON_CLICK_CHECK.clear();
+        ON_CLICK_CHECK_OFF.clear();
+        NOT_CHECKING_ANYONE.clear();
+        BAN_REASON.clear();
+        KICK_REASON.clear();
+        PLAYER_NOW_OFFLINE.clear();
+        PUNISHED.clear();
+        SHOUTOUT_PUNISHMENT.clear();
+        TEAM_NOTIFY.clear();
+        PUNISHED_PLAYER.clear();
         
-        if (!file.exists()) {
+        if (!MESSAGES_FILE.exists()) {
             try {
-                FileUtils.copyInputStreamToFile(Core.getInstance().getResource("messages.yml"), file);
+                FileUtils.copyInputStreamToFile(Core.getInstance().getResource("messages.yml"), MESSAGES_FILE);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(MESSAGES_FILE);
         
         try {
-            cfg.load(file);
+            cfg.load(MESSAGES_FILE);
         } catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
         }
@@ -114,6 +115,7 @@ public class Variables {
     }
     
     private static void configInts() {
+        restrictForSeconds = Core.getInstance().getConfig().getInt("AntiAC.RestrictForSeconds");
         unbanAfterHours = Core.getInstance().getConfig().getInt("AntiAC.UnbanAfterHours");
         freezeTimeInSeconds = Core.getInstance().getConfig().getInt("AntiAC.FreezeTimeInSeconds");
         highestAllowedPing = Core.getInstance().getConfig().getInt("AntiAC.HighestAllowedPing");

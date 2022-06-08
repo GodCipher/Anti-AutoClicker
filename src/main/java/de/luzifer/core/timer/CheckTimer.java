@@ -97,10 +97,6 @@ public class CheckTimer implements Runnable {
             user.clearViolations = 0;
         }
 
-        if(user.isRestricted()) {
-            user.setRestricted(false);
-        }
-
         user.setClicks(0);
     }
 

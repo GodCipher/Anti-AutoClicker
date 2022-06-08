@@ -199,6 +199,11 @@ public class User {
     public void setRestricted(boolean restricted) {
         this.restricted = restricted;
     }
+
+    public void setRestricted(boolean restricted, int duration) {
+        this.setRestricted(restricted);
+        Bukkit.getScheduler().runTaskLater(Core.getInstance(), () -> this.setRestricted(!restricted), 20 * duration);
+    }
     
     public boolean isRestricted() {
         return restricted;
@@ -264,7 +269,7 @@ public class User {
     }
     
     public boolean isBypassed() {
-        return (getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) || getPlayer().isOp()) || getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) && getPlayer().isOp();
+        return getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) || getPlayer().isOp() || getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) && getPlayer().isOp();
     }
     
     public void sanction(Check check) {
@@ -289,17 +294,14 @@ public class User {
             
             if (!isFrozen()) {
                 
-                setFrozen(true);
-                
+                setFrozen(true, Variables.freezeTimeInSeconds);
                 Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
-                Bukkit.getScheduler().runTaskLater(Core.getInstance(), () -> setFrozen(false), 20L * Variables.freezeTimeInSeconds);
             }
         } else if (Variables.restrictPlayer) {
             
             if (!isRestricted()) {
                 
-                setRestricted(true);
-        
+                setRestricted(true, Variables.restrictForSeconds);
                 Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
             }
         }

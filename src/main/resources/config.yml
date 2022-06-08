@@ -115,6 +115,9 @@ AntiAC:
   # If a player got discovered for AutoClicker he can't build & place blocks and can't hit entities
   # Will just restrict the player when his clicks are too high or the average is too equal
 
+  RestrictForSeconds: 10
+  # This will be the amount of time in seconds the player will be restricted from any actions.
+
   PlayerFreeze: false
   # If a player got discovered for AutoClicker he gets frozen
   # PlayerFreeze overwrites RestrictPlayer
