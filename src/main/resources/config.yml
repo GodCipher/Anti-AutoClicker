@@ -17,10 +17,11 @@ AntiAC:
   # Change <NeededPermission> with whatever you put there. By default: antiac
 
   # Bedrock Settings
-  ExcludeBedrockPlayers: true
+  ExcludeBedrockPlayers: false
   # Experimental setting to exclude bedrock players since they always false positive.
   # This is just a "hacky way" to prevent false positives.
-  # NOTE: Only useful for bedrock-supporting servers
+  # NOTE: Only useful for bedrock-supporting servers using GeyserMC
+  # This should not be set to true if GeyserMC is not installed.
 
   # Profile Settings
   Profile-Store-As-Much-Data-In-One-DataContainer: 20
