@@ -10,9 +10,7 @@ import de.luzifer.core.utils.Variables;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.geysermc.floodgate.api.FloodgateApi;
-import org.geysermc.floodgate.api.player.FloodgatePlayer;
 
-import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -42,7 +40,7 @@ public class CheckTimer implements Runnable {
             dataContainer(user);
 
             // Just execute the checks on them if the player is NOT a bedrock player
-            if(!(Variables.excludeBedrockPlayers && FloodgateApi.getInstance().isFloodgatePlayer(all.getUniqueId()))) {
+            if(!(Variables.excludeBedrockPlayers || FloodgateApi.getInstance().isFloodgatePlayer(all.getUniqueId()))) {
 
                 int current_clicks = user.getClicks();
                 for(Check check : checkManager.getChecks()) {
