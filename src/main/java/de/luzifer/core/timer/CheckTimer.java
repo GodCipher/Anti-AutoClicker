@@ -40,7 +40,7 @@ public class CheckTimer implements Runnable {
             dataContainer(user);
 
             // Just execute the checks on them if the player is NOT a bedrock player
-            if(!(Variables.excludeBedrockPlayers || FloodgateApi.getInstance().isFloodgatePlayer(all.getUniqueId()))) {
+            if(!(Variables.excludeBedrockPlayers && FloodgateApi.getInstance().isFloodgatePlayer(all.getUniqueId()))) {
 
                 int current_clicks = user.getClicks();
                 for(Check check : checkManager.getChecks()) {
