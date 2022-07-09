@@ -1,12 +1,11 @@
 package de.luzifer.core.commands;
 
 import de.luzifer.core.Core;
-import de.luzifer.core.api.check.CheckManager;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.LogGUI;
 import de.luzifer.core.api.profile.inventory.ProfileGUI;
-import de.luzifer.core.version.UpdateChecker;
 import de.luzifer.core.utils.Variables;
+import de.luzifer.core.version.UpdateChecker;
 import de.luzifer.core.version.UpdateCheckerResult;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -235,18 +234,19 @@ public class AntiACCommand implements CommandExecutor {
             
             if (hasSubPermission(p, s)) {
                 
+                StringBuilder stringBuilder = new StringBuilder(s);
                 switch (s) {
                     case "profile":
                     case "check":
                     case "punish":
-                        s += " <player>";
+                        stringBuilder.append(" <player>");
                         break;
                     case "notify":
-                        s += " <on/off>";
+                        stringBuilder.append(" <on/off>");
                         break;
                 }
                 
-                p.sendMessage(prefix + "§6/antiac " + s);
+                p.sendMessage(prefix + "§6/antiac " + stringBuilder + " §8[" + Variables.perms + "." + s + "§8]");
                 count++;
             }
         }
