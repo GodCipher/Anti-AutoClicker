@@ -15,8 +15,8 @@ import org.bukkit.entity.Player;
 
 public class AntiACCommand implements CommandExecutor {
     
-    private final String[] subCommands = {"version", "checkupdate", "logs", "reload", "profile", "check", "punish", "notify"};
-    private final String prefix = Core.prefix;
+    private static final String[] SUB_COMMANDS = {"version", "checkupdate", "logs", "reload", "profile", "check", "punish", "notify"};
+    private static final String PREFIX = Core.prefix;
     
     private final Core core;
     private final UpdateChecker updateChecker;
@@ -49,7 +49,7 @@ public class AntiACCommand implements CommandExecutor {
                     
                     Variables.init();
                     
-                    sender.sendMessage(prefix + "§7Config, Checks & Messages reloaded!");
+                    sender.sendMessage(PREFIX + "§7Config, Checks & Messages reloaded!");
                     return true;
                 } else if (args[0].equalsIgnoreCase("logs")) {
                     
@@ -161,7 +161,7 @@ public class AntiACCommand implements CommandExecutor {
                             Variables.NOTIFY_ALREADY_DEACTIVATED.forEach(var -> player.sendMessage(Core.prefix + var.replace("&", "§")));
                         }
                     } else {
-                        player.sendMessage(prefix + "§6/antiac notify <ON/OFF>");
+                        player.sendMessage(PREFIX + "§6/antiac notify <ON/OFF>");
                     }
                     return true;
                 } else if (args[0].equalsIgnoreCase("check")) {
@@ -230,7 +230,7 @@ public class AntiACCommand implements CommandExecutor {
     private void sendCommands(CommandSender p) {
         
         int count = 0;
-        for (String s : subCommands) {
+        for (String s : SUB_COMMANDS) {
             
             if (hasSubPermission(p, s)) {
                 
@@ -246,7 +246,7 @@ public class AntiACCommand implements CommandExecutor {
                         break;
                 }
                 
-                p.sendMessage(prefix + "§6/antiac " + stringBuilder + " §8[" + Variables.perms + "." + s + "§8]");
+                p.sendMessage(PREFIX + "§6/antiac " + stringBuilder + " §8[" + Variables.perms + "." + s + "§8]");
                 count++;
             }
         }

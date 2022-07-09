@@ -15,8 +15,8 @@ import java.util.List;
 
 public class AntiACCommandTabCompleter implements TabCompleter {
     
-    private final String[] ARGS = {"check", "version", "notify", "checkupdate", "profile", "logs", "reload", "punish"};
-    private final String[] ARGS2 = {"on", "off"};
+    private static final String[] ARGS = {"check", "version", "notify", "checkupdate", "profile", "logs", "reload", "punish"};
+    private static final String[] ARGS2 = {"on", "off"};
     
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
