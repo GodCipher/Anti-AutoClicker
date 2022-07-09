@@ -33,9 +33,15 @@ import java.util.UUID;
 
 public class Listeners implements Listener {
     
+    private static final XMaterial[] INTERACTIVE_MATERIALS = {
+            XMaterial.FISHING_ROD, XMaterial.EGG, XMaterial.SNOWBALL, XMaterial.ENDER_PEARL, XMaterial.ENDER_EYE,
+            XMaterial.SPLASH_POTION, XMaterial.LINGERING_POTION, XMaterial.EXPERIENCE_BOTTLE
+    };
+    
     private final Core core;
     
-    private final List<UUID> rod_click = new ArrayList<>();
+    // not really a good name
+    private final List<UUID> recently_clicked = new ArrayList<>();
     
     public Listeners(Core core) {
         this.core = core;
@@ -213,12 +219,22 @@ public class Listeners implements Listener {
         if (User.get(e.getPlayer().getUniqueId()).isRestricted())
             e.setCancelled(true);
     
-        if (getBukkitVersion() > 8)
-            if (e.getHand() == EquipmentSlot.OFF_HAND) return;
+        if (getBukkitVersion() > 8 && e.getHand() == EquipmentSlot.OFF_HAND)
+            return;
             
-        if(e.getItem() != null && e.getItem().getType() == XMaterial.FISHING_ROD.parseMaterial())
-            if(cancelledDuplicateRodClick(e.getPlayer().getUniqueId(), e.getAction()))
+        if(e.getItem() != null) {
+            
+            boolean isInteractiveItem = false;
+            for(XMaterial material : INTERACTIVE_MATERIALS) {
+                if(e.getItem().getType() == material.parseMaterial()) {
+                    isInteractiveItem = true;
+                    break;
+                }
+            }
+            
+            if(isInteractiveItem && cancelDuplicateClick(e.getPlayer().getUniqueId(), e.getAction()))
                 return;
+        }
         
         if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             
@@ -234,17 +250,15 @@ public class Listeners implements Listener {
         }
     }
     
-    private boolean cancelledDuplicateRodClick(UUID uuid, Action action) {
-        
-        if(action == Action.RIGHT_CLICK_AIR) {
-            rod_click.add(uuid);
-        } else if(action == Action.LEFT_CLICK_AIR) {
-            
-            if(rod_click.contains(uuid)) {
-                rod_click.remove(uuid);
-                return true;
-            }
+    private boolean cancelDuplicateClick(UUID uuid, Action action) {
+    
+        if(recently_clicked.contains(uuid)) {
+            recently_clicked.remove(uuid);
+            return true;
         }
+        
+        if(action == Action.RIGHT_CLICK_AIR)
+            recently_clicked.add(uuid);
         
         return false;
     }
