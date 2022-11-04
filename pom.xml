@@ -24,7 +24,7 @@
                     <finalName>Anti-AutoClicker</finalName>
                     <archive>
                         <manifest>
-                            <mainClass>dev.luzifer.Main</mainClass>
+                            <mainClass>de.luzifer.core.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
