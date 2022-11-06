@@ -40,9 +40,9 @@ public class Core extends JavaPlugin {
     
     public static String prefix;
     
-    public static boolean lowTPS = false;
+    public static boolean lowTps = false;
     
-    public static double TPS = 0;
+    public static double tps = 0;
     
     private static Plugin plugin;
     private static String nmsver;
@@ -173,14 +173,14 @@ public class Core extends JavaPlugin {
             Tick++;
             if (Tick == 20) {
                 
-                TPS = Tick;
+                tps = Tick;
                 Tick = 0;
                 
                 if (LastFinish + 1000 < System.currentTimeMillis())
-                    TPS /= (System.currentTimeMillis() - LastFinish) / 1000;
+                    tps /= (System.currentTimeMillis() - LastFinish) / 1000;
                 
                 LastFinish = System.currentTimeMillis();
-                lowTPS = TPS < lowestAllowedTPS;
+                lowTps = tps < lowestAllowedTPS;
             }
         }, 1, 1);
     }

@@ -35,7 +35,7 @@ public class Listeners implements Listener {
     
     private static final XMaterial[] INTERACTIVE_MATERIALS = {
             XMaterial.FISHING_ROD, XMaterial.EGG, XMaterial.SNOWBALL, XMaterial.ENDER_PEARL, XMaterial.ENDER_EYE,
-            XMaterial.SPLASH_POTION, XMaterial.LINGERING_POTION, XMaterial.EXPERIENCE_BOTTLE
+            XMaterial.SPLASH_POTION, XMaterial.LINGERING_POTION, XMaterial.EXPERIENCE_BOTTLE, XMaterial.FIREWORK_ROCKET
     };
     
     private final Core core;
@@ -107,7 +107,7 @@ public class Listeners implements Listener {
         if (User.get(e.getPlayer().getUniqueId()).isRestricted())
             e.setCancelled(true);
         
-        if (!Core.lowTPS) {
+        if (!Core.lowTps) {
             if (Variables.pingChecker) {
                 if (!(User.get(e.getPlayer().getUniqueId()).getPing() >= Variables.highestAllowedPing)) {
                     if (User.get(e.getPlayer().getUniqueId()).getLastRightClick() == null) {
@@ -159,7 +159,7 @@ public class Listeners implements Listener {
                     if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) return;
                 }
                 
-                if (!Core.lowTPS) {
+                if (!Core.lowTps) {
                     if (Variables.pingChecker) {
                         if (!(User.get(player.getUniqueId()).getPing() >= Variables.highestAllowedPing)) {
                             User.get(player.getUniqueId()).addClicks(1);
@@ -238,7 +238,7 @@ public class Listeners implements Listener {
         
         if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             
-            if (!Core.lowTPS) {
+            if (!Core.lowTps) {
                 if (Variables.pingChecker) {
                     if (!(User.get(e.getPlayer().getUniqueId()).getPing() >= Variables.highestAllowedPing)) {
                         User.get(e.getPlayer().getUniqueId()).addClicks(1);

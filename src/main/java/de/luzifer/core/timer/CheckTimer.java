@@ -70,7 +70,7 @@ public class CheckTimer implements Runnable {
             message2 = " §e§l-> §cClicks : §7§l" + user.getChecked().getClicks()+ " §6Average : §6§l" + user.getChecked().getAverage();
             message2 = message2 + " §6VL: §e" + user.getChecked().getViolations();
 
-            if(Core.lowTPS)
+            if(Core.lowTps)
                 message2 = " §e§l-> §c§lCannot be checked -> §4§lLowTPS";
 
             if(Variables.pingChecker)
