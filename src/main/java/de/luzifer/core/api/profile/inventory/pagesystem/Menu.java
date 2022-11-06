@@ -23,7 +23,6 @@ public abstract class Menu implements InventoryHolder {
     public void fill() {
         ItemStack fill = new ItemStack(Objects.requireNonNull(XMaterial.WHITE_STAINED_GLASS_PANE.parseMaterial()), 1, (byte) 15);
         ItemMeta fillMeta = fill.getItemMeta();
-        assert fillMeta != null;
         fillMeta.setDisplayName("§9");
         fill.setItemMeta(fillMeta);
         fill(inv, fill);

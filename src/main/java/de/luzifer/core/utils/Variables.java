@@ -1,13 +1,15 @@
 package de.luzifer.core.utils;
 
 import de.luzifer.core.Core;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +59,7 @@ public class Variables {
         
         if (!MESSAGES_FILE.exists()) {
             try {
-                FileUtils.copyInputStreamToFile(Core.getInstance().getResource("messages.yml"), MESSAGES_FILE);
+                copyInputStreamToFile(Core.getInstance().getResource("messages.yml"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -124,6 +126,20 @@ public class Variables {
         storeAsManyData = Core.getInstance().getConfig().getInt("AntiAC.Profile-Store-As-Much-Data-In-One-DataContainer");
         removeAfterExist = Core.getInstance().getConfig().getInt("AntiAC.Remove-First-DataContainer-After-X-Exist");
         sanctionateAtViolations = Core.getInstance().getConfig().getInt("AntiAC.Just-Sanction-If-At-Violations");
+    }
+
+    private static void copyInputStreamToFile(InputStream in) throws IOException {
+
+        if(in == null)
+            return;
+
+        try (OutputStream out = Files.newOutputStream(Variables.MESSAGES_FILE.toPath())) {
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+        }
     }
     
 }

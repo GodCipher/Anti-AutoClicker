@@ -1,11 +1,9 @@
 package de.luzifer.core.checks;
 
-import de.luzifer.core.Core;
 import de.luzifer.core.api.check.Check;
 import de.luzifer.core.api.enums.ViolationType;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.utils.Variables;
-import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;

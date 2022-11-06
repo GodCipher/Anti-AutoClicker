@@ -11,7 +11,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.*;
 
@@ -100,8 +99,7 @@ public class ProfileGUI extends PaginatedMenu {
         assert meta != null;
         meta.setDisplayName("§cDataContainer §8" + UUID.randomUUID().toString().split("(?<=\\G.{5})")[0]);
         ArrayList<String> lore = new ArrayList<>();
-        PrettyTime pr = new PrettyTime();
-        lore.add("§6Data from: §e" + pr.format(dataContainers.get(index).getFinishedAt()));
+        lore.add("§6Data from: §e" + prettyTime(dataContainers.get(index).getFinishedAt()));
         lore.add("§6Data collected: §e" + Variables.storeAsManyData);
         lore.add("");
         lore.add("§6Clicks                  §6Averages");
@@ -146,6 +144,32 @@ public class ProfileGUI extends PaginatedMenu {
             
             inv.setItem(53, forward);
         }
+    }
+
+    private String prettyTime(Date date) {
+
+        long diff = new Date().getTime() - date.getTime();
+
+        long seconds = diff / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+        long days = hours / 24;
+
+        StringBuilder time = new StringBuilder();
+
+        if (days > 0)
+            time.append(days).append(" days, ");
+
+        if (hours > 0)
+            time.append(hours % 24).append(" hours, ");
+
+        if (minutes > 0)
+            time.append(minutes % 60).append(" minutes and ");
+
+        if (seconds > 0)
+            time.append(seconds % 60).append(" seconds");
+
+        return time.toString();
     }
     
 }
