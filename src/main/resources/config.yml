@@ -1,4 +1,3 @@
-# The plugin does not perceive clicks on the ground or in the air so well. But clicks against players or entities are generally 100% accurate
 AntiAC:
 
   # Additional Settings
@@ -29,6 +28,11 @@ AntiAC:
   # If it reached this amount, the DataContainer will be closed, posted to the profile and a new will be created
   # Storing per second
   # NOTE: Too much data in one DataContainer could glitch out of the minecraft window at a too little screen or cause other bugs
+
+  # AntiAC Settings
+  CountClicksOnBlocks: false
+  # Whether clicks on blocks should be counted too
+  # NOTE: This is not recommended since it could cause false positives (!)
 
   Remove-First-DataContainer-After-X-Exist: 10
   # Removes the first set DataContainer after X DataContainer exist

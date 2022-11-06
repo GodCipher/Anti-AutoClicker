@@ -35,7 +35,7 @@ public class Variables {
     
     public static String executeBanCommand, executeKickCommand, perms;
     
-    public static boolean excludeBedrockPlayers, consoleNotify, log, playerBan, shoutOutPunishment, informTeam, playerKick, playerKill, playerFreeze, restrictPlayer, bypass, pingChecker, autoNotify, doNotStoreNothing;
+    public static boolean excludeBedrockPlayers, clicksOnGround, consoleNotify, log, playerBan, shoutOutPunishment, informTeam, playerKick, playerKill, playerFreeze, restrictPlayer, bypass, pingChecker, autoNotify, doNotStoreNothing;
     
     public static int restrictForSeconds, unbanAfterHours, freezeTimeInSeconds, highestAllowedPing, clearVLMinutes, storeAsManyData, removeAfterExist, sanctionateAtViolations;
     
@@ -102,6 +102,7 @@ public class Variables {
     
     private static void configBooleans() {
         excludeBedrockPlayers = Core.getInstance().getConfig().getBoolean("AntiAC.ExcludeBedrockPlayers");
+        clicksOnGround = Core.getInstance().getConfig().getBoolean("AntiAC.CountClicksOnBlocks");
         informTeam = Core.getInstance().getConfig().getBoolean("AntiAC.InformTeam");
         consoleNotify = Core.getInstance().getConfig().getBoolean("AntiAC.ConsoleNotification");
         log = Core.getInstance().getConfig().getBoolean("AntiAC.Log");

@@ -236,7 +236,10 @@ public class Listeners implements Listener {
                 return;
         }
         
-        if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+        if (e.getAction() == Action.LEFT_CLICK_AIR
+                || e.getAction() == Action.RIGHT_CLICK_AIR
+                || e.getAction() == Action.RIGHT_CLICK_BLOCK
+                || (Variables.clicksOnGround && e.getAction() == Action.LEFT_CLICK_BLOCK)) {
             
             if (!Core.lowTps) {
                 if (Variables.pingChecker) {
