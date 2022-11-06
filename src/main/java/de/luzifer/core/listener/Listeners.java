@@ -1,14 +1,15 @@
 package de.luzifer.core.listener;
 
-import com.cryptomorin.xseries.XMaterial;
 import de.luzifer.core.Core;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.pagesystem.Menu;
 import de.luzifer.core.utils.Variables;
+import de.luzifer.core.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -26,8 +27,11 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -40,7 +44,6 @@ public class Listeners implements Listener {
     
     private final Core core;
     
-    // not really a good name
     private final List<UUID> recently_clicked = new ArrayList<>();
     
     public Listeners(Core core) {
@@ -144,9 +147,14 @@ public class Listeners implements Listener {
     
     @EventHandler
     public void onEntityHit(EntityDamageByEntityEvent e) {
+
         if (e.getDamager() instanceof Player && !e.getDamager().hasMetadata("NPC")) {
             if (e.getEntity() instanceof LivingEntity) {
+
                 Player player = (Player) e.getDamager();
+
+                if(hasTriggeredEventRecently(player, e))
+                    return;
   
                 if (Variables.bypass)
                     if ((player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp()) || player.hasPermission(Objects.requireNonNull(Variables.perms)) && player.isOp())
@@ -265,6 +273,35 @@ public class Listeners implements Listener {
         
         return false;
     }
+
+    private static final Map<UUID, EventInformation> triggeredEventMap = new HashMap<>();
+
+    // Checks if the given player has triggered the given event within the past 0~1 ms
+    private boolean hasTriggeredEventRecently(Player player, Event event) {
+
+        EventInformation eventInformation = triggeredEventMap.get(player.getUniqueId());
+
+        if (eventInformation == null) {
+
+            eventInformation = new EventInformation(event.getClass(), new Timestamp(System.currentTimeMillis()));
+            triggeredEventMap.put(player.getUniqueId(), eventInformation);
+
+            return false;
+        }
+
+        if (eventInformation.getEventClass() != event.getClass()) {
+
+            eventInformation = new EventInformation(event.getClass(), new Timestamp(System.currentTimeMillis()));
+            triggeredEventMap.put(player.getUniqueId(), eventInformation);
+
+            return false;
+        }
+
+        Timestamp lastTriggered = eventInformation.getTimestamp();
+        triggeredEventMap.put(player.getUniqueId(), null); // reset the event information since we pop it
+
+        return lastTriggered.getTime() + 1 >= System.currentTimeMillis();
+    }
     
     private double getBukkitVersion() {
         
@@ -278,5 +315,24 @@ public class Listeners implements Listener {
     
     private boolean hasPermission(Player player) {
         return player.hasPermission(Variables.perms + ".*") || player.isOp();
+    }
+
+    private static class EventInformation {
+
+        private final Class<? extends Event> eventClass;
+        private final Timestamp timestamp;
+
+        public EventInformation(Class<? extends Event> eventClass, Timestamp timestamp) {
+            this.eventClass = eventClass;
+            this.timestamp = timestamp;
+        }
+
+        public Class<? extends Event> getEventClass() {
+            return eventClass;
+        }
+
+        public Timestamp getTimestamp() {
+            return timestamp;
+        }
     }
 }

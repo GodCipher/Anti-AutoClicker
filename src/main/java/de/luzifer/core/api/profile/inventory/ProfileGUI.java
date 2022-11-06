@@ -1,18 +1,22 @@
 package de.luzifer.core.api.profile.inventory;
 
-import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.Lists;
 import de.luzifer.core.api.player.User;
 import de.luzifer.core.api.profile.inventory.pagesystem.PaginatedMenu;
 import de.luzifer.core.api.profile.storage.DataContainer;
 import de.luzifer.core.utils.Variables;
+import de.luzifer.core.xseries.XMaterial;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class ProfileGUI extends PaginatedMenu {
     
@@ -169,7 +173,7 @@ public class ProfileGUI extends PaginatedMenu {
         if (seconds > 0)
             time.append(seconds % 60).append(" seconds");
 
-        return time.toString();
+        return time.append(" ago").toString();
     }
     
 }

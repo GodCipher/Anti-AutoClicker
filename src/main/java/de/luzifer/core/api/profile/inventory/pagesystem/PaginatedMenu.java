@@ -1,6 +1,6 @@
 package de.luzifer.core.api.profile.inventory.pagesystem;
 
-import com.cryptomorin.xseries.XMaterial;
+import de.luzifer.core.xseries.XMaterial;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
