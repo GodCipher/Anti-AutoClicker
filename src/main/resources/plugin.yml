@@ -1,7 +1,7 @@
 name: AntiAC
-author: Luziferium
+author: GodCipher
 version: ${project.version}
-main: de.luzifer.core.Core
+main: dev.luzifer.antiac.Core
 api-version: 1.13
 
 commands:
