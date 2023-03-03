@@ -3,6 +3,7 @@ package dev.luzifer.antiac.api.player;
 import dev.luzifer.antiac.Core;
 import dev.luzifer.antiac.api.check.Check;
 import dev.luzifer.antiac.api.enums.ViolationType;
+import dev.luzifer.antiac.api.events.FlagEvent;
 import dev.luzifer.antiac.api.log.Log;
 import dev.luzifer.antiac.api.profile.Profile;
 import dev.luzifer.antiac.checks.DoubleClickCheck;
@@ -279,7 +280,9 @@ public class User {
         
         if (Variables.log)
             Log.log(getPlayer(), getClicks(), getAverage(), check);
-    
+
+        Bukkit.getPluginManager().callEvent(new FlagEvent(getPlayer(), getClicks(), getAverage(), getViolations()));
+
         shoutOutPunishment();
     
         if (Variables.playerBan) {
