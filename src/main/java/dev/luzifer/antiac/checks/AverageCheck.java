@@ -55,13 +55,10 @@ public class AverageCheck extends Check {
                     if(d != db)
                         return false;
             } else {
-                
                 return false;
             }
-            
             return true;
         }
-        
         return false;
     }
     

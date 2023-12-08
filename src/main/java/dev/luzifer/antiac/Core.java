@@ -1,8 +1,12 @@
 package dev.luzifer.antiac;
 
+import com.github.retrooper.packetevents.PacketEvents;
+import com.github.retrooper.packetevents.event.EventManager;
+import com.github.retrooper.packetevents.event.PacketListenerPriority;
+import com.github.retrooper.packetevents.util.TimeStampMode;
 import dev.luzifer.antiac.api.check.Check;
-import dev.luzifer.antiac.api.events.ActionBarMessageEvent;
 import dev.luzifer.antiac.api.check.CheckManager;
+import dev.luzifer.antiac.api.events.ActionBarMessageEvent;
 import dev.luzifer.antiac.api.player.User;
 import dev.luzifer.antiac.api.profile.inventory.pagesystem.Menu;
 import dev.luzifer.antiac.checks.AverageCheck;
@@ -12,18 +16,18 @@ import dev.luzifer.antiac.checks.LevelCheck;
 import dev.luzifer.antiac.commands.AntiACCommand;
 import dev.luzifer.antiac.commands.AntiACCommandTabCompleter;
 import dev.luzifer.antiac.extern.Metrics;
+import dev.luzifer.antiac.listener.InteractEntityPacketListener;
 import dev.luzifer.antiac.listener.Listeners;
 import dev.luzifer.antiac.timer.CheckTimer;
 import dev.luzifer.antiac.timer.UpdateTimer;
 import dev.luzifer.antiac.utils.InputStreamUtils;
 import dev.luzifer.antiac.utils.Variables;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.InputStream;
@@ -44,7 +48,6 @@ public class Core extends JavaPlugin {
     
     public static double tps = 0;
     
-    private static Plugin plugin;
     private static String nmsver;
     private static boolean useOldMethods;
     
@@ -128,28 +131,7 @@ public class Core extends JavaPlugin {
             e.printStackTrace();
         }
     }
-    
-    public static void sendActionBar(final Player player, final String message, int duration) {
-        sendActionBar(player, message);
-        if (duration >= 0) {
-            new BukkitRunnable() {
-                
-                public void run() {
-                    Core.sendActionBar(player, "");
-                }
-            }.runTaskLaterAsynchronously(Core.plugin, duration + 1);
-        }
-        while (duration > 40) {
-            duration -= 40;
-            new BukkitRunnable() {
-                
-                public void run() {
-                    Core.sendActionBar(player, message);
-                }
-            }.runTaskLaterAsynchronously(Core.plugin, duration);
-        }
-    }
-    
+
     private static double getBukkitVersion() {
         
         String version = Bukkit.getBukkitVersion().split("-")[0];
@@ -193,8 +175,21 @@ public class Core extends JavaPlugin {
             if (all.getOpenInventory().getTopInventory().getHolder() instanceof Menu) all.closeInventory();
         }
     }
-    
+
+    @Override
+    public void onLoad() {
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+        PacketEvents.getAPI().load();
+    }
+
     public void onEnable() {
+        PacketEvents.getAPI().getSettings()
+                .debug(false)
+                .bStats(false)
+                .checkForUpdates(false)
+                .timeStampMode(TimeStampMode.MILLIS)
+                .reEncodeByDefault(true);
+        PacketEvents.getAPI().init();
         
         core = this;
         initialize();
@@ -203,8 +198,16 @@ public class Core extends JavaPlugin {
         loadChecks();
         loadMessages();
         loadListener();
+        registerProtocolListener();
         loadCommands();
         loadActionBar();
+    }
+
+    private void registerProtocolListener() {
+        EventManager eventManager = PacketEvents.getAPI().getEventManager();
+        eventManager.registerListener(new InteractEntityPacketListener(), PacketListenerPriority.NORMAL);
+
+        logger.info("Registered Packet Listener");
     }
     
     public void initialize() {
@@ -249,8 +252,6 @@ public class Core extends JavaPlugin {
     }
     
     public void loadActionBar() {
-        
-        plugin = this;
         
         nmsver = Bukkit.getServer().getClass().getPackage().getName();
         nmsver = nmsver.substring(nmsver.lastIndexOf(".") + 1);

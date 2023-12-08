@@ -16,7 +16,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -60,7 +59,6 @@ public class Listeners implements Listener {
                 
                 Variables.PLAYER_NOW_OFFLINE.forEach(var -> all.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", p.getName())));
                 User.get(all.getUniqueId()).setChecked(null);
-                
             }
         }
         User.getAllUser().remove(User.get(p.getUniqueId()));
@@ -96,90 +94,50 @@ public class Listeners implements Listener {
             menu.handleEvent(e);
         }
     }
-    
+
     @EventHandler
     public void onEntityClick(PlayerInteractAtEntityEvent e) {
-    
-        if (Variables.bypass)
-            if ((e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) || e.getPlayer().isOp()) || e.getPlayer().hasPermission(Objects.requireNonNull(Variables.perms)) && e.getPlayer().isOp())
-                return;
-            
-        if (getBukkitVersion() > 8)
-            if (e.getHand() == EquipmentSlot.OFF_HAND) return;
-    
-        if (User.get(e.getPlayer().getUniqueId()).isRestricted())
+        Player player = e.getPlayer();
+        User user = User.get(player.getUniqueId());
+
+        if (Variables.bypass &&
+                (player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp())) {
+            return;
+        }
+
+        if (getBukkitVersion() > 8 && e.getHand() == EquipmentSlot.OFF_HAND) {
+            return;
+        }
+
+        if (user.isRestricted()) {
             e.setCancelled(true);
-        
-        if (!Core.lowTps) {
-            if (Variables.pingChecker) {
-                if (!(User.get(e.getPlayer().getUniqueId()).getPing() >= Variables.highestAllowedPing)) {
-                    if (User.get(e.getPlayer().getUniqueId()).getLastRightClick() == null) {
-                        User.get(e.getPlayer().getUniqueId()).setLastRightClick(System.currentTimeMillis());
-                    }
-                    if (User.get(e.getPlayer().getUniqueId()).getClicks() <= 15) {
-                        if (!(System.currentTimeMillis() - User.get(e.getPlayer().getUniqueId()).getLastRightClick() <= 1)) {
-                            if (e.getPlayer().getItemInHand().getType() == Material.AIR) {
-                                User.get(e.getPlayer().getUniqueId()).addClicks(1);
-                            }
-                        }
-                    } else {
-                        User.get(e.getPlayer().getUniqueId()).addClicks(1);
-                    }
-                    User.get(e.getPlayer().getUniqueId()).setLastRightClick(System.currentTimeMillis());
-                }
+        }
+
+        if (!Core.lowTps &&
+                (!Variables.pingChecker || user.getPing() < Variables.highestAllowedPing)) {
+
+            if (user.getClicks() <= 15 && System.currentTimeMillis() - user.getLastRightClick() > 1
+                    && player.getItemInHand().getType() == Material.AIR) {
+                user.setLastRightClick(System.currentTimeMillis());
+                user.addClicks(1);
             } else {
-                if (User.get(e.getPlayer().getUniqueId()).getLastRightClick() == null) {
-                    User.get(e.getPlayer().getUniqueId()).setLastRightClick(System.currentTimeMillis());
-                }
-                if (User.get(e.getPlayer().getUniqueId()).getClicks() <= 15) {
-                    if (!(System.currentTimeMillis() - User.get(e.getPlayer().getUniqueId()).getLastRightClick() <= 1)) {
-                        if (e.getPlayer().getItemInHand().getType() == Material.AIR) {
-                            User.get(e.getPlayer().getUniqueId()).addClicks(1);
-                        }
-                    }
-                } else {
-                    User.get(e.getPlayer().getUniqueId()).addClicks(1);
-                }
-                User.get(e.getPlayer().getUniqueId()).setLastRightClick(System.currentTimeMillis());
+                user.addClicks(1);
             }
+            user.setLastRightClick(System.currentTimeMillis());
         }
     }
     
     @EventHandler
     public void onEntityHit(EntityDamageByEntityEvent e) {
-
         if (e.getDamager() instanceof Player && !e.getDamager().hasMetadata("NPC")) {
             if (e.getEntity() instanceof LivingEntity) {
-
                 Player player = (Player) e.getDamager();
-
-                if(hasTriggeredEventRecently(player, e))
-                    return;
-  
-                if (Variables.bypass)
-                    if ((player.hasPermission(Objects.requireNonNull(Variables.perms)) || player.isOp()) || player.hasPermission(Objects.requireNonNull(Variables.perms)) && player.isOp())
-                        return;
-    
                 if (User.get(player.getUniqueId()).isRestricted())
                     e.setCancelled(true);
-    
-                if (getBukkitVersion() > 8) {
-                    if (e.getCause() == EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK) return;
-                }
-                
-                if (!Core.lowTps) {
-                    if (Variables.pingChecker) {
-                        if (!(User.get(player.getUniqueId()).getPing() >= Variables.highestAllowedPing)) {
-                            User.get(player.getUniqueId()).addClicks(1);
-                        }
-                    } else {
-                        User.get(player.getUniqueId()).addClicks(1);
-                    }
-                }
             }
         }
     }
-    
+
     @EventHandler
     public void onConnect(PlayerJoinEvent e) {
         Player p = e.getPlayer();
