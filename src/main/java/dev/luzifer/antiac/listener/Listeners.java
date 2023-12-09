@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -17,6 +16,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -26,11 +26,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -116,7 +113,9 @@ public class Listeners implements Listener {
         if (!Core.lowTps &&
                 (!Variables.pingChecker || user.getPing() < Variables.highestAllowedPing)) {
 
-            if (user.getClicks() <= 15 && System.currentTimeMillis() - user.getLastRightClick() > 1
+            if (user.getClicks() <= 15
+                    && user.getLastRightClick() != null
+                    && System.currentTimeMillis() - user.getLastRightClick() > 1
                     && player.getItemInHand().getType() == Material.AIR) {
                 user.setLastRightClick(System.currentTimeMillis());
                 user.addClicks(1);
@@ -126,7 +125,7 @@ public class Listeners implements Listener {
             user.setLastRightClick(System.currentTimeMillis());
         }
     }
-    
+
     @EventHandler
     public void onEntityHit(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Player && !e.getDamager().hasMetadata("NPC")) {
@@ -174,7 +173,12 @@ public class Listeners implements Listener {
             e.setCancelled(true);
         }
     }
-    
+
+    @EventHandler
+    public void onItemDrop(PlayerDropItemEvent event) {
+        User.get(event.getPlayer().getUniqueId()).setLastItemDrop(System.currentTimeMillis());
+    }
+
     @EventHandler
     public void onNormalClick(PlayerInteractEvent e) {
     
@@ -187,7 +191,11 @@ public class Listeners implements Listener {
     
         if (getBukkitVersion() > 8 && e.getHand() == EquipmentSlot.OFF_HAND)
             return;
-            
+
+        User user = User.get(e.getPlayer().getUniqueId());
+        if(user.getLastItemDrop() != null && !isOverOneSecond(System.currentTimeMillis(), user.getLastItemDrop()))
+            return;
+
         if(e.getItem() != null) {
             
             boolean isInteractiveItem = false;
@@ -218,6 +226,10 @@ public class Listeners implements Listener {
             }
         }
     }
+
+    private boolean isOverOneSecond(long now, long time) {
+        return (now - time) > 1000;
+    }
     
     private boolean cancelDuplicateClick(UUID uuid, Action action) {
     
@@ -232,35 +244,6 @@ public class Listeners implements Listener {
         return false;
     }
 
-    private static final Map<UUID, EventInformation> triggeredEventMap = new HashMap<>();
-
-    // Checks if the given player has triggered the given event within the past 0~1 ms
-    private boolean hasTriggeredEventRecently(Player player, Event event) {
-
-        EventInformation eventInformation = triggeredEventMap.get(player.getUniqueId());
-
-        if (eventInformation == null) {
-
-            eventInformation = new EventInformation(event.getClass(), new Timestamp(System.currentTimeMillis()));
-            triggeredEventMap.put(player.getUniqueId(), eventInformation);
-
-            return false;
-        }
-
-        if (eventInformation.getEventClass() != event.getClass()) {
-
-            eventInformation = new EventInformation(event.getClass(), new Timestamp(System.currentTimeMillis()));
-            triggeredEventMap.put(player.getUniqueId(), eventInformation);
-
-            return false;
-        }
-
-        Timestamp lastTriggered = eventInformation.getTimestamp();
-        triggeredEventMap.put(player.getUniqueId(), null); // reset the event information since we pop it
-
-        return lastTriggered.getTime() + 1 >= System.currentTimeMillis();
-    }
-    
     private double getBukkitVersion() {
         
         String version = Bukkit.getBukkitVersion().split("-")[0];
@@ -273,24 +256,5 @@ public class Listeners implements Listener {
     
     private boolean hasPermission(Player player) {
         return player.hasPermission(Variables.perms + ".*") || player.isOp();
-    }
-
-    private static class EventInformation {
-
-        private final Class<? extends Event> eventClass;
-        private final Timestamp timestamp;
-
-        public EventInformation(Class<? extends Event> eventClass, Timestamp timestamp) {
-            this.eventClass = eventClass;
-            this.timestamp = timestamp;
-        }
-
-        public Class<? extends Event> getEventClass() {
-            return eventClass;
-        }
-
-        public Timestamp getTimestamp() {
-            return timestamp;
-        }
     }
 }

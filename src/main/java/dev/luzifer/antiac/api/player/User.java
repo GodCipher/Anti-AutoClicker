@@ -9,7 +9,6 @@ import dev.luzifer.antiac.checks.DoubleClickCheck;
 import dev.luzifer.antiac.utils.Variables;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -39,6 +38,7 @@ public class User {
     private int violations = 0;
     
     private Long lastRightClick;
+    private Long lastItemDrop;
     private User check;
     private Profile profile;
     
@@ -132,19 +132,23 @@ public class User {
     public Player getPlayer() {
         return Bukkit.getPlayer(uuid);
     }
-    
-    public OfflinePlayer getOfflinePlayer() {
-        return Bukkit.getOfflinePlayer(uuid);
-    }
-    
+
     public Long getLastRightClick() {
         return lastRightClick;
     }
-    
+
+    public Long getLastItemDrop() {
+        return lastItemDrop;
+    }
+
     public void setLastRightClick(Long lastRightClick) {
         this.lastRightClick = lastRightClick;
     }
-    
+
+    public void setLastItemDrop(Long lastItemDrop) {
+        this.lastItemDrop = lastItemDrop;
+    }
+
     @Deprecated
     public void setViolations(int violations) {
         this.violations = violations;
@@ -154,11 +158,7 @@ public class User {
         this.violations = violations + violationType.getViolations();
         this.clearViolations = 0;
     }
-    
-    public void removeViolation(ViolationType violationType) {
-        this.violations = violations - violationType.getViolations();
-    }
-    
+
     public void clearViolations() {
         this.violations = 0;
     }
