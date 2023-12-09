@@ -38,6 +38,8 @@ public class User {
     private int violations = 0;
     
     private Long lastRightClick;
+    private Long lastBlockClick;
+    private int blockClicksInARow;
     private Long lastItemDrop;
     private User check;
     private Profile profile;
@@ -157,6 +159,22 @@ public class User {
     public void addViolation(ViolationType violationType) {
         this.violations = violations + violationType.getViolations();
         this.clearViolations = 0;
+    }
+
+    public int getBlockClicksInARow() {
+        return blockClicksInARow;
+    }
+
+    public void setBlockClicksInARow(int blockClicksInARow) {
+        this.blockClicksInARow = blockClicksInARow;
+    }
+
+    public void setLastBlockClick(Long lastBlockClick) {
+        this.lastBlockClick = lastBlockClick;
+    }
+
+    public Long getLastBlockClick() {
+        return lastBlockClick;
     }
 
     public void clearViolations() {

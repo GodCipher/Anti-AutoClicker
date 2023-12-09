@@ -16,6 +16,7 @@ import dev.luzifer.antiac.checks.LevelCheck;
 import dev.luzifer.antiac.commands.AntiACCommand;
 import dev.luzifer.antiac.commands.AntiACCommandTabCompleter;
 import dev.luzifer.antiac.extern.Metrics;
+import dev.luzifer.antiac.listener.BlockInteractionPacketListener;
 import dev.luzifer.antiac.listener.InteractEntityPacketListener;
 import dev.luzifer.antiac.listener.Listeners;
 import dev.luzifer.antiac.timer.CheckTimer;
@@ -206,6 +207,7 @@ public class Core extends JavaPlugin {
     private void registerProtocolListener() {
         EventManager eventManager = PacketEvents.getAPI().getEventManager();
         eventManager.registerListener(new InteractEntityPacketListener(), PacketListenerPriority.NORMAL);
+        eventManager.registerListener(new BlockInteractionPacketListener(), PacketListenerPriority.NORMAL);
 
         logger.info("Registered Packet Listener");
     }
