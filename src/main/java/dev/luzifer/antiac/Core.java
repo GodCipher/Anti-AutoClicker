@@ -23,6 +23,8 @@ import dev.luzifer.antiac.timer.CheckTimer;
 import dev.luzifer.antiac.timer.UpdateTimer;
 import dev.luzifer.antiac.utils.InputStreamUtils;
 import dev.luzifer.antiac.utils.Variables;
+import dev.luzifer.antiac.version.UpdateChecker;
+import dev.luzifer.antiac.version.UpdateCheckerResult;
 import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -202,6 +204,20 @@ public class Core extends JavaPlugin {
         registerProtocolListener();
         loadCommands();
         loadActionBar();
+
+        checkForUpdate();
+    }
+
+    private void checkForUpdate() {
+        UpdateChecker updateChecker = new UpdateChecker(this);
+        Bukkit.getScheduler().runTaskAsynchronously(core, () -> {
+            UpdateCheckerResult updateCheckerResult = updateChecker.checkUpdate();
+
+            if (updateCheckerResult.isUpdateAvailable()) {
+                Bukkit.getScheduler().runTask(core, () -> Bukkit.getConsoleSender().sendMessage("§a[AntiAC] §rThere is an update available. " +
+                        "§c[" + updateCheckerResult.getOldVersion() + "] §e-> §a[" + updateCheckerResult.getNewVersion() + "]"));
+            }
+        });
     }
 
     private void registerProtocolListener() {
