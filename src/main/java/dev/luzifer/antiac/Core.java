@@ -186,13 +186,7 @@ public class Core extends JavaPlugin {
     }
 
     public void onEnable() {
-        PacketEvents.getAPI().getSettings()
-                .debug(false)
-                .bStats(false)
-                .checkForUpdates(false)
-                .timeStampMode(TimeStampMode.MILLIS)
-                .reEncodeByDefault(true);
-        PacketEvents.getAPI().init();
+        setupPacketEvents();
         
         core = this;
         initialize();
@@ -206,6 +200,16 @@ public class Core extends JavaPlugin {
         loadActionBar();
 
         checkForUpdate();
+    }
+
+    private void setupPacketEvents() {
+        PacketEvents.getAPI().getSettings()
+                .debug(false)
+                .bStats(false)
+                .checkForUpdates(false)
+                .timeStampMode(TimeStampMode.MILLIS)
+                .reEncodeByDefault(true);
+        PacketEvents.getAPI().init();
     }
 
     private void checkForUpdate() {
