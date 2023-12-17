@@ -44,7 +44,9 @@ public class DoubleClickCheck extends Check {
         
             if (list.size() > i + 1) second = list.get(i + 1);
             else second = 0L;
-        
+
+            if(first == null || second == null) continue;
+
             everyFirst.add(first);
             everySecond.add(second);
         }

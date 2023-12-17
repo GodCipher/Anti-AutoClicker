@@ -69,7 +69,6 @@ public class User {
             allUser.add(user);
             
             return user;
-            
         } else {
             
             User user = new User(uuid);
@@ -80,7 +79,6 @@ public class User {
             allUser.add(user);
             
             return user;
-            
         }
         
     }
@@ -107,7 +105,6 @@ public class User {
             String reason = "§cAnti§4AC \n " + String.join("\n ", reasonList).replace("&", "§").replaceAll("%date%", date1);
             Bukkit.getBanList(BanList.Type.NAME).addBan(getPlayer().getName(), reason, calendar.getTime(), null);
             getPlayer().kickPlayer(reason);
-            
         } else {
             
             String execute = Variables.executeBanCommand;
@@ -245,11 +242,7 @@ public class User {
         
         DoubleClickCheck.latestClicks.put(this, millis);
     }
-    
-    public void removeClicks(int amount) {
-        setClicks(getClicks() - amount);
-    }
-    
+
     public double getAverage() {
         return round(calculateAverage(clicksAverage));
     }
