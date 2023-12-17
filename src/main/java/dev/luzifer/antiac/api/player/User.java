@@ -1,10 +1,8 @@
 package dev.luzifer.antiac.api.player;
 
 import dev.luzifer.antiac.Core;
-import dev.luzifer.antiac.api.check.Check;
 import dev.luzifer.antiac.api.enums.ViolationType;
 import dev.luzifer.antiac.api.events.FlagEvent;
-import dev.luzifer.antiac.api.log.Log;
 import dev.luzifer.antiac.api.profile.Profile;
 import dev.luzifer.antiac.checks.DoubleClickCheck;
 import dev.luzifer.antiac.utils.Variables;
@@ -284,13 +282,10 @@ public class User {
         return getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) || getPlayer().isOp() || getPlayer().hasPermission(Objects.requireNonNull(Core.getInstance().getConfig().getString("AntiAC.BypassPermission"))) && getPlayer().isOp();
     }
     
-    public void sanction(Check check) {
+    public void sanction() {
         
         if (Variables.consoleNotify)
             Variables.TEAM_NOTIFY.forEach(var -> Bukkit.getConsoleSender().sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName()).replaceAll("%clicks%", String.valueOf(getClicks())).replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
-        
-        if (Variables.log)
-            Log.log(getPlayer(), getClicks(), getAverage(), check);
 
         Bukkit.getPluginManager().callEvent(new FlagEvent(getPlayer(), getClicks(), getAverage(), getViolations()));
 
@@ -301,20 +296,15 @@ public class User {
         } else if (Variables.playerKick) {
             pluginKick();
         } else if (Variables.playerKill) {
-            
             getPlayer().setHealth(0);
             Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
         } else if (Variables.playerFreeze) {
-            
             if (!isFrozen()) {
-                
                 setFrozen(true, Variables.freezeTimeInSeconds);
                 Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
             }
         } else if (Variables.restrictPlayer) {
-            
             if (!isRestricted()) {
-                
                 setRestricted(true, Variables.restrictForSeconds);
                 Variables.PUNISHED.forEach(var -> getPlayer().sendMessage(Core.prefix + var.replace("&", "§")));
             }
@@ -325,9 +315,7 @@ public class User {
     }
     
     private UUID getUniqueID() {
-        
         return uuid;
-        
     }
     
     private void setProfile(Profile profile) {
@@ -346,9 +334,7 @@ public class User {
     }
     
     private void informTeam() {
-        
         if (Variables.informTeam) {
-            
             for (Player team : Bukkit.getOnlinePlayers())
                 informPlayerIfNotified(team);
         }
@@ -378,9 +364,7 @@ public class User {
     }
     
     private double getBukkitVersion() {
-        
         String version = Bukkit.getBukkitVersion().split("-")[0];
         return Double.parseDouble(version.split("\\.")[1]);
     }
-    
 }

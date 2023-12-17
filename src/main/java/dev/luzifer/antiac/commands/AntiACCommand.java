@@ -213,7 +213,7 @@ public class AntiACCommand implements CommandExecutor {
                     }
     
                     User targetUser = User.get(target.getUniqueId());
-                    targetUser.sanction(null);
+                    targetUser.sanction();
                     
                     Variables.PUNISHED_PLAYER.forEach(var -> sender.sendMessage(Core.prefix + var.replace("&", "§").replace("%player%", target.getName())));
                     

@@ -106,16 +106,6 @@ AntiAC:
 
 
 
-  # Log Settings
-  Log: false
-  # Store players who got detected in a file.
-  # ATTENTION only recommended if sufficient memory space is available.
-
-  DeleteLogsAfterDays: 14
-  # Deletes the logs after X days
-
-
-
   # Punishments configurations
   InformTeam: true
   # Sends a message to someone with the permissions If a player got detected

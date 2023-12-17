@@ -27,7 +27,7 @@ public class ClickLimitCheck extends Check {
             return;
         }
         
-        user.sanction(this);
+        user.sanction();
     }
     
     @Override

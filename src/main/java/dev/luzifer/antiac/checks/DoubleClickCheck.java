@@ -21,7 +21,7 @@ public class DoubleClickCheck extends Check {
             return;
         }
         
-        user.sanction(this);
+        user.sanction();
     }
     
     @Override
