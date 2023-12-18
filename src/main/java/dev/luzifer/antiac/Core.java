@@ -235,7 +235,7 @@ public class Core extends JavaPlugin {
         if (getConfig().getBoolean("AntiAC.UpdateChecker"))
             Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new UpdateTimer(this), 0, 20 * 60 * 5);
 
-        logger.info("Loaded configruation successful");
+        logger.info("Loaded configuration successful");
     }
     
     public void loadCommands() {
