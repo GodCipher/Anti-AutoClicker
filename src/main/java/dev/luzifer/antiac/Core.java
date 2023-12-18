@@ -68,7 +68,6 @@ public class Core extends JavaPlugin {
         if (actionBarMessageEvent.isCancelled()) return;
         
         if (getBukkitVersion() >= 16) {
-            
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
             return;
         }
@@ -116,7 +115,6 @@ public class Core extends JavaPlugin {
     }
 
     private static double getBukkitVersion() {
-        
         String version = Bukkit.getBukkitVersion().split("-")[0];
         return Double.parseDouble(version.split("\\.")[1]);
     }
@@ -132,7 +130,6 @@ public class Core extends JavaPlugin {
     private String pluginVersion;
     
     public void tpsChecker() {
-        logger.info("Booting up TPSChecker");
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             
             tick++;
@@ -210,19 +207,15 @@ public class Core extends JavaPlugin {
         EventManager eventManager = PacketEvents.getAPI().getEventManager();
         eventManager.registerListener(new InteractEntityPacketListener(), PacketListenerPriority.NORMAL);
         eventManager.registerListener(new BlockInteractionPacketListener(), PacketListenerPriority.NORMAL);
-
-        logger.info("Registered Packet Listener");
     }
     
     public void initialize() {
         new Metrics(this, 6473);
-        logger.info("Initialize complete");
     }
     
     public void loadMessages() {
-        
         Variables.init();
-        logger.info("Loading messages.yml complete");
+        logger.info("Loaded messages successful");
     }
     
     public void loadConfig() {
@@ -241,36 +234,27 @@ public class Core extends JavaPlugin {
 
         if (getConfig().getBoolean("AntiAC.UpdateChecker"))
             Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new UpdateTimer(this), 0, 20 * 60 * 5);
-        
-        logger.info("Loading config.yml complete");
+
+        logger.info("Loaded configruation successful");
     }
     
     public void loadCommands() {
-        
         getCommand("antiac").setExecutor(new AntiACCommand(this));
         getCommand("antiac").setTabCompleter(new AntiACCommandTabCompleter());
-        
-        logger.info("Loading Command(s) complete");
     }
     
     public void loadActionBar() {
-        
         nmsver = Bukkit.getServer().getClass().getPackage().getName();
         nmsver = nmsver.substring(nmsver.lastIndexOf(".") + 1);
         
         if (nmsver.equalsIgnoreCase("v1_8_R1") || Core.nmsver.startsWith("v1_7_")) Core.useOldMethods = true;
-        
-        logger.info("Loading ActionBarAPI complete");
     }
     
     public void loadListener() {
-        
         Bukkit.getPluginManager().registerEvents(new Listeners(this), this);
-        logger.info("Loading Listener(s) complete");
     }
     
     public void loadChecks() {
-        
         checkManager.registerCheck(new AverageCheck());
         checkManager.registerCheck(new ClickLimitCheck());
         checkManager.registerCheck(new DoubleClickCheck());
@@ -292,7 +276,6 @@ public class Core extends JavaPlugin {
     }
     
     public void reloadChecks() {
-        
         for(Check check : checkManager.getChecks()) {
             try {
                 check.unload();
@@ -321,7 +304,6 @@ public class Core extends JavaPlugin {
     }
     
     private void fetchPluginVersion() {
-        
         InputStream inputStream = InputStreamUtils.getInputStream("version.txt");
         this.pluginVersion = InputStreamUtils.readLineFromInputStream(inputStream, logger);
     }
