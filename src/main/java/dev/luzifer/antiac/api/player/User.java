@@ -290,7 +290,8 @@ public class User {
         Bukkit.getPluginManager().callEvent(new FlagEvent(getPlayer(), getClicks(), getAverage(), getViolations()));
 
         shoutOutPunishment();
-    
+        informTeam();
+
         if (Variables.playerBan) {
             pluginBan();
         } else if (Variables.playerKick) {
@@ -310,7 +311,6 @@ public class User {
             }
         }
         
-        informTeam();
         clearViolations();
     }
     
@@ -341,9 +341,15 @@ public class User {
     }
     
     private void informPlayerIfNotified(Player player) {
-    
-        if (User.get(player.getUniqueId()).isNotified())
-            Variables.TEAM_NOTIFY.forEach(var -> player.sendMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName()).replaceAll("%clicks%", String.valueOf(getClicks())).replaceAll("%average%", String.valueOf(getAverage())).replaceAll("%VL%", String.valueOf(getViolations()))));
+        if (get(player.getUniqueId()).notified) {
+            String name = getPlayer() == null ? Bukkit.getOfflinePlayer(uuid).getName() : getPlayer().getName();
+            Variables.TEAM_NOTIFY.forEach(var ->
+                    player.sendMessage(Core.prefix + var.replace("&", "§")
+                            .replaceAll("%player%", name)
+                            .replaceAll("%clicks%", String.valueOf(getClicks()))
+                            .replaceAll("%average%", String.valueOf(getAverage()))
+                            .replaceAll("%VL%", String.valueOf(getViolations()))));
+        }
     }
     
     private double calculateAverage(List<Integer> marks) {
