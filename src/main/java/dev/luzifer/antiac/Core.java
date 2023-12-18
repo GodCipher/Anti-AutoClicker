@@ -32,14 +32,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -54,7 +49,6 @@ public class Core extends JavaPlugin {
     private static String nmsver;
     private static boolean useOldMethods;
     
-    private static int days = 0;
     private static Core core;
     
     static {
@@ -64,21 +58,7 @@ public class Core extends JavaPlugin {
     public static Core getInstance() {
         return core;
     }
-    
-    public static void deleteLogs() {
-        Date xDaysAgo = Date.from(Instant.now().minus(Duration.ofDays(days)));
-        SimpleDateFormat formatFile = new SimpleDateFormat("dd MMMM yyyy");
-        
-        if (new Date().after(xDaysAgo)) {
-            File file = new File("plugins/AntiAC/Logs", formatFile.format(xDaysAgo) + ".yml");
-            
-            if (file.exists()) {
-                file.delete();
-                getInstance().logger.info(" Deleted log of ///| " + formatFile.format(xDaysAgo) + " |///");
-            }
-        }
-    }
-    
+
     public static void sendActionBar(final Player player, final String message) {
         
         if (!player.isOnline()) return;
@@ -249,7 +229,6 @@ public class Core extends JavaPlugin {
         saveDefaultConfig();
 
         prefix = getConfig().getString("AntiAC.Prefix"); // Soon moving to Variables.class
-        days = getConfig().getInt("AntiAC.DeleteLogsAfterDays");
         lowestAllowedTPS = getConfig().getInt("AntiAC.LowestAllowedTPS");
         
         if (getConfig().getBoolean("AntiAC.AutoNotification")) setNotified();
@@ -257,8 +236,7 @@ public class Core extends JavaPlugin {
         if (getConfig().getBoolean("AntiAC.TPSChecker")) tpsChecker();
         
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new CheckTimer(checkManager), 0, 20);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Core::deleteLogs, 0, 20 * 60 * 60 * 12 /* 12 hours */);
-        
+
         if (getConfig().getBoolean("AntiAC.UpdateChecker"))
             Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new UpdateTimer(this), 0, 20 * 60 * 5);
         
