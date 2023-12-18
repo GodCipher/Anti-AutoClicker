@@ -343,8 +343,8 @@ public class User {
     private void informPlayerIfNotified(Player player) {
         if (get(player.getUniqueId()).notified) {
             String name = getPlayer() == null ? Bukkit.getOfflinePlayer(uuid).getName() : getPlayer().getName();
-            Variables.TEAM_NOTIFY.forEach(var ->
-                    player.sendMessage(Core.prefix + var.replace("&", "§")
+            Variables.TEAM_NOTIFY.forEach(variable ->
+                    player.sendMessage(Core.prefix + variable.replace("&", "§")
                             .replaceAll("%player%", name)
                             .replaceAll("%clicks%", String.valueOf(getClicks()))
                             .replaceAll("%average%", String.valueOf(getAverage()))
