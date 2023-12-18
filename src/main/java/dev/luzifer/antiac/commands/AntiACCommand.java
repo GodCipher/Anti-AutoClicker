@@ -2,7 +2,6 @@ package dev.luzifer.antiac.commands;
 
 import dev.luzifer.antiac.Core;
 import dev.luzifer.antiac.api.player.User;
-import dev.luzifer.antiac.api.profile.inventory.LogGUI;
 import dev.luzifer.antiac.api.profile.inventory.ProfileGUI;
 import dev.luzifer.antiac.utils.Variables;
 import dev.luzifer.antiac.version.UpdateChecker;
@@ -15,7 +14,7 @@ import org.bukkit.entity.Player;
 
 public class AntiACCommand implements CommandExecutor {
     
-    private static final String[] SUB_COMMANDS = {"version", "checkupdate", "logs", "reload", "profile", "check", "punish", "notify"};
+    private static final String[] SUB_COMMANDS = {"version", "checkupdate", "reload", "profile", "check", "punish", "notify"};
     private static final String PREFIX = Core.prefix;
     
     private final Core core;
@@ -50,25 +49,6 @@ public class AntiACCommand implements CommandExecutor {
                     Variables.init();
                     
                     sender.sendMessage(PREFIX + "§7Config, Checks & Messages reloaded!");
-                    return true;
-                } else if (args[0].equalsIgnoreCase("logs")) {
-                    
-                    if (!isPlayer) {
-                        sender.sendMessage("Whups.. that didn't worked.");
-                        return true;
-                    }
-                    
-                    Player player = (Player) sender;
-                    
-                    if (!hasSubPermission(player, "logs")) {
-                        player.sendMessage(Core.prefix + "§7Current plugin version : " + core.getPluginVersion());
-                        return true;
-                    }
-                    
-                    LogGUI logGUI = new LogGUI();
-                    logGUI.buildGUI();
-                    
-                    player.openInventory(logGUI.getInventory());
                     return true;
                 } else if (args[0].equalsIgnoreCase("version")) {
                     sender.sendMessage(Core.prefix + "§7Current plugin version : " + core.getPluginVersion());

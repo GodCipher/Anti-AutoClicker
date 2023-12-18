@@ -126,8 +126,8 @@ public class Core extends JavaPlugin {
     
     public int lowestAllowedTPS;
     
-    private byte Tick = 0;
-    private double LastFinish = 0;
+    private byte tick = 0;
+    private double lastFinish = 0;
     
     private String pluginVersion;
     
@@ -135,21 +135,22 @@ public class Core extends JavaPlugin {
         logger.info("Booting up TPSChecker");
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             
-            Tick++;
-            if (Tick == 20) {
+            tick++;
+            if (tick == 20) {
                 
-                tps = Tick;
-                Tick = 0;
+                tps = tick;
+                tick = 0;
                 
-                if (LastFinish + 1000 < System.currentTimeMillis())
-                    tps /= (System.currentTimeMillis() - LastFinish) / 1000;
+                if (lastFinish + 1000 < System.currentTimeMillis())
+                    tps /= (System.currentTimeMillis() - lastFinish) / 1000;
                 
-                LastFinish = System.currentTimeMillis();
+                lastFinish = System.currentTimeMillis();
                 lowTps = tps < lowestAllowedTPS;
             }
         }, 1, 1);
     }
-    
+
+    @Override
     public void onDisable() {
         
         saveDefaultConfig();
@@ -165,6 +166,7 @@ public class Core extends JavaPlugin {
         PacketEvents.getAPI().load();
     }
 
+    @Override
     public void onEnable() {
         setupPacketEvents();
         

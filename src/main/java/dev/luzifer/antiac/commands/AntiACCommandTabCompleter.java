@@ -15,7 +15,7 @@ import java.util.List;
 
 public class AntiACCommandTabCompleter implements TabCompleter {
     
-    private static final String[] ARGS = {"check", "version", "notify", "checkupdate", "profile", "logs", "reload", "punish"};
+    private static final String[] ARGS = {"check", "version", "notify", "checkupdate", "profile", "reload", "punish"};
     private static final String[] ARGS2 = {"on", "off"};
     
     @Override
