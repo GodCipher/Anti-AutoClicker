@@ -177,8 +177,9 @@ public class Core extends JavaPlugin {
         registerProtocolListener();
         loadCommands();
         loadActionBar();
-
-        checkForUpdate();
+        
+        if (getConfig().getBoolean("AntiAC.UpdateChecker"))
+            checkForUpdate();
     }
 
     private void setupPacketEvents() {
