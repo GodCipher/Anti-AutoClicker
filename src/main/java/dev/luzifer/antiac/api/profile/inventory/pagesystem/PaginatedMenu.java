@@ -1,6 +1,6 @@
 package dev.luzifer.antiac.api.profile.inventory.pagesystem;
 
-import dev.luzifer.antiac.xseries.XMaterial;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -26,14 +26,14 @@ public abstract class PaginatedMenu extends Menu {
     }
     
     private void setButtons() {
-        ItemStack back = new ItemStack(Objects.requireNonNull(XMaterial.OAK_BUTTON.parseMaterial()));
+        ItemStack back = new ItemStack(Objects.requireNonNull(Material.OAK_BUTTON));
         ItemMeta backMeta = back.getItemMeta();
         assert backMeta != null;
         backMeta.setDisplayName("§bPrevious page");
         back.setItemMeta(backMeta);
         inv.setItem(45, back);
         
-        ItemStack forward = new ItemStack(Objects.requireNonNull(XMaterial.OAK_BUTTON.parseMaterial()));
+        ItemStack forward = new ItemStack(Objects.requireNonNull(Material.OAK_BUTTON));
         ItemMeta forwardMeta = forward.getItemMeta();
         assert forwardMeta != null;
         forwardMeta.setDisplayName("§bNext page");

@@ -5,7 +5,7 @@ import dev.luzifer.antiac.api.player.User;
 import dev.luzifer.antiac.api.profile.inventory.pagesystem.PaginatedMenu;
 import dev.luzifer.antiac.api.profile.storage.DataContainer;
 import dev.luzifer.antiac.utils.Variables;
-import dev.luzifer.antiac.xseries.XMaterial;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -98,7 +98,7 @@ public class ProfileGUI extends PaginatedMenu {
     
     private void addDataContainer(List<DataContainer> dataContainers) {
         
-        ItemStack item = new ItemStack(Objects.requireNonNull(XMaterial.CHEST.parseMaterial()));
+        ItemStack item = new ItemStack(Objects.requireNonNull(Material.CHEST));
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
         meta.setDisplayName("§cDataContainer §8" + UUID.randomUUID().toString().split("(?<=\\G.{5})")[0]);
@@ -127,7 +127,7 @@ public class ProfileGUI extends PaginatedMenu {
     
     private void changeButtons(List<DataContainer> dataContainers) {
         if (page == 0) {
-            ItemStack backward = new ItemStack(Objects.requireNonNull(XMaterial.STONE_BUTTON.parseMaterial()));
+            ItemStack backward = new ItemStack(Objects.requireNonNull(Material.STONE_BUTTON));
             ItemMeta backwardMeta = backward.getItemMeta();
             
             assert backwardMeta != null;
@@ -139,7 +139,7 @@ public class ProfileGUI extends PaginatedMenu {
         
         if (!((index + 1) >= dataContainers.size())) {
         } else {
-            ItemStack forward = new ItemStack(Objects.requireNonNull(XMaterial.STONE_BUTTON.parseMaterial()));
+            ItemStack forward = new ItemStack(Objects.requireNonNull(Material.STONE_BUTTON));
             ItemMeta forwardMeta = forward.getItemMeta();
             
             assert forwardMeta != null;

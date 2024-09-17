@@ -326,9 +326,9 @@ public class User {
         if (Variables.shoutOutPunishment) {
             Objects.requireNonNull(getPlayer().getLocation().getWorld()).strikeLightningEffect(getPlayer().getLocation());
             Variables.SHOUTOUT_PUNISHMENT.forEach(var -> Bukkit.broadcastMessage(Core.prefix + var.replace("&", "§").replaceAll("%player%", getPlayer().getName())));
-            
+
             for (Player others : Bukkit.getOnlinePlayers()) {
-                Objects.requireNonNull(others.getLocation().getWorld()).spawnEntity(others.getLocation(), EntityType.FIREWORK);
+                Objects.requireNonNull(others.getLocation().getWorld()).spawnEntity(others.getLocation(), EntityType.FIREWORK_ROCKET);
             }
         }
     }

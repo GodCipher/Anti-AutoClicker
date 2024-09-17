@@ -1,7 +1,7 @@
 package dev.luzifer.antiac.api.profile.inventory.pagesystem;
 
-import dev.luzifer.antiac.xseries.XMaterial;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -21,7 +21,7 @@ public abstract class Menu implements InventoryHolder {
     public abstract void handleEvent(InventoryClickEvent e);
     
     public void fill() {
-        ItemStack fill = new ItemStack(Objects.requireNonNull(XMaterial.WHITE_STAINED_GLASS_PANE.parseMaterial()), 1, (byte) 15);
+        ItemStack fill = new ItemStack(Objects.requireNonNull(Material.WHITE_STAINED_GLASS_PANE), 1, (byte) 15);
         ItemMeta fillMeta = fill.getItemMeta();
         fillMeta.setDisplayName("§9");
         fill.setItemMeta(fillMeta);

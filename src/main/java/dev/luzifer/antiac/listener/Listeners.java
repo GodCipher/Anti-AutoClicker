@@ -4,7 +4,6 @@ import dev.luzifer.antiac.Core;
 import dev.luzifer.antiac.api.player.User;
 import dev.luzifer.antiac.api.profile.inventory.pagesystem.Menu;
 import dev.luzifer.antiac.utils.Variables;
-import dev.luzifer.antiac.xseries.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -33,9 +32,9 @@ import java.util.UUID;
 
 public class Listeners implements Listener {
     
-    private static final XMaterial[] INTERACTIVE_MATERIALS = {
-            XMaterial.FISHING_ROD, XMaterial.EGG, XMaterial.SNOWBALL, XMaterial.ENDER_PEARL, XMaterial.ENDER_EYE,
-            XMaterial.SPLASH_POTION, XMaterial.LINGERING_POTION, XMaterial.EXPERIENCE_BOTTLE, XMaterial.FIREWORK_ROCKET
+    private static final Material[] INTERACTIVE_MATERIALS = {
+            Material.FISHING_ROD, Material.EGG, Material.SNOWBALL, Material.ENDER_PEARL, Material.ENDER_EYE,
+            Material.SPLASH_POTION, Material.LINGERING_POTION, Material.EXPERIENCE_BOTTLE, Material.FIREWORK_ROCKET
     };
     
     private final Core core;
@@ -199,8 +198,8 @@ public class Listeners implements Listener {
         if(e.getItem() != null) {
             
             boolean isInteractiveItem = false;
-            for(XMaterial material : INTERACTIVE_MATERIALS) {
-                if(e.getItem().getType() == material.parseMaterial()) {
+            for(Material material : INTERACTIVE_MATERIALS) {
+                if(e.getItem().getType() == material) {
                     isInteractiveItem = true;
                     break;
                 }

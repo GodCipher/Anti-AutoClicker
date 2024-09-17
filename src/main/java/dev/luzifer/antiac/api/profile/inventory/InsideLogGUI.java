@@ -2,7 +2,7 @@ package dev.luzifer.antiac.api.profile.inventory;
 
 import dev.luzifer.antiac.api.player.User;
 import dev.luzifer.antiac.api.profile.inventory.pagesystem.PaginatedMenu;
-import dev.luzifer.antiac.xseries.XMaterial;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -118,7 +118,7 @@ public class InsideLogGUI extends PaginatedMenu {
         Integer clicksToMuch = cfg.getInt("LogDetailed." + playerNames.get(index) + ".clicksToMuch");
         String logMessage = cfg.getString("LogDetailed." + playerNames.get(index) + ".logMessage");
         
-        ItemStack itemStack = new ItemStack(XMaterial.PAPER.parseMaterial());
+        ItemStack itemStack = new ItemStack(Material.PAPER);
         ItemMeta itemMeta = itemStack.getItemMeta();
         
         itemMeta.setDisplayName("§cIndex: " + (index + 1));
@@ -138,7 +138,7 @@ public class InsideLogGUI extends PaginatedMenu {
     
     private void changeButtons(List<String> playerNames) {
         if (page == 0) {
-            ItemStack backward = new ItemStack(Objects.requireNonNull(XMaterial.STONE_BUTTON.parseMaterial()));
+            ItemStack backward = new ItemStack(Objects.requireNonNull(Material.STONE_BUTTON));
             ItemMeta backwardMeta = backward.getItemMeta();
             
             assert backwardMeta != null;
@@ -150,7 +150,7 @@ public class InsideLogGUI extends PaginatedMenu {
         
         if (!((index + 1) >= playerNames.size())) {
         } else {
-            ItemStack forward = new ItemStack(Objects.requireNonNull(XMaterial.STONE_BUTTON.parseMaterial()));
+            ItemStack forward = new ItemStack(Objects.requireNonNull(Material.STONE_BUTTON));
             ItemMeta forwardMeta = forward.getItemMeta();
             
             assert forwardMeta != null;
